@@ -1,0 +1,6 @@
+{
+    "editor": {
+        "formatOnSave": true
+    },
+    "brace_style": "collapse,preserve-inline"
+}

@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "module": "es2020",
+        "allowSyntheticDefaultImports": true,
+        "target": "ES2018",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declaration": true,
+        "baseUrl": ".",
+        "paths": {},
+        "types": [
+            "node"
+        ]
+    },
+    "include": [
+        "./**/*.ts"
+    ],
+}
