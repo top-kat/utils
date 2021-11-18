@@ -1,8 +1,8 @@
 {
   "name": "topkat-utils",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "type": "module",
-  "private": true,
+  "private": false,
   "description": "UTILS BIG TIME",
   "author": "538ROMEO",
   "license": "ISC",
