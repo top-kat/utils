@@ -324,7 +324,9 @@ declare function upperCase(...wordBits: any[]): string;
 declare function lowerCase(...wordBits: any[]): string;
 declare function capitalize1st(str?: string): string;
 declare function camelCaseToWords(str: any): any;
-declare function escapeRegexp(str: any): any;
+declare function escapeRegexp(str: any, config?: {
+    parseStarChar?: boolean;
+}): any;
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */

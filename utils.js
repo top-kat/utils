@@ -855,7 +855,13 @@ function capitalize1st(str = '') { return str[0].toUpperCase() + str.slice(1); }
 function camelCaseToWords(str) {
     return str ? str.trim().replace(/([A-Z])/g, '-$1').toLowerCase().split('-') : [];
 }
-function escapeRegexp(str) { return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'); }
+function escapeRegexp(str, config = {}) {
+    const { parseStarChar = false } = config;
+    if (parseStarChar)
+        return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, '.*');
+    else
+        return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+}
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */
