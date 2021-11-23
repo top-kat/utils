@@ -607,13 +607,13 @@ declare const C: {
     info(...str: any[]): void;
     success(...str: any[]): void;
     /** First param **false** to avoid logging stack trace */
-    error: (...errors: any[]) => void;
+    error: (...errors: any[]) => any;
     /** First param **false** to avoid logging stack trace */
-    warning: (...str: any[]) => void;
-    customError: (color: any, ...str: any[]) => void;
-    customWarning: (color: any, ...str: any[]) => void;
-    applicationError: (color: any, ...str: any[]) => void;
-    warningLight: (color: any, ...str: any[]) => void;
+    warning: (...str: any[]) => any;
+    customError: (color: any, ...str: any[]) => any;
+    customWarning: (color: any, ...str: any[]) => any;
+    applicationError: (color: any, ...str: any[]) => any;
+    warningLight: (color: any, ...str: any[]) => any;
     dimStrSplit(...logs: any[]): string;
     notifShow(): void;
     /** Keep in memory the logs to show when needed with C.notifShow()
@@ -682,7 +682,7 @@ declare function waitUntilTrue(callback: any, timeoutSec?: number, errorAfterNSe
  * @param {Number} time default: 500ms;
  * @param {Function} errorCallback default: e => C.error(e)
  */
-declare function executeInDelayedLoop(callback: any, time?: number, errorCallback?: (e: any) => void): Promise<void>;
+declare function executeInDelayedLoop(callback: any, time?: number, errorCallback?: (e: any) => any): Promise<void>;
 /** Allow to perform async functions in a defined order
  * This adds the callback to a queue and is resolved when ALL previous callbacks with same name are executed
  * Use it like: await transaction('nameOfTheFlow', async () => { ...myFunction })
@@ -883,13 +883,13 @@ declare const _: {
         info(...str: any[]): void;
         success(...str: any[]): void;
         /** First param **false** to avoid logging stack trace */
-        error: (...errors: any[]) => void;
+        error: (...errors: any[]) => any;
         /** First param **false** to avoid logging stack trace */
-        warning: (...str: any[]) => void;
-        customError: (color: any, ...str: any[]) => void;
-        customWarning: (color: any, ...str: any[]) => void;
-        applicationError: (color: any, ...str: any[]) => void;
-        warningLight: (color: any, ...str: any[]) => void;
+        warning: (...str: any[]) => any;
+        customError: (color: any, ...str: any[]) => any;
+        customWarning: (color: any, ...str: any[]) => any;
+        applicationError: (color: any, ...str: any[]) => any;
+        warningLight: (color: any, ...str: any[]) => any;
         dimStrSplit(...logs: any[]): string;
         notifShow(): void;
         /** Keep in memory the logs to show when needed with C.notifShow()

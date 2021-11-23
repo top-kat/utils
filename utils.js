@@ -1933,6 +1933,8 @@ const C = {
 };
 function logErrPrivate(type, color, ...errors) {
     const { isProd } = configFn();
+    if (errors.length === 1 && typeof errors[0].log === 'function')
+        return errors[0].log();
     let stackTrace = (new Error('')).stack || '';
     const displayStack = errors[0] === false ? errors.shift() : true;
     const symbol = type === 'error' ? '✘ ' : '⚠ ';
@@ -1966,7 +1968,14 @@ function logErrPrivate(type, color, ...errors) {
             return '';
     };
     if (errors.length && errors[0]) {
-        const messages = errors.map(getStringFromErr);
+        const messages = errors.map((e, i) => {
+            if (typeof e.log === 'function') {
+                e.log();
+                return '';
+            }
+            else
+                return getStringFromErr(e, i);
+        });
         // Stack
         if (displayStack) {
             messages.push(isProd ? stackTrace : cleanStackTrace(stackTrace) + '\n');
