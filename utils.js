@@ -340,7 +340,7 @@ function strAsArray(arrOrStr) {
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
 function asArray(item) {
-    return isset(item) && !Array.isArray(item) ? [item] : item;
+    return typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item];
 }
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }

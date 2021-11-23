@@ -381,9 +381,10 @@ function strAsArray(arrOrStr) {
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
-function asArray(item): any[] {
-    return isset(item) && !Array.isArray(item) ? [item] : item;
+function asArray<T>(item: T | T[]): T[] | undefined {
+    return typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]
 }
+
 
 
 /** Array comparison
