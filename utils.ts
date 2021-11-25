@@ -385,8 +385,6 @@ function asArray<T>(item: T | T[]): T[] | undefined {
     return typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]
 }
 
-
-
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */
@@ -461,6 +459,10 @@ function isNotEmptyArray(arr): boolean {
 }
 
 function randomItemInArray(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function randomizeArray(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
 
@@ -2474,6 +2476,7 @@ const _ = {
     isset,
     cleanStackTrace,
     shuffleArray,
+    randomizeArray: shuffleArray,
     round2,
 
     camelCase,
@@ -2681,6 +2684,7 @@ export {
     isset,
     cleanStackTrace,
     shuffleArray,
+    shuffleArray as randomizeArray,
     round2,
 
     camelCase,
