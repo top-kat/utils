@@ -1,3 +1,7 @@
+### v1.0.5
+* new alias randomize array
+* type for asArray
+
 ### v1.0.3
 * new err handling
 * escapeRegexp config with parseStarChar option
