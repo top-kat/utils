@@ -62,7 +62,7 @@ const generatedTokens = []; // timestamp, counter
  * @param {string} mode one of ['alphanumeric', 'hexadecimal']
  * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
  */
-function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
+function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
     let charConvNumeric = mode === 'alphanumeric' ? 36 : 16;
     if (unique && length < 8) length = 8;
     let token = unique ? (new Date().getTime()).toString(charConvNumeric) : '';
