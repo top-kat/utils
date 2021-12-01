@@ -38,7 +38,7 @@ declare function tryCatch(callback: any, onErr?: Function): Promise<any>;
  * @param {string} mode one of ['alphanumeric', 'hexadecimal']
  * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
  */
-declare function generateToken(length?: number, unique?: boolean, mode?: string): string;
+declare function generateToken(length?: number, unique?: boolean, mode?: 'alphanumeric' | 'hexadecimal'): string;
 /** Useful to join differents bits of url with normalizing slashes
  * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
  * * urlPathJoin('http:/', 'kikou.lol') => https://www.kikou.lol
