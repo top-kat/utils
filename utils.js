@@ -1080,7 +1080,7 @@ function validatorReturnErrArray(...paramsToValidate) {
                     'number',
                     'bigint',
                     'year',
-                    ...Object.keys(configFn().customTypes)
+                    //...Object.keys(configFn().customTypes)
                 ];
                 if (!allTypes.includes(type))
                     throw new dataValidationUtilErrorHandler('typeDoNotExist', 500, { type });

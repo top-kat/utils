@@ -5,7 +5,7 @@ declare const arrayUniqueValue: typeof noDuplicateFilter;
 declare const JSONstringyParse: (o: any) => any;
 declare const removeUndefinedKeys: typeof objFilterUndefinedRecursive;
 declare type Color = [number, number, number];
-declare type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year';
+declare type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email';
 /** Round with custom number of decimals (default:0) */
 declare function round(number: number, decimals?: number): number;
 /** Round with custom number of decimals (default:0) */
@@ -407,6 +407,7 @@ declare function checkCtxIntegrity(ctx: any): void;
 ----------------------------------------*/
 declare type ValidatorObject = {
     name: string;
+    type: BaseTypes;
     value: any;
     eq?: any;
     neq?: any;
@@ -422,6 +423,7 @@ declare type ValidatorObject = {
     regexp?: RegExp;
     mustNotBeSet?: boolean;
     optional?: boolean;
+    [k: string]: any;
 };
 declare function validator(...paramsToValidate: ValidatorObject[]): void;
 declare function assert(msg: string | ValidatorObject, validatorObject: ValidatorObject): void;
