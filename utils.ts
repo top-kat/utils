@@ -1152,7 +1152,9 @@ function validator(...paramsToValidate: ValidatorObject[]) {
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray);
 }
 
-function assert(msg: string | ValidatorObject, validatorObject: ValidatorObject) {
+function assert(validatorObject: ValidatorObject)
+function assert(msg: string, validatorObject: ValidatorObject)
+function assert(msg: string | ValidatorObject, validatorObject?: ValidatorObject) {
     if (typeof msg === 'string') validatorObject.name = msg
     else validatorObject.name = JSON.stringify(validatorObject)
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
