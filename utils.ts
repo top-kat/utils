@@ -1279,20 +1279,18 @@ function validatorReturnErrArray(...paramsToValidate): [string?, number?, object
 }
 
 
-
-// <MANUALLY IMPORTED>
-function isEmpty(objOrArr: object | any[]) {
-    if (Array.isArray(objOrArr) || typeof objOrArr === 'string') return objOrArr.length === 0;
-    else if (typeof objOrArr == 'object') return Object.keys(objOrArr).length === 0 && objOrArr.constructor === Object;
+function isEmpty(objOrArr: object | any[] | string | null | undefined) {
+    if (Array.isArray(objOrArr) || typeof objOrArr === 'string') return objOrArr.length === 0
+    else if (typeof objOrArr == 'object' && objOrArr !== null) return Object.keys(objOrArr).length === 0
+    else false
 }
 
 function err422IfNotSet(o) {
-    let m = [];
+    let m = []
     for (let p in o)
-        if (!isset(o[p]) || isEmpty(o[p]) || Number.isNaN(o[p])) m.push(p);
-    if (m.length) throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') });
+        if (!isset(o[p]) || isEmpty(o[p]) || Number.isNaN(o[p])) m.push(p)
+    if (m.length) throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') })
 }
-//</IMPORTED>
 
 function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?): number { return getDateAsInt(dateAllFormat, errIfNotValid, true); } // alias
 

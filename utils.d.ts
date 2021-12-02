@@ -415,7 +415,7 @@ declare function checkCtxIntegrity(ctx: any): void;
 ----------------------------------------*/
 declare function validator(...paramsToValidate: any[]): void;
 declare function validatorReturnErrArray(...paramsToValidate: any[]): [string?, number?, object?];
-declare function isEmpty(objOrArr: object | any[]): boolean;
+declare function isEmpty(objOrArr: object | any[] | string | null | undefined): boolean;
 declare function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?: any): number;
 declare function humanReadableTimestamp(dateAllFormat: any): number;
 /** format for 6/8/2018 => 20180806

@@ -1178,12 +1178,13 @@ function validatorReturnErrArray(...paramsToValidate) {
     }
     return [];
 }
-// <MANUALLY IMPORTED>
 function isEmpty(objOrArr) {
     if (Array.isArray(objOrArr) || typeof objOrArr === 'string')
         return objOrArr.length === 0;
-    else if (typeof objOrArr == 'object')
-        return Object.keys(objOrArr).length === 0 && objOrArr.constructor === Object;
+    else if (typeof objOrArr == 'object' && objOrArr !== null)
+        return Object.keys(objOrArr).length === 0;
+    else
+        false;
 }
 function err422IfNotSet(o) {
     let m = [];
@@ -1193,7 +1194,6 @@ function err422IfNotSet(o) {
     if (m.length)
         throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') });
 }
-//</IMPORTED>
 function getDateAsInt12(dateAllFormat, errIfNotValid) { return getDateAsInt(dateAllFormat, errIfNotValid, true); } // alias
 function humanReadableTimestamp(dateAllFormat) {
     if (isset(dateAllFormat))
