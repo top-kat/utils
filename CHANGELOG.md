@@ -1,3 +1,6 @@
+### v1.0.9
+* assert used for testing
+
 ### v1.0.5
 * new alias randomize array
 * type for asArray
