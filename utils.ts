@@ -1128,9 +1128,9 @@ function checkCtxIntegrity(ctx) {
 ----------------------------------------*/
 
 type ValidatorObject = {
-    name: string
-    type: BaseTypes
-    value: any
+    name?: string
+    value?: any
+    type?: BaseTypes
     eq?: any
     neq?: any
     in?: any[]
