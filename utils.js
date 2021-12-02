@@ -998,8 +998,10 @@ function validator(...paramsToValidate) {
 function assert(msg, validatorObject) {
     if (typeof msg === 'string')
         validatorObject.name = msg;
-    else
+    else {
+        validatorObject = msg;
         validatorObject.name = JSON.stringify(validatorObject);
+    }
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
     if (isValid(validatorObject))
         C.success(msg);

@@ -1156,7 +1156,10 @@ function assert(validatorObject: ValidatorObject)
 function assert(msg: string, validatorObject: ValidatorObject)
 function assert(msg: string | ValidatorObject, validatorObject?: ValidatorObject) {
     if (typeof msg === 'string') validatorObject.name = msg
-    else validatorObject.name = JSON.stringify(validatorObject)
+    else {
+        validatorObject = msg
+        validatorObject.name = JSON.stringify(validatorObject)
+    }
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
     if (isValid(validatorObject)) C.success(msg)
     else C.error(false, msg + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`)
