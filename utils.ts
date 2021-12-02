@@ -7,7 +7,7 @@ const removeUndefinedKeys = objFilterUndefinedRecursive;
 
 type Color = [number, number, number]
 
-type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year'
+type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email'
 
 /** Round with custom number of decimals (default:0) */
 function round(number: number, decimals = 0) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
@@ -1129,6 +1129,7 @@ function checkCtxIntegrity(ctx) {
 
 type ValidatorObject = {
     name: string
+    type: BaseTypes
     value: any
     eq?: any
     neq?: any
@@ -1144,6 +1145,7 @@ type ValidatorObject = {
     regexp?: RegExp
     mustNotBeSet?: boolean
     optional?: boolean
+    [k: string]: any
 }
 function validator(...paramsToValidate: ValidatorObject[]) {
     const errArray = validatorReturnErrArray(...paramsToValidate);
@@ -1215,7 +1217,7 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
             const types = Array.isArray(paramObj.type) ? paramObj.type : [paramObj.type]; // support for multiple type
             const areSomeTypeValid = types.some(type => {
 
-                const allTypes = [
+                const allTypes: Array<BaseTypes> = [
                     'objectId',
                     'dateInt6',
                     'dateInt', // alias for dateInt8
@@ -1234,7 +1236,7 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
                     'number',
                     'bigint',
                     'year',
-                    ...Object.keys(configFn().customTypes)
+                    //...Object.keys(configFn().customTypes)
                 ];
 
                 if (!allTypes.includes(type)) throw new dataValidationUtilErrorHandler('typeDoNotExist', 500, { type });
