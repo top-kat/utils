@@ -939,7 +939,7 @@ function camelCaseToWords(str) {
 
 
 
-function escapeRegexp(str, config: { parseStarChar?: boolean } = {}) {
+function escapeRegexp(str: string, config: { parseStarChar?: boolean } = {}): string {
     const { parseStarChar = false } = config
     if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, '.*')
     else return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -948,13 +948,13 @@ function escapeRegexp(str, config: { parseStarChar?: boolean } = {}) {
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */
-function firstMatch(str, regExp) { return (str.match(regExp) || [undefined])[1]; }
+function firstMatch(str: string, regExp: RegExp): string | undefined { return (str.match(regExp) || [])[1]; }
 
 /** Get all matches from regexp with g flag
  * Eg: [ [full, match1, m2], [f, m1, m2]... ]
  * NOTE: the G flag will be appended to regexp
  */
-function allMatches(str, reg) {
+function allMatches(str: string, reg: RegExp): string[] {
     let i = 0;
     let matches;
     const arr = [];
@@ -976,7 +976,7 @@ function allMatches(str, reg) {
  *  This will return the content separated by first level of separators
  *  @return ["{ blah;2}", "['nested,(what,ever)']"]
  */
-function getValuesBetweenSeparator(str, separator, removeTrailingSpaces = true) {
+function getValuesBetweenSeparator(str: string, separator: string, removeTrailingSpaces = true) {
     err500IfEmptyOrNotSet({ separator, str });
     const { outer } = getValuesBetweenStrings(str, separator, undefined, undefined, undefined, removeTrailingSpaces);
     return outer;
@@ -991,7 +991,7 @@ function getValuesBetweenSeparator(str, separator, removeTrailingSpaces = true) 
  * @param ignoreBetweenOpen default ['\'', '`', '"', '/'], when reaching an opening char, it will ignore all until it find the corresponding closing char
  * @param ignoreBetweenClose default ['\'', '`', '"', '/'] list of corresponding closing chars
  */
-function getValuesBetweenStrings(str, openingOrSeparator, closing, ignoreBetweenOpen = ['\'', '`', '"', '/'], ignoreBetweenClose = ['\'', '`', '"', '/'], removeTrailingSpaces = true) {
+function getValuesBetweenStrings(str: string, openingOrSeparator, closing, ignoreBetweenOpen = ['\'', '`', '"', '/'], ignoreBetweenClose = ['\'', '`', '"', '/'], removeTrailingSpaces = true) {
     err500IfEmptyOrNotSet({ openingOrSeparator, str });
 
     str = str.replace(/<</g, '§§"').replace(/>>/g, '"§§');
@@ -1075,18 +1075,6 @@ function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
     if (missingVars.length) throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, errCode, { origin: 'Validator', varNames: missingVars.join(', ') });
 }
 
-/** Same as validator but return a boolean
- * See {@link validator}
- */
-function isValid(...paramsToValidate) {
-    const errArray = validatorReturnErrArray(...paramsToValidate);
-    return errArray.length ? false : true;
-}
-
-/** Default types + custom types
- * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
- */
-function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }); }
 
 function isDateObject(variable) { return variable instanceof Date; }
 
@@ -1138,12 +1126,52 @@ function checkCtxIntegrity(ctx) {
         { name: [{'blahVar': blahVarValue, 'myOtherVar': myOtherVarValue}], type: 'string'} // multiple names for same check
     )
 ----------------------------------------*/
-function validator(...paramsToValidate) {
+
+type ValidatorObject = {
+    name: string
+    value: any
+    eq?: any
+    neq?: any
+    in?: any[]
+    lt?: number
+    gt?: number
+    lte?: number
+    gte?: number
+    length?: number
+    minLength?: number
+    maxLength?: number
+    emptyAllowed?: boolean
+    regexp?: RegExp
+    mustNotBeSet?: boolean
+    optional?: boolean
+}
+function validator(...paramsToValidate: ValidatorObject[]) {
     const errArray = validatorReturnErrArray(...paramsToValidate);
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray);
 }
 
-function validatorReturnErrArray(...paramsToValidate): [string?, number?, object?] {
+function assert(msg: string | ValidatorObject, validatorObject: ValidatorObject) {
+    if (typeof msg === 'string') validatorObject.name = msg
+    else validatorObject.name = JSON.stringify(validatorObject)
+    const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
+    if (isValid(validatorObject)) C.success(msg)
+    else C.error(false, msg + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`)
+}
+
+/** Same as validator but return a boolean
+ * See {@link validator}
+ */
+function isValid(...paramsToValidate) {
+    const errArray = validatorReturnErrArray(...paramsToValidate);
+    return errArray.length ? false : true;
+}
+
+/** Default types + custom types
+ * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
+ */
+function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }); }
+
+function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?] {
     let paramsFormatted = [];
 
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
@@ -1890,6 +1918,7 @@ function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDat
 
 
 
+
 //----------------------------------------
 // LOGGER
 //----------------------------------------
@@ -2498,6 +2527,7 @@ const _ = {
     validator,
     required: validator, // alias for readability
     validatorReturnErrArray,
+    assert,
     isValid,
     isType,
     isDateObject,
@@ -2529,7 +2559,6 @@ const _ = {
     getTimeAsInt,
     getIntAsTime,
     isTimeStringValid,
-    // isDateObject <= see validator.js
     getDuration,
     doDateOverlap,
     getDatesForDaysArrayBetweenTwoDates,
@@ -2706,6 +2735,7 @@ export {
     validator,
     validator as required, // alias for readability
     validatorReturnErrArray,
+    assert,
     isValid,
     isType,
     isDateObject,
