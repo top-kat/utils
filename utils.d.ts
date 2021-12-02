@@ -324,23 +324,23 @@ declare function upperCase(...wordBits: any[]): string;
 declare function lowerCase(...wordBits: any[]): string;
 declare function capitalize1st(str?: string): string;
 declare function camelCaseToWords(str: any): any;
-declare function escapeRegexp(str: any, config?: {
+declare function escapeRegexp(str: string, config?: {
     parseStarChar?: boolean;
-}): any;
+}): string;
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */
-declare function firstMatch(str: any, regExp: any): any;
+declare function firstMatch(str: string, regExp: RegExp): string | undefined;
 /** Get all matches from regexp with g flag
  * Eg: [ [full, match1, m2], [f, m1, m2]... ]
  * NOTE: the G flag will be appended to regexp
  */
-declare function allMatches(str: any, reg: any): any[];
+declare function allMatches(str: string, reg: RegExp): string[];
 /** GIVEN A STRING '{ blah;2}, ['nested,(what,ever)']' AND A SEPARATOR ",""
  *  This will return the content separated by first level of separators
  *  @return ["{ blah;2}", "['nested,(what,ever)']"]
  */
-declare function getValuesBetweenSeparator(str: any, separator: any, removeTrailingSpaces?: boolean): any;
+declare function getValuesBetweenSeparator(str: string, separator: string, removeTrailingSpaces?: boolean): any;
 /** GIVEN A STRING "a: [ 'str', /[^]]/, '[aa]]]str', () => [ nestedArray ] ], b: ['arr']"
  * @return matching: [ "'str', /[^]]/, '[aa]]]str', () => [ nestedArray ]", "'arr'" ], between: [ "a:", ", b: " ]
  * @param str base string
@@ -349,7 +349,7 @@ declare function getValuesBetweenSeparator(str: any, separator: any, removeTrail
  * @param ignoreBetweenOpen default ['\'', '`', '"', '/'], when reaching an opening char, it will ignore all until it find the corresponding closing char
  * @param ignoreBetweenClose default ['\'', '`', '"', '/'] list of corresponding closing chars
  */
-declare function getValuesBetweenStrings(str: any, openingOrSeparator: any, closing: any, ignoreBetweenOpen?: string[], ignoreBetweenClose?: string[], removeTrailingSpaces?: boolean): {
+declare function getValuesBetweenStrings(str: string, openingOrSeparator: any, closing: any, ignoreBetweenOpen?: string[], ignoreBetweenClose?: string[], removeTrailingSpaces?: boolean): {
     inner: any;
     outer: any;
 };
@@ -360,14 +360,6 @@ declare function err500IfNotSet(objOfVarNamesWithValues: any): void;
 declare function errIfEmptyOrNotSet(objOfVarNamesWithValues: any): void;
 declare function err500IfEmptyOrNotSet(objOfVarNamesWithValues: any): void;
 declare function errXXXIfNotSet(errCode: any, checkEmpty: any, objOfVarNamesWithValues: any): void;
-/** Same as validator but return a boolean
- * See {@link validator}
- */
-declare function isValid(...paramsToValidate: any[]): boolean;
-/** Default types + custom types
- * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
- */
-declare function isType(value: any, type: BaseTypes): boolean;
 declare function isDateObject(variable: any): boolean;
 /** Check all values are set */
 declare function checkAllObjectValuesAreEmpty(o: any): boolean;
@@ -413,8 +405,35 @@ declare function checkCtxIntegrity(ctx: any): void;
         { name: [{'blahVar': blahVarValue, 'myOtherVar': myOtherVarValue}], type: 'string'} // multiple names for same check
     )
 ----------------------------------------*/
-declare function validator(...paramsToValidate: any[]): void;
-declare function validatorReturnErrArray(...paramsToValidate: any[]): [string?, number?, object?];
+declare type ValidatorObject = {
+    name: string;
+    value: any;
+    eq?: any;
+    neq?: any;
+    in?: any[];
+    lt?: number;
+    gt?: number;
+    lte?: number;
+    gte?: number;
+    length?: number;
+    minLength?: number;
+    maxLength?: number;
+    emptyAllowed?: boolean;
+    regexp?: RegExp;
+    mustNotBeSet?: boolean;
+    optional?: boolean;
+};
+declare function validator(...paramsToValidate: ValidatorObject[]): void;
+declare function assert(msg: string | ValidatorObject, validatorObject: ValidatorObject): void;
+/** Same as validator but return a boolean
+ * See {@link validator}
+ */
+declare function isValid(...paramsToValidate: any[]): boolean;
+/** Default types + custom types
+ * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
+ */
+declare function isType(value: any, type: BaseTypes): boolean;
+declare function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?];
 declare function isEmpty(objOrArr: object | any[] | string | null | undefined): boolean;
 declare function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?: any): number;
 declare function humanReadableTimestamp(dateAllFormat: any): number;
@@ -780,6 +799,7 @@ declare const _: {
     validator: typeof validator;
     required: typeof validator;
     validatorReturnErrArray: typeof validatorReturnErrArray;
+    assert: typeof assert;
     isValid: typeof isValid;
     isType: typeof isType;
     isDateObject: typeof isDateObject;
@@ -921,4 +941,4 @@ declare const _: {
 export default _;
 export { round, random, cln, pad, int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
-validatorReturnErrArray, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };
+validatorReturnErrArray, assert, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };

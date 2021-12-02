@@ -868,7 +868,7 @@ function escapeRegexp(str, config = {}) {
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */
-function firstMatch(str, regExp) { return (str.match(regExp) || [undefined])[1]; }
+function firstMatch(str, regExp) { return (str.match(regExp) || [])[1]; }
 /** Get all matches from regexp with g flag
  * Eg: [ [full, match1, m2], [f, m1, m2]... ]
  * NOTE: the G flag will be appended to regexp
@@ -982,6 +982,30 @@ function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
     if (missingVars.length)
         throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, errCode, { origin: 'Validator', varNames: missingVars.join(', ') });
 }
+function isDateObject(variable) { return variable instanceof Date; }
+/** Check all values are set */
+function checkAllObjectValuesAreEmpty(o) { return Object.values(o).every(value => !isset(value)); }
+/** Throw an error in case data passed is not a valid ctx */
+function checkCtxIntegrity(ctx) {
+    if (!isset(ctx) || !isset(ctx.user))
+        throw new dataValidationUtilErrorHandler('ctxNotSet', 500);
+}
+function validator(...paramsToValidate) {
+    const errArray = validatorReturnErrArray(...paramsToValidate);
+    if (errArray.length)
+        throw new dataValidationUtilErrorHandler(...errArray);
+}
+function assert(msg, validatorObject) {
+    if (typeof msg === 'string')
+        validatorObject.name = msg;
+    else
+        validatorObject.name = JSON.stringify(validatorObject);
+    const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
+    if (isValid(validatorObject))
+        C.success(msg);
+    else
+        C.error(false, msg + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`);
+}
 /** Same as validator but return a boolean
  * See {@link validator}
  */
@@ -993,59 +1017,6 @@ function isValid(...paramsToValidate) {
  * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
  */
 function isType(value, type) { return isValid({ name: 'Is type check', value, type }); }
-function isDateObject(variable) { return variable instanceof Date; }
-/** Check all values are set */
-function checkAllObjectValuesAreEmpty(o) { return Object.values(o).every(value => !isset(value)); }
-/** Throw an error in case data passed is not a valid ctx */
-function checkCtxIntegrity(ctx) {
-    if (!isset(ctx) || !isset(ctx.user))
-        throw new dataValidationUtilErrorHandler('ctxNotSet', 500);
-}
-/**
-## VALIDATOR
-
-@name validator
-
-@description support multiple names, multiple values and multiple type check
-@option if nameString ends by $ sign it is considered optional
-
-@function validator([Objects])
-@return {error|true/false|testMode} depend on mode (see prop mode)
-@param {} mode normal (default) | test (TODO) | boolean
-@param {} name 'myName' || [{myVar1: 'blah, myvar2: myvar2}], support multiple names / values
-@param {} value myVar,
-@param {string} myVar myVar, instead of name / value
-@param {array} in ['blah', 'otherPossibleValue', true], equal ONE OF THESE values
-@param {any} eq exactly equal to in, both support string or array of values
-@param {any} neq not in, both support string or array of values
-@param {number} lte 3, less than or equal
-@param {number} gte 1, greater or equal
-@param {number} lt 3, less than
-@param {number} gt 1, greater
-@param {string|string[]} type
- * possibleTypes: object, number, string, boolean, array, date, dateInt8, dateInt12, dateInt6, time, objectId (mongo), humanReadableTimestamp, buffer
- * Notes: multiples value is an OR, /!\ Array is type 'array' and not 'object' like in real JS /!\
-@param {regExp} regexp /regexp/, test against regexp
-@param {number} minLength for string, array or number length
-@param {number} maxLength
-@param {number} length
-@param {boolean} optional default false
-@param {boolean} emptyAllowed default false (to use if must be set but can be empty)
-@param {boolean} mustNotBeSet this one must not be set
-@param {any} includes check if array or string includes value (like js .includes())
-
-@example
-    validator(
-        { myNumber : 3, type: 'number', gte: 1, lte: 3 }, // use the name directly as a param
-        { name: 'email', value: 'nameATsite.com', regexp: /[^\sAT]+AT[^\sAT]+\.[^\sAT]/},
-        { name: [{'blahVar': blahVarValue, 'myOtherVar': myOtherVarValue}], type: 'string'} // multiple names for same check
-    )
-----------------------------------------*/
-function validator(...paramsToValidate) {
-    const errArray = validatorReturnErrArray(...paramsToValidate);
-    if (errArray.length)
-        throw new dataValidationUtilErrorHandler(...errArray);
-}
 function validatorReturnErrArray(...paramsToValidate) {
     let paramsFormatted = [];
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
@@ -2346,6 +2317,7 @@ const _ = {
     validator,
     required: validator,
     validatorReturnErrArray,
+    assert,
     isValid,
     isType,
     isDateObject,
@@ -2376,7 +2348,6 @@ const _ = {
     getTimeAsInt,
     getIntAsTime,
     isTimeStringValid,
-    // isDateObject <= see validator.js
     getDuration,
     doDateOverlap,
     getDatesForDaysArrayBetweenTwoDates,
@@ -2457,7 +2428,7 @@ int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArra
 //allias
 arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
-validatorReturnErrArray, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, 
+validatorReturnErrArray, assert, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, 
 // ALIASES
 issetOr as orIsset, 
 // DATE
