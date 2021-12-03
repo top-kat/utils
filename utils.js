@@ -1000,7 +1000,7 @@ function assert(msg, validatorObject) {
         validatorObject.name = msg;
     else {
         validatorObject = msg;
-        validatorObject.name = JSON.stringify(validatorObject);
+        msg = validatorObject.name = JSON.stringify(validatorObject);
     }
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
     if (isValid(validatorObject))
