@@ -995,12 +995,17 @@ function validator(...paramsToValidate) {
     if (errArray.length)
         throw new dataValidationUtilErrorHandler(...errArray);
 }
-function assert(msg, validatorObject) {
-    if (typeof msg === 'string')
-        validatorObject.name = msg;
+function assert(...params) {
+    let msg, validatorObject, value;
+    if (params.length === 3) {
+        msg = params[0];
+        value = params[1];
+        validatorObject = params[2];
+    }
     else {
-        validatorObject = msg;
-        msg = validatorObject.name = JSON.stringify(validatorObject);
+        value = params[0];
+        validatorObject = params[1];
+        msg = JSON.stringify(validatorObject);
     }
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
     if (isValid(validatorObject))
