@@ -1007,6 +1007,8 @@ function assert(...params) {
         validatorObject = params[1];
         msg = JSON.stringify(validatorObject);
     }
+    validatorObject.value = value;
+    validatorObject.name = msg;
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
     if (isValid(validatorObject))
         C.success(msg);

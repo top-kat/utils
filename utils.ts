@@ -1165,6 +1165,8 @@ function assert(...params: any[]) {
         validatorObject = params[1]
         msg = JSON.stringify(validatorObject)
     }
+    validatorObject.value = value
+    validatorObject.name = msg
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
     if (isValid(validatorObject)) C.success(msg)
     else C.error(false, msg + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`)
