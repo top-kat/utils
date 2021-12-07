@@ -1152,24 +1152,14 @@ function validator(...paramsToValidate: ValidatorObject[]) {
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray);
 }
 
-function assert(value: any, validatorObject: ValidatorObject)
-function assert(msg: string, value: any, validatorObject: ValidatorObject)
-function assert(...params: any[]) {
-    let msg: string, validatorObject: ValidatorObject, value: any
-    if (params.length === 3) {
-        msg = params[0]
-        value = params[1]
-        validatorObject = params[2]
-    } else {
-        value = params[0]
-        validatorObject = params[1]
-        msg = JSON.stringify(validatorObject)
-    }
+function assert(msg: string, value: any, validatorObject: ValidatorObject = {}) {
+    const issetCheck = isEmpty(validatorObject)
     validatorObject.value = value
     validatorObject.name = msg
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
-    if (!isset(errMsg)) C.success(msg)
-    else C.error(false, msg + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`)
+    const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, value: undefined })}`}`
+    if (!isset(errMsg)) C.success(msg2)
+    else C.error(false, msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`)
 }
 
 /** Same as validator but return a boolean

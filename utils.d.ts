@@ -426,8 +426,7 @@ declare type ValidatorObject = {
     [k: string]: any;
 };
 declare function validator(...paramsToValidate: ValidatorObject[]): void;
-declare function assert(value: any, validatorObject: ValidatorObject): any;
-declare function assert(msg: string, value: any, validatorObject: ValidatorObject): any;
+declare function assert(msg: string, value: any, validatorObject?: ValidatorObject): void;
 /** Same as validator but return a boolean
  * See {@link validator}
  */
