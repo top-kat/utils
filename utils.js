@@ -1000,7 +1000,7 @@ function assert(msg, value, validatorObject = {}) {
     validatorObject.value = value;
     validatorObject.name = msg;
     const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
-    const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, value: undefined })}`}`;
+    const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`;
     if (!isset(errMsg))
         C.success(msg2);
     else
