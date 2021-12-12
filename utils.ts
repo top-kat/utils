@@ -1152,7 +1152,8 @@ function validator(...paramsToValidate: ValidatorObject[]) {
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray);
 }
 
-function assert(msg: string, value: any, validatorObject: ValidatorObject = {}) {
+function assert(msg: string, value: any, validatorObject: ValidatorObject | number | boolean | string = {}) {
+    if (typeof validatorObject !== 'object') validatorObject = { eq: validatorObject }
     const issetCheck = isEmpty(validatorObject)
     validatorObject.value = value
     validatorObject.name = msg

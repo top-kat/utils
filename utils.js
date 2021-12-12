@@ -996,6 +996,8 @@ function validator(...paramsToValidate) {
         throw new dataValidationUtilErrorHandler(...errArray);
 }
 function assert(msg, value, validatorObject = {}) {
+    if (typeof validatorObject !== 'object')
+        validatorObject = { eq: validatorObject };
     const issetCheck = isEmpty(validatorObject);
     validatorObject.value = value;
     validatorObject.name = msg;
