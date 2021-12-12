@@ -17,8 +17,8 @@ function round2(number: number, decimals = 2) { return Math.round(number * Math.
 /** Is number between two numbers (including those numbers) */
 function isBetween(number: number, min: number, max: number) { return number <= max && number >= min; }
 
-/** Random number between two values */
-function random(nb1: number, nb2: number, nbOfDecimals = 2) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
+/** Random number between two values with 0 decimals by default */
+function random(nb1: number, nb2: number, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
 
 /** Sum all values of an array, all values MUST be numbers */
 function sumArray(array: number[]) {
