@@ -10,8 +10,8 @@ function round(number, decimals = 0) { return Math.round(number * Math.pow(10, d
 function round2(number, decimals = 2) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
 /** Is number between two numbers (including those numbers) */
 function isBetween(number, min, max) { return number <= max && number >= min; }
-/** Random number between two values */
-function random(nb1, nb2, nbOfDecimals = 2) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
+/** Random number between two values with 0 decimals by default */
+function random(nb1, nb2, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
 /** Sum all values of an array, all values MUST be numbers */
 function sumArray(array) {
     return array.filter(item => typeof item === 'number').reduce((sum, val) => isset(val) ? val + sum : sum, 0);

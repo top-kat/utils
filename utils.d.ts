@@ -12,7 +12,7 @@ declare function round(number: number, decimals?: number): number;
 declare function round2(number: number, decimals?: number): number;
 /** Is number between two numbers (including those numbers) */
 declare function isBetween(number: number, min: number, max: number): boolean;
-/** Random number between two values */
+/** Random number between two values with 0 decimals by default */
 declare function random(nb1: number, nb2: number, nbOfDecimals?: number): number;
 /** Sum all values of an array, all values MUST be numbers */
 declare function sumArray(array: number[]): number;
