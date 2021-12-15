@@ -190,7 +190,7 @@ declare function arrayToObjectSorted(array: any, getFieldFromItem: any): {};
  */
 declare function pushIfNotExist(arrayToPushInto: any, valueOrArrayOfValuesToBePushed: any, comparisonFunction?: (a: any, b: any) => boolean): any[];
 declare function isNotEmptyArray(arr: any): boolean;
-declare function randomItemInArray(array: any): any;
+declare function randomItemInArray<T>(array: T[]): T;
 declare function cloneObject(o: any): any;
 /** Deep clone. WILL REMOVE circular references */
 declare function deepClone(obj: any, cache?: any[]): any;

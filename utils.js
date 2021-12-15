@@ -413,9 +413,6 @@ function isNotEmptyArray(arr) {
 function randomItemInArray(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
-function randomizeArray(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
 function cloneObject(o) {
     return JSON.parse(JSON.stringify(o));
 }

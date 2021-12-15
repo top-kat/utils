@@ -458,11 +458,7 @@ function isNotEmptyArray(arr): boolean {
     return Array.isArray(arr) && !!arr.length;
 }
 
-function randomItemInArray(array) {
-    return array[Math.floor(Math.random() * array.length)];
-}
-
-function randomizeArray(array) {
+function randomItemInArray<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)];
 }
 
