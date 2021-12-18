@@ -2,7 +2,7 @@
 const int = parseInt;
 const average = moyenne;
 const arrayUniqueValue = noDuplicateFilter;
-const JSONstringyParse = o => JSON.parse(JSON.stringify(o));
+const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
 const removeUndefinedKeys = objFilterUndefinedRecursive;
 /** Round with custom number of decimals (default:0) */
 function round(number, decimals = 0) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
