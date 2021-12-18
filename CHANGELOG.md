@@ -1,3 +1,6 @@
+### v1.0.25
+* NEW restTestMini mini test framework
+
 ### v1.0.9
 * assert used for testing
 
