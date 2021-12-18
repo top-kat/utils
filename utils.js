@@ -1007,6 +1007,7 @@ const restTestMini = {
             C.error(false, lastErr);
         C.log('\n\n\n');
         C.info(`STATS =========`);
+        C.info(`Total: ${restTestMini.nbSuccess + restTestMini.nbError}`);
         C.success(`Success: ${restTestMini.nbSuccess}`);
         C.error(false, `Errors: ${restTestMini.nbError}`);
     },
