@@ -79,7 +79,7 @@ declare function ENV(): {
  * @param {any} mayBeAstring
  * @return !!value
  */
-declare function parseBool(mayBeAstring: any): boolean;
+declare function parseBool(mayBeAstring: string | boolean): boolean;
 declare type Config = {
     env: string;
     isProd: boolean;

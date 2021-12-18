@@ -175,7 +175,7 @@ function parseBool(mayBeAstring) {
     if (typeof mayBeAstring === 'boolean')
         return mayBeAstring;
     else
-        return !!mayBeAstring;
+        return mayBeAstring === 'true' ? true : mayBeAstring === 'false' ? false : !!mayBeAstring;
 }
 function dim(str = '') {
     return configFn().terminal.noColor ? str : `\x1b[2m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`;
