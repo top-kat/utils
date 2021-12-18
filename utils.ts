@@ -1148,15 +1148,49 @@ function validator(...paramsToValidate: ValidatorObject[]) {
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray);
 }
 
+const restTestMini = {
+    reset() {
+        restTestMini.nbSuccess = 0
+        restTestMini.nbError = 0
+        restTestMini.lastErrors = []
+    },
+    printStats() {
+        // TODO print last errz
+        C.info(`ERRORS RESUME =========`)
+        if (restTestMini.lastErrors.length) C.log('\n\n\n')
+        for (const lastErr of restTestMini.lastErrors) C.error(false, lastErr)
+        C.log('\n\n\n')
+        C.info(`STATS =========`)
+        C.success(`Success: ${restTestMini.nbSuccess}`)
+        C.error(false, `Errors: ${restTestMini.nbError}`)
+    },
+    nbSuccess: 0,
+    nbError: 0,
+    lastErrors: []
+}
+
 function assert(msg: string, value: any, validatorObject: ValidatorObject | number | boolean | string = {}) {
-    if (typeof validatorObject !== 'object') validatorObject = { eq: validatorObject }
-    const issetCheck = isEmpty(validatorObject)
-    validatorObject.value = value
-    validatorObject.name = msg
-    const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
-    const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`
-    if (!isset(errMsg)) C.success(msg2)
-    else C.error(false, msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`)
+    try {
+        if (typeof validatorObject !== 'object') validatorObject = { eq: validatorObject }
+        const issetCheck = isEmpty(validatorObject)
+        validatorObject.value = value
+        validatorObject.name = msg
+        const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
+        const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`
+        if (!isset(errMsg)) {
+            restTestMini.nbSuccess++
+            C.success(msg2)
+        } else {
+            restTestMini.nbError++
+            const err = msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`
+            restTestMini.lastErrors.push(err)
+            C.error(false, err)
+        }
+    } catch (err) {
+        restTestMini.nbError++
+        restTestMini.lastErrors.push(err)
+        C.error(err)
+    }
 }
 
 /** Same as validator but return a boolean
@@ -2529,6 +2563,7 @@ const _ = {
     required: validator, // alias for readability
     validatorReturnErrArray,
     assert,
+    restTestMini,
     isValid,
     isType,
     isDateObject,
@@ -2737,6 +2772,7 @@ export {
     validator as required, // alias for readability
     validatorReturnErrArray,
     assert,
+    restTestMini,
     isValid,
     isType,
     isDateObject,

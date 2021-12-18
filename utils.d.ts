@@ -426,6 +426,13 @@ declare type ValidatorObject = {
     [k: string]: any;
 };
 declare function validator(...paramsToValidate: ValidatorObject[]): void;
+declare const restTestMini: {
+    reset(): void;
+    printStats(): void;
+    nbSuccess: number;
+    nbError: number;
+    lastErrors: any[];
+};
 declare function assert(msg: string, value: any, validatorObject?: ValidatorObject | number | boolean | string): void;
 /** Same as validator but return a boolean
  * See {@link validator}
@@ -802,6 +809,13 @@ declare const _: {
     required: typeof validator;
     validatorReturnErrArray: typeof validatorReturnErrArray;
     assert: typeof assert;
+    restTestMini: {
+        reset(): void;
+        printStats(): void;
+        nbSuccess: number;
+        nbError: number;
+        lastErrors: any[];
+    };
     isValid: typeof isValid;
     isType: typeof isType;
     isDateObject: typeof isDateObject;
@@ -943,4 +957,4 @@ declare const _: {
 export default _;
 export { round, random, cln, pad, int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
-validatorReturnErrArray, assert, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };
+validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };

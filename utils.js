@@ -992,18 +992,53 @@ function validator(...paramsToValidate) {
     if (errArray.length)
         throw new dataValidationUtilErrorHandler(...errArray);
 }
+const restTestMini = {
+    reset() {
+        restTestMini.nbSuccess = 0;
+        restTestMini.nbError = 0;
+        restTestMini.lastErrors = [];
+    },
+    printStats() {
+        // TODO print last errz
+        C.info(`ERRORS RESUME =========`);
+        if (restTestMini.lastErrors.length)
+            C.log('\n\n\n');
+        for (const lastErr of restTestMini.lastErrors)
+            C.error(false, lastErr);
+        C.log('\n\n\n');
+        C.info(`STATS =========`);
+        C.success(`Success: ${restTestMini.nbSuccess}`);
+        C.error(false, `Errors: ${restTestMini.nbError}`);
+    },
+    nbSuccess: 0,
+    nbError: 0,
+    lastErrors: []
+};
 function assert(msg, value, validatorObject = {}) {
-    if (typeof validatorObject !== 'object')
-        validatorObject = { eq: validatorObject };
-    const issetCheck = isEmpty(validatorObject);
-    validatorObject.value = value;
-    validatorObject.name = msg;
-    const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
-    const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`;
-    if (!isset(errMsg))
-        C.success(msg2);
-    else
-        C.error(false, msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`);
+    try {
+        if (typeof validatorObject !== 'object')
+            validatorObject = { eq: validatorObject };
+        const issetCheck = isEmpty(validatorObject);
+        validatorObject.value = value;
+        validatorObject.name = msg;
+        const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
+        const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`;
+        if (!isset(errMsg)) {
+            restTestMini.nbSuccess++;
+            C.success(msg2);
+        }
+        else {
+            restTestMini.nbError++;
+            const err = msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`;
+            restTestMini.lastErrors.push(err);
+            C.error(false, err);
+        }
+    }
+    catch (err) {
+        restTestMini.nbError++;
+        restTestMini.lastErrors.push(err);
+        C.error(err);
+    }
 }
 /** Same as validator but return a boolean
  * See {@link validator}
@@ -2317,6 +2352,7 @@ const _ = {
     required: validator,
     validatorReturnErrArray,
     assert,
+    restTestMini,
     isValid,
     isType,
     isDateObject,
@@ -2427,7 +2463,7 @@ int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArra
 //allias
 arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
-validatorReturnErrArray, assert, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, 
+validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, 
 // ALIASES
 issetOr as orIsset, 
 // DATE
