@@ -2,7 +2,7 @@
 const int = parseInt;
 const average = moyenne;
 const arrayUniqueValue = noDuplicateFilter;
-const JSONstringyParse = o => JSON.parse(JSON.stringify(o));
+const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
 const removeUndefinedKeys = objFilterUndefinedRecursive;
 
 type Color = [number, number, number]
