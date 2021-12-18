@@ -1163,7 +1163,7 @@ const restTestMini = {
         C.info(`STATS =========`)
         C.info(`Total: ${restTestMini.nbSuccess + restTestMini.nbError}`)
         C.success(`Success: ${restTestMini.nbSuccess}`)
-        C.error(false, `Errors: ${restTestMini.nbError}`)
+        C.error(false, `    Errors: ${restTestMini.nbError}`)
     },
     nbSuccess: 0,
     nbError: 0,
