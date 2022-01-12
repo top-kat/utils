@@ -1,3 +1,7 @@
+### v1.0.27
+* arrayCount count the nb of occurence of an item in array
+* isBetween inclusive option (default true)
+
 ### v1.0.25
 * NEW restTestMini mini test framework
 
