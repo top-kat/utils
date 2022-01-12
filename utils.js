@@ -9,7 +9,7 @@ function round(number, decimals = 0) { return Math.round(number * Math.pow(10, d
 /** Round with custom number of decimals (default:0) */
 function round2(number, decimals = 2) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
 /** Is number between two numbers (including those numbers) */
-function isBetween(number, min, max) { return number <= max && number >= min; }
+function isBetween(number, min, max, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
 /** Random number between two values with 0 decimals by default */
 function random(nb1, nb2, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
 /** Sum all values of an array, all values MUST be numbers */
@@ -384,6 +384,10 @@ function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b) {
  */
 function noDuplicateFilter(arr, comparisonFn = (a, b) => a === b) {
     return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i);
+}
+/** Count number of occurence of item in array */
+function arrayCount(item, arr) {
+    return arr.reduce((total, item2) => item === item2 ? total + 1 : total, 0);
 }
 /**
  * Sort an array in an object of subArrays, no duplicate.
@@ -2297,6 +2301,7 @@ const _ = {
     getArrayDiff,
     getNotInArrayA,
     noDuplicateFilter,
+    arrayCount,
     arrayToObjectSorted,
     pushIfNotExist,
     isNotEmptyArray,
@@ -2460,7 +2465,7 @@ const _ = {
 export default _;
 export { round, random, cln, pad, 
 // ALIASES
-int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, 
+int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, 
 //allias
 arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability

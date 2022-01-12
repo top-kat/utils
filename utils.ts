@@ -15,7 +15,7 @@ function round(number: number, decimals = 0) { return Math.round(number * Math.p
 function round2(number: number, decimals = 2) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
 
 /** Is number between two numbers (including those numbers) */
-function isBetween(number: number, min: number, max: number) { return number <= max && number >= min; }
+function isBetween(number: number, min: number, max: number, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
 
 /** Random number between two values with 0 decimals by default */
 function random(nb1: number, nb2: number, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
@@ -426,6 +426,11 @@ function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b): an
  */
 function noDuplicateFilter(arr, comparisonFn = (a, b) => a === b): any[] {
     return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i);
+}
+
+/** Count number of occurence of item in array */
+function arrayCount(item: any, arr: any[]): number {
+    return arr.reduce((total, item2) => item === item2 ? total + 1 : total, 0)
 }
 
 /**
@@ -2502,6 +2507,7 @@ const _ = {
     getArrayDiff,
     getNotInArrayA,
     noDuplicateFilter,
+    arrayCount,
     arrayToObjectSorted,
     pushIfNotExist,
     isNotEmptyArray,
@@ -2711,6 +2717,7 @@ export {
     getArrayDiff,
     getNotInArrayA,
     noDuplicateFilter,
+    arrayCount,
     arrayToObjectSorted,
     pushIfNotExist,
     isNotEmptyArray,
