@@ -1672,10 +1672,12 @@ function isWeekend(dateAllFormat: Date | string | number = getDateAsInt()) {
 
 type DateAllFormat = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp'
 
+function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp', cannotBeTheSameDayAsFromDate?: boolean): number
+function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'date', cannotBeTheSameDayAsFromDate?: boolean): Date
 function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat: DateAllFormat = 'date', cannotBeTheSameDayAsFromDate = true) {
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt)) weekDayInt = (date.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6)
-    const toAdd = date.getDay() === weekDayInt ? 7 : 0
+    const toAdd = cannotBeTheSameDayAsFromDate && date.getDay() === weekDayInt ? 7 : 0
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }

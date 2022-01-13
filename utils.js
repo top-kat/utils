@@ -1490,7 +1490,7 @@ function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', cannotBeTheSam
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt))
         weekDayInt = date.getDay();
-    const toAdd = date.getDay() === weekDayInt ? 7 : 0;
+    const toAdd = cannotBeTheSameDayAsFromDate && date.getDay() === weekDayInt ? 7 : 0;
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }

@@ -515,8 +515,8 @@ declare function isThursday(dateAllFormat?: Date | string | number): boolean;
 declare function isFriday(dateAllFormat?: Date | string | number): boolean;
 declare function isSaturday(dateAllFormat?: Date | string | number): boolean;
 declare function isWeekend(dateAllFormat?: Date | string | number): boolean;
-declare type DateAllFormat = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp';
-declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateAllFormat, cannotBeTheSameDayAsFromDate?: boolean): number | Date;
+declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp', cannotBeTheSameDayAsFromDate?: boolean): number;
+declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'date', cannotBeTheSameDayAsFromDate?: boolean): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
