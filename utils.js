@@ -1191,7 +1191,7 @@ function validatorReturnErrArray(...paramsToValidate) {
 function isEmpty(objOrArr) {
     if (Array.isArray(objOrArr) || typeof objOrArr === 'string')
         return objOrArr.length === 0;
-    else if (typeof objOrArr == 'object' && objOrArr !== null)
+    else if (typeof objOrArr == 'object' && objOrArr !== null && !(objOrArr instanceof Date))
         return Object.keys(objOrArr).length === 0;
     else
         false;
@@ -1199,7 +1199,7 @@ function isEmpty(objOrArr) {
 function err422IfNotSet(o) {
     let m = [];
     for (let p in o)
-        if (!isset(o[p]) || isEmpty(o[p]) || Number.isNaN(o[p]))
+        if (!isset(o[p]))
             m.push(p);
     if (m.length)
         throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') });
@@ -1264,7 +1264,8 @@ function getDateAsObject(dateAllFormat = new Date(), errIfNotValid$ = true) {
     return dateObj;
 }
 function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length) {
-    err422IfNotSet({ dateStringOrInt });
+    if (!isset(dateStringOrInt))
+        return false;
     const dateStr = dateStringOrInt.toString();
     if (length && dateStr.length !== length)
         throw new dataValidationUtilErrorHandler(`wrongLengthForDateInt`, 422, { origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: `${dateStringOrInt} length !== ${length}` });
