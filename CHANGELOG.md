@@ -1,3 +1,6 @@
+### v1.0.28
+* nextWeekDay
+
 ### v1.0.27
 * arrayCount count the nb of occurence of an item in array
 * isBetween inclusive option (default true)
