@@ -1486,11 +1486,11 @@ function isWeekend(dateAllFormat = getDateAsInt()) {
     let date = getDateAsObject(dateAllFormat);
     return date.getUTCDay() === 6 || date.getUTCDay() === 0;
 }
-function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', cannotBeTheSameDayAsFromDate = true) {
+function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', sameDayAllowed = false) {
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt))
         weekDayInt = date.getDay();
-    const toAdd = cannotBeTheSameDayAsFromDate && date.getDay() === weekDayInt ? 7 : 0;
+    const toAdd = !sameDayAllowed && date.getDay() === weekDayInt ? 7 : 0;
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }
