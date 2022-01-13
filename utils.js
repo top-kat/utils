@@ -1486,60 +1486,12 @@ function isWeekend(dateAllFormat = getDateAsInt()) {
     let date = getDateAsObject(dateAllFormat);
     return date.getUTCDay() === 6 || date.getUTCDay() === 0;
 }
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextMonday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (8 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextTuesday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (9 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextWednesday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (10 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextThursday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (11 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextFriday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (12 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextSaturday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (13 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextSunday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (7 - date.getUTCDay()) % 7);
+function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', cannotBeTheSameDayAsFromDate = true) {
+    const date = getDateAsObject(fromDate);
+    if (!isset(weekDayInt))
+        weekDayInt = date.getDay();
+    const toAdd = date.getDay() === weekDayInt ? 7 : 0;
+    date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }
 /**
@@ -2403,13 +2355,7 @@ const _ = {
     isFriday,
     isSaturday,
     isWeekend,
-    nextMonday,
-    nextTuesday,
-    nextWednesday,
-    nextThursday,
-    nextFriday,
-    nextSaturday,
-    nextSunday,
+    nextWeekDay,
     addMinutes,
     addHours,
     addDays,
@@ -2475,7 +2421,7 @@ issetOr as orIsset,
 // DATE
 getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, 
 // isDateObject <= see validator.js
-getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextMonday, nextTuesday, nextWednesday, nextThursday, nextFriday, nextSaturday, nextSunday, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, 
+getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, 
 // ALIASES
 getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, 
 // LOGGER

@@ -1670,62 +1670,16 @@ function isWeekend(dateAllFormat: Date | string | number = getDateAsInt()) {
     return date.getUTCDay() === 6 || date.getUTCDay() === 0;
 }
 
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextMonday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (8 - date.getUTCDay()) % 7);
+type DateAllFormat = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp'
+
+function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat: DateAllFormat = 'date', cannotBeTheSameDayAsFromDate = true) {
+    const date = getDateAsObject(fromDate);
+    if (!isset(weekDayInt)) weekDayInt = (date.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6)
+    const toAdd = date.getDay() === weekDayInt ? 7 : 0
+    date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextTuesday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (9 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextWednesday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (10 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextThursday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (11 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextFriday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (12 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextSaturday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (13 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function nextSunday(fromDate = getDateAsInt(), outputFormat = 'int') {
-    let date = getDateAsObject(fromDate);
-    date.setUTCDate(date.getUTCDate() + (7 - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
-}
+
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
@@ -1956,8 +1910,6 @@ function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDat
             return getDateAsObject(dateAllFormat);
     }
 }
-
-
 
 
 //----------------------------------------
@@ -2616,13 +2568,7 @@ const _ = {
     isFriday,
     isSaturday,
     isWeekend,
-    nextMonday,
-    nextTuesday,
-    nextWednesday,
-    nextThursday,
-    nextFriday,
-    nextSaturday,
-    nextSunday,
+    nextWeekDay,
     addMinutes,
     addHours,
     addDays,
@@ -2828,13 +2774,7 @@ export {
     isFriday,
     isSaturday,
     isWeekend,
-    nextMonday,
-    nextTuesday,
-    nextWednesday,
-    nextThursday,
-    nextFriday,
-    nextSaturday,
-    nextSunday,
+    nextWeekDay,
     addMinutes,
     addHours,
     addDays,
