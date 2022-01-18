@@ -55,19 +55,28 @@ async function tryCatch(callback, onErr: Function = () => { }) {
 }
 
 
-const generatedTokens = []; // timestamp, counter
+let generatedTokens = []; // cache to avoid collision
+let lastTs = new Date().getTime();
 /** minLength 8 if unique 
- * @param {Number} length default: 20
- * @param {Boolean} unique default: true. Generate a real unique token base on the date. min length will be min 8 in this case
- * @param {string} mode one of ['alphanumeric', 'hexadecimal']
- * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
- */
-function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
+* @param {Number} length default: 20
+* @param {Boolean} unique default: true. Generate a real unique token base on the date. min length will be min 8 in this case
+* @param {string} mode one of ['alphanumeric', 'hexadecimal']
+* NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
+*/
+function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
     let charConvNumeric = mode === 'alphanumeric' ? 36 : 16;
     if (unique && length < 8) length = 8;
-    let token = unique ? (new Date().getTime()).toString(charConvNumeric) : '';
-    while (token.length < length) token += Math.random().toString(charConvNumeric).substr(2, 1); // char alphaNumeric aléatoire
-    while (generatedTokens.includes(token)) token = token.replace(/.$/, Math.random().toString(charConvNumeric).substr(2, 1));
+    let token
+    let tokenTs
+    do {
+        tokenTs = (new Date()).getTime()
+        token = unique ? tokenTs.toString(charConvNumeric) : '';
+        while (token.length < length) token += Math.random().toString(charConvNumeric).substr(2, 1); // char alphaNumeric aléatoire
+    } while (generatedTokens.includes(token))
+    if (lastTs < tokenTs) {
+        generatedTokens = [] // reset generated token on new timestamp because cannot collide
+    }
+    generatedTokens.push(token)
     return token;
 }
 
