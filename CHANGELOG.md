@@ -1,3 +1,6 @@
+### v1.0.32
+* safer generateToken
+
 ### v1.0.28
 * nextWeekDay
 
