@@ -189,7 +189,7 @@ function ENV(): { [key: string]: any } {
  * @param {any} mayBeAstring 
  * @return !!value
  */
-function parseBool(mayBeAstring: string | boolean): boolean {
+function parseBool(mayBeAstring: string | boolean | number): boolean {
     if (typeof mayBeAstring === 'boolean') return mayBeAstring;
     else return mayBeAstring === 'true' ? true : mayBeAstring === 'false' ? false : !!mayBeAstring;
 }
