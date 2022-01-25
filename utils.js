@@ -344,9 +344,6 @@ function mergeMixins(that, ...mixins) {
 function strAsArray(arrOrStr) {
     return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr;
 }
-/** If not an array provided, return the array with the value
- * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
- */
 function asArray(item) {
     return typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item];
 }

@@ -390,7 +390,9 @@ function strAsArray(arrOrStr) {
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
-function asArray<T>(item: T | T[]): T[] | undefined {
+function asArray<T extends undefined | null>(item: T): T
+function asArray<T extends string | number | boolean | any[] | object>(item: T): T[]
+function asArray<T>(item: T): any {
     return typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]
 }
 
