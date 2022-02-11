@@ -152,8 +152,7 @@ declare function strAsArray(arrOrStr: any): any;
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
-declare function asArray<T extends undefined | null>(item: T): T;
-declare function asArray<T extends string | number | boolean | any[] | object>(item: T): T[];
+declare function asArray<T extends any[] | any>(item: T): T extends undefined ? undefined : T extends any[] ? T : T[];
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */

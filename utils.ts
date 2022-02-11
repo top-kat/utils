@@ -390,10 +390,8 @@ function strAsArray(arrOrStr) {
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
-function asArray<T extends undefined | null>(item: T): T
-function asArray<T extends string | number | boolean | any[] | object>(item: T): T[]
-function asArray<T>(item: T): any {
-    return typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]
+function asArray<T extends any[] | any>(item: T): T extends undefined ? undefined : T extends any[] ? T : T[] {
+    return ((typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]) as T extends undefined ? undefined : T extends any[] ? T : T[])
 }
 
 /** Array comparison
@@ -1166,9 +1164,6 @@ function validator(...paramsToValidate: ValidatorObject[]) {
 
 const restTestMini = {
     reset() {
-        restTestMini.nbSuccess = 0
-        restTestMini.nbError = 0
-        restTestMini.lastErrors = []
     },
     printStats() {
         // TODO print last errz
