@@ -1,3 +1,6 @@
+### v1.0.35
+* fix in asArray typing
+
 ### v1.0.32
 * safer generateToken
 
