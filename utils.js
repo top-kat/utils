@@ -1220,7 +1220,12 @@ function humanReadableTimestamp(dateAllFormat) {
  */
 function getDateAsInt(dateAllFormat = new Date(), errIfNotValid$ = false, withHoursAndMinutes$ = false) {
     let dateInt;
-    if (isDateIntOrStringValid(dateAllFormat)) {
+    if (typeof dateAllFormat === 'string' && dateAllFormat.includes('/')) {
+        // 01/01/2020 format
+        const [d, m, y] = dateAllFormat.split('/');
+        return y + m.toString().padStart(2, '0') + d.toString().padStart(2, '0');
+    }
+    else if (isDateIntOrStringValid(dateAllFormat)) {
         // we can pass an int or string format (20180106)
         dateInt = (dateAllFormat + '00000000').substr(0, 12); // add default 000000 for "month days minutes:sec" if not set
     }
@@ -1406,92 +1411,6 @@ function doDateOverlap(event1, event2, fieldNameForStartDate$ = 'startDate', fie
         return (!event2[fieldNameForEndDate$] || event1[fieldNameForStartDate$] < event2[fieldNameForEndDate$]) && (!event1[fieldNameForEndDate$] || event1[fieldNameForEndDate$] > event2[fieldNameForStartDate$]);
     return (!event2[fieldNameForEndDate$] || event1[fieldNameForStartDate$] <= event2[fieldNameForEndDate$]) && (!event1[fieldNameForEndDate$] || event1[fieldNameForEndDate$] >= event2[fieldNameForStartDate$]);
 }
-/** Get all dates at specified days between two dates
- * @param daysArray [0,1,2,3,4,5,6]
- * @param {*} startDate all format
- * @param {*} endDate all format
- * @param {'int'|'object'} outputFormat default: int
- */
-function getDatesForDaysArrayBetweenTwoDates(daysArray, startDate, endDate, outputFormat = 'int') {
-    const dateArr = [];
-    let actualDate = getDateAsObject(startDate);
-    endDate = getDateAsObject(endDate);
-    while (actualDate <= endDate) {
-        if (daysArray.includes(actualDate.getUTCDay()))
-            dateArr.push(getDateAsObject(actualDate)); // cloned
-        actualDate.setUTCDate(actualDate.getUTCDate() + 1);
-    }
-    return dateArr.map(d => getDateAs(d, outputFormat));
-}
-function getEndTimeFromDurationAndStartTime(startTime, duration) {
-    const timeArr = startTime.split(':').map(n => parseInt(n));
-    let endTime = (timeArr[0] * 60 + timeArr[1]) + duration;
-    return {
-        days: Math.floor(endTime / 1440),
-        time: pad(Math.floor((endTime % 1440) / 60)) + ':' + pad(endTime % 60)
-    };
-}
-function getDate12FromDateAndTime(dateAllFormat, timeAllFormat) {
-    if (typeof dateAllFormat !== 'number' || dateAllFormat > 99991231 || dateAllFormat < 0)
-        dateAllFormat = getDateAsInt(dateAllFormat);
-    if (typeof timeAllFormat !== 'number' || timeAllFormat > 2359 || timeAllFormat < 0)
-        timeAllFormat = getTimeAsInt(timeAllFormat);
-    return dateAllFormat * 10000 + timeAllFormat;
-}
-function eachDayOfInterval(startDateAllFormat, endDateAllFormat, outputFormat = 'int') {
-    const start = getDateAsObject(startDateAllFormat);
-    const end = getDateAsObject(endDateAllFormat);
-    let days = [];
-    let current = new Date();
-    current.setTime(start.getTime());
-    while (current <= end) {
-        days.push(new Date(current.getTime()));
-        current.setTime(current.getTime() + 1000 * 60 * 60 * 24);
-    }
-    return days.map(d => getDateAs(d, outputFormat));
-}
-function eachMonthOfInterval(startDateAllFormat, endDateAllFormat) {
-    const months = [];
-    const current = firstDayOfMonth(startDateAllFormat, 'Object');
-    const end = firstDayOfMonth(endDateAllFormat, 'Object');
-    while (current <= end) {
-        months.push(getMonthAsInt(current));
-        current.setUTCMonth(current.getUTCMonth() + 1);
-    }
-    return months;
-}
-function isSunday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 0;
-}
-function isMonday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 1;
-}
-function isTuesday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 2;
-}
-function isWednesday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 3;
-}
-function isThursday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 4;
-}
-function isFriday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 5;
-}
-function isSaturday(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 6;
-}
-function isWeekend(dateAllFormat = getDateAsInt()) {
-    let date = getDateAsObject(dateAllFormat);
-    return date.getUTCDay() === 6 || date.getUTCDay() === 0;
-}
 function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', sameDayAllowed = false) {
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt))
@@ -1602,103 +1521,6 @@ function differenceInDays(startDateAllFormat, endDateAllFormat) {
 }
 function differenceInWeeks(startDateAllFormat, endDateAllFormat) {
     return differenceInDays(startDateAllFormat, endDateAllFormat) / 7;
-}
-function differenceInMonths(startDateAllFormat, endDateAllFormat) {
-    const startDate = getDateAsInt(startDateAllFormat);
-    const endDate = getDateAsInt(endDateAllFormat);
-    const monthesForStart = parseInt(getYear(startDate)) * 12 + parseInt(getMonthForHuman(startDate));
-    const monthesForEnd = parseInt(getYear(endDate)) * 12 + parseInt(getMonthForHuman(endDate));
-    if (monthesForStart === monthesForEnd) {
-        const firstDay = firstDayOfMonth(startDate);
-        const lastDay = lastDayOfMonth(endDate);
-        const differenceBetweenStartAndEnd = differenceInDays(startDate, endDate);
-        const numberOfDaysInMonth = differenceInDays(firstDay, lastDay);
-        return round(differenceBetweenStartAndEnd / numberOfDaysInMonth, 2);
-    }
-    const firstDayOfStartDateMonth = firstDayOfMonth(startDate);
-    const lastDayOfStartDateMonth = lastDayOfMonth(startDate);
-    const firstDayOfEndDateMonth = firstDayOfMonth(endDate);
-    const lastDayOfEndDateMonth = lastDayOfMonth(endDate);
-    const differenceBetweenStartDateAndEndOfStartMonth = differenceInDays(startDate, lastDayOfStartDateMonth);
-    const differenceBetweenStartOfEndMonthAndEndDate = differenceInDays(firstDayOfEndDateMonth, endDate);
-    const numberOfDaysInStartMonth = differenceInDays(firstDayOfStartDateMonth, lastDayOfStartDateMonth);
-    const numberOfDaysInEndMonth = differenceInDays(firstDayOfEndDateMonth, lastDayOfEndDateMonth);
-    return round(monthesForEnd - monthesForStart - 1 + differenceBetweenStartDateAndEndOfStartMonth / numberOfDaysInStartMonth + differenceBetweenStartOfEndMonthAndEndDate / numberOfDaysInEndMonth, 2);
-}
-/** Will check if that date exists, and if not, this will
- * Usefull for monthly subscription or reccuring month dates
- * @param {any} dateAllFormat default: new Date()
- * @returns {Date} Date object
- */
-function getClosestExistingDateOfMonth(dateAllFormat = getDateAsInt()) {
-    let [day, month, year] = dateArrayInt(dateAllFormat);
-    const zeroBasedMonth = minMax(month - 1, 0, 11);
-    if (!isBetween(month, 1, 12))
-        console.error('Wrong month provided for getClosestExistingDateOfMonth: ' + month + ' Shall be between 1-12. Converted to ' + zeroBasedMonth);
-    let dayNb = minMax(day, 1, 31);
-    let date;
-    let increment = dayNb < 1;
-    let tooMuchRecursionCount = 0;
-    do
-        date = new Date(year, zeroBasedMonth, (increment ? dayNb++ : dayNb--), 12);
-    while (date.getUTCMonth() !== zeroBasedMonth && tooMuchRecursionCount < 99);
-    if (tooMuchRecursionCount)
-        throw new dataValidationUtilErrorHandler(`tooMuchRecursionCount`, 500, { origin: 'getClosestExistingDateOfMonth', day, month, year });
-    return date;
-}
-/** Compute the best possible date for next month same day
- * Usefull for monthly subscription or reccuring month dates
- * @param {any} dateAllFormat default: new Date()
- * @param {Boolean} onlyFuture if true return the future date relative to any date in the past, else, it return the next month date possible relative to the dateAllFormat
- * @returns {Date} Date object
- */
-function getNextMonthlyDate(dateAllFormat = getDateAsInt(), onlyFuture = false) {
-    let [day, month, year] = dateArrayInt(dateAllFormat);
-    day = minMax(day, 1, 31);
-    month = minMax(month, 1, 12);
-    err422IfNotSet({ year, month, day });
-    const isDatePast = getDateAsInt(dateAllFormat) <= getDateAsInt();
-    if (onlyFuture && isDatePast) {
-        let [, todayMonth, todayYear] = dateArrayInt();
-        month = todayMonth;
-        year = todayYear;
-    }
-    let nextMonth;
-    if (month === 12) {
-        nextMonth = 1;
-        year++;
-    }
-    else
-        nextMonth = month + 1;
-    return getClosestExistingDateOfMonth(new Date(year, nextMonth - 1, day));
-}
-function getHolidayReferenceYear(dateAllFormat) {
-    let date = getDateAsObject(dateAllFormat);
-    if (date.getUTCMonth() > 4)
-        return date.getUTCFullYear();
-    return date.getUTCFullYear() - 1;
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function getFirstDayOfHolidayReferenceYear(dateAllFormat, outputFormat = 'int') {
-    const date = getDateAsObject(dateAllFormat);
-    let year = date.getUTCFullYear();
-    if (date.getUTCMonth() < 4)
-        year = date.getUTCFullYear() - 1;
-    const firstDayAsInt = year + '0601';
-    return getDateAs(firstDayAsInt, outputFormat);
-}
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function getLastDayOfHolidayReferenceYear(dateAllFormat, outputFormat = 'int') {
-    let date = getDateAsObject(dateAllFormat);
-    let year = date.getUTCFullYear() + 1;
-    if (date.getUTCMonth() < 4)
-        year = date.getUTCFullYear();
-    const firstDayAsInt = year + '0531';
-    return getDateAs(firstDayAsInt, outputFormat);
 }
 /**
  * @param {String} outputDateFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
@@ -2349,18 +2171,7 @@ const _ = {
     isTimeStringValid,
     getDuration,
     doDateOverlap,
-    getDatesForDaysArrayBetweenTwoDates,
-    getEndTimeFromDurationAndStartTime,
-    getDate12FromDateAndTime,
     getMonthAsInt,
-    isSunday,
-    isMonday,
-    isTuesday,
-    isWednesday,
-    isThursday,
-    isFriday,
-    isSaturday,
-    isWeekend,
     nextWeekDay,
     addMinutes,
     addHours,
@@ -2373,20 +2184,12 @@ const _ = {
     getMinutes,
     firstDayOfMonth,
     lastDayOfMonth,
-    eachDayOfInterval,
-    eachMonthOfInterval,
     differenceInMilliseconds,
     differenceInSeconds,
     differenceInMinutes,
     differenceInHours,
     differenceInDays,
     differenceInWeeks,
-    differenceInMonths,
-    getClosestExistingDateOfMonth,
-    getNextMonthlyDate,
-    getHolidayReferenceYear,
-    getFirstDayOfHolidayReferenceYear,
-    getLastDayOfHolidayReferenceYear,
     // ALIASES
     getDateAsArrayFormatted: dateArray,
     getDateAsArray: dateStringToArray,
@@ -2427,7 +2230,7 @@ issetOr as orIsset,
 // DATE
 getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, 
 // isDateObject <= see validator.js
-getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, 
+getDuration, doDateOverlap, getMonthAsInt, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, 
 // ALIASES
 getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, 
 // LOGGER

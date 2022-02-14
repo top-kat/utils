@@ -446,12 +446,12 @@ declare function isValid(...paramsToValidate: any[]): boolean;
 declare function isType(value: any, type: BaseTypes): boolean;
 declare function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?];
 declare function isEmpty(objOrArr: object | any[] | string | null | undefined): boolean;
-declare function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?: any): number;
+declare function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?: any): string;
 declare function humanReadableTimestamp(dateAllFormat: any): number;
 /** format for 6/8/2018 => 20180806
  * @param dateAllFormat multiple format allowed 2012, 20120101, 201201011200, new Date(), "2019-12-08T16:19:10.341Z" and all string that new Date() can parse
  */
-declare function getDateAsInt(dateAllFormat?: Date | string | number, errIfNotValid$?: boolean, withHoursAndMinutes$?: boolean): number;
+declare function getDateAsInt(dateAllFormat?: Date | string | number, errIfNotValid$?: boolean, withHoursAndMinutes$?: boolean): string;
 declare function getMonthAsInt(dateAllFormat?: Date | string | number): number;
 /**
  * @param dateAllFormat multiple format allowed 2012, 20120101, 201201011200, new Date(), "2019-12-08T16:19:10.341Z" and all string that new Date() can parse
@@ -481,7 +481,7 @@ declare function getTimeAsInt(timeOrDateInt?: any): number | "dateInvalid";
  * @param {timeInt|dateInt12} Eg: 2222 OR 201201012222. Default, actual dateInt12
  * @param {String} separator default: ":"
  */
-declare function getIntAsTime(intOrDateTimeInt?: number, separator?: string): string;
+declare function getIntAsTime(intOrDateTimeInt?: string, separator?: string): string;
 declare function isTimeStringValid(timeStr: any, outputAnError$?: boolean): boolean;
 declare function getDuration(startDate: any, endDate: any, inMinutes?: boolean): number | number[];
 /** compare two object with DATE INT, if they overlap return true
@@ -493,50 +493,28 @@ declare function getDuration(startDate: any, endDate: any, inMinutes?: boolean):
  * @param {Boolean} strict$ if true,
  */
 declare function doDateOverlap(event1: any, event2: any, fieldNameForStartDate$?: string, fieldNameForEndDate$?: string, allowNull$?: boolean, strict$?: boolean): boolean;
-/** Get all dates at specified days between two dates
- * @param daysArray [0,1,2,3,4,5,6]
- * @param {*} startDate all format
- * @param {*} endDate all format
- * @param {'int'|'object'} outputFormat default: int
- */
-declare function getDatesForDaysArrayBetweenTwoDates(daysArray: any, startDate: any, endDate: any, outputFormat?: string): (number | Date)[];
-declare function getEndTimeFromDurationAndStartTime(startTime: any, duration: any): {
-    days: number;
-    time: string;
-};
-declare function getDate12FromDateAndTime(dateAllFormat: Date | string | number, timeAllFormat: any): any;
-declare function eachDayOfInterval(startDateAllFormat: any, endDateAllFormat: any, outputFormat?: string): (number | Date)[];
-declare function eachMonthOfInterval(startDateAllFormat: any, endDateAllFormat: any): any[];
-declare function isSunday(dateAllFormat?: Date | string | number): boolean;
-declare function isMonday(dateAllFormat?: Date | string | number): boolean;
-declare function isTuesday(dateAllFormat?: Date | string | number): boolean;
-declare function isWednesday(dateAllFormat?: Date | string | number): boolean;
-declare function isThursday(dateAllFormat?: Date | string | number): boolean;
-declare function isFriday(dateAllFormat?: Date | string | number): boolean;
-declare function isSaturday(dateAllFormat?: Date | string | number): boolean;
-declare function isWeekend(dateAllFormat?: Date | string | number): boolean;
 declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp', sameDayAllowed?: boolean): number;
 declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'date', sameDayAllowed?: boolean): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: string): number | Date;
+declare function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: string): string | number | Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: string): number | Date;
+declare function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: string): string | number | Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: string): number | Date;
+declare function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: string): string | number | Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: string): number | Date;
+declare function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: string): string | number | Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addYears(dateAllFormat?: Date | string | number, numberOfYears?: number, outputFormat?: string): number | Date;
+declare function addYears(dateAllFormat?: Date | string | number, numberOfYears?: number, outputFormat?: string): string | number | Date;
 declare function getDayOfMonth(dateAllFormat?: Date | string | number): any;
 declare function getYear(dateAllFormat?: Date | string | number): any;
 declare function getHours(dateAllFormat?: Date | string | number): any;
@@ -544,40 +522,17 @@ declare function getMinutes(dateAllFormat?: Date | string | number): any;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function lastDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: string): number | Date;
+declare function lastDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: string): string | number | Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function firstDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: string): number | Date;
+declare function firstDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: string): string | number | Date;
 declare function differenceInMilliseconds(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInSeconds(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInMinutes(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInHours(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInDays(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInWeeks(startDateAllFormat: any, endDateAllFormat: any): number;
-declare function differenceInMonths(startDateAllFormat: any, endDateAllFormat: any): number;
-/** Will check if that date exists, and if not, this will
- * Usefull for monthly subscription or reccuring month dates
- * @param {any} dateAllFormat default: new Date()
- * @returns {Date} Date object
- */
-declare function getClosestExistingDateOfMonth(dateAllFormat?: Date | string | number): any;
-/** Compute the best possible date for next month same day
- * Usefull for monthly subscription or reccuring month dates
- * @param {any} dateAllFormat default: new Date()
- * @param {Boolean} onlyFuture if true return the future date relative to any date in the past, else, it return the next month date possible relative to the dateAllFormat
- * @returns {Date} Date object
- */
-declare function getNextMonthlyDate(dateAllFormat?: Date | string | number, onlyFuture?: boolean): any;
-declare function getHolidayReferenceYear(dateAllFormat: Date | string | number): number;
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-declare function getFirstDayOfHolidayReferenceYear(dateAllFormat: Date | string | number, outputFormat?: string): number | Date;
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-declare function getLastDayOfHolidayReferenceYear(dateAllFormat: Date | string | number, outputFormat?: string): number | Date;
 /**
 // console colored output
 // * console.log(C.green(C.dim('Hey bro !')))
@@ -823,18 +778,7 @@ declare const _: {
     isTimeStringValid: typeof isTimeStringValid;
     getDuration: typeof getDuration;
     doDateOverlap: typeof doDateOverlap;
-    getDatesForDaysArrayBetweenTwoDates: typeof getDatesForDaysArrayBetweenTwoDates;
-    getEndTimeFromDurationAndStartTime: typeof getEndTimeFromDurationAndStartTime;
-    getDate12FromDateAndTime: typeof getDate12FromDateAndTime;
     getMonthAsInt: typeof getMonthAsInt;
-    isSunday: typeof isSunday;
-    isMonday: typeof isMonday;
-    isTuesday: typeof isTuesday;
-    isWednesday: typeof isWednesday;
-    isThursday: typeof isThursday;
-    isFriday: typeof isFriday;
-    isSaturday: typeof isSaturday;
-    isWeekend: typeof isWeekend;
     nextWeekDay: typeof nextWeekDay;
     addMinutes: typeof addMinutes;
     addHours: typeof addHours;
@@ -847,20 +791,12 @@ declare const _: {
     getMinutes: typeof getMinutes;
     firstDayOfMonth: typeof firstDayOfMonth;
     lastDayOfMonth: typeof lastDayOfMonth;
-    eachDayOfInterval: typeof eachDayOfInterval;
-    eachMonthOfInterval: typeof eachMonthOfInterval;
     differenceInMilliseconds: typeof differenceInMilliseconds;
     differenceInSeconds: typeof differenceInSeconds;
     differenceInMinutes: typeof differenceInMinutes;
     differenceInHours: typeof differenceInHours;
     differenceInDays: typeof differenceInDays;
     differenceInWeeks: typeof differenceInWeeks;
-    differenceInMonths: typeof differenceInMonths;
-    getClosestExistingDateOfMonth: typeof getClosestExistingDateOfMonth;
-    getNextMonthlyDate: typeof getNextMonthlyDate;
-    getHolidayReferenceYear: typeof getHolidayReferenceYear;
-    getFirstDayOfHolidayReferenceYear: typeof getFirstDayOfHolidayReferenceYear;
-    getLastDayOfHolidayReferenceYear: typeof getLastDayOfHolidayReferenceYear;
     getDateAsArrayFormatted: typeof dateArray;
     getDateAsArray: typeof dateStringToArray;
     convertDateAsInt: typeof getDateAsInt;
@@ -928,4 +864,4 @@ declare const _: {
 export default _;
 export { round, random, cln, pad, int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
-validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getDatesForDaysArrayBetweenTwoDates, getEndTimeFromDurationAndStartTime, getDate12FromDateAndTime, getMonthAsInt, isSunday, isMonday, isTuesday, isWednesday, isThursday, isFriday, isSaturday, isWeekend, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, eachDayOfInterval, eachMonthOfInterval, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, differenceInMonths, getClosestExistingDateOfMonth, getNextMonthlyDate, getHolidayReferenceYear, getFirstDayOfHolidayReferenceYear, getLastDayOfHolidayReferenceYear, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };
+validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getMonthAsInt, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };
