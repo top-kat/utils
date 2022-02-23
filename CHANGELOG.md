@@ -1,3 +1,7 @@
+### v1.0.37
+* add generateObjectId
+* cleaning and typing improvements
+
 ### v1.0.35
 * fix in asArray typing
 
