@@ -5,6 +5,9 @@ declare const arrayUniqueValue: typeof noDuplicateFilter;
 declare const JSONstringyParse: (o: any) => any;
 declare const removeUndefinedKeys: typeof objFilterUndefinedRecursive;
 declare type Color = [number, number, number];
+declare type ObjectGeneric = {
+    [k: string]: any;
+};
 declare type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email';
 /** Round with custom number of decimals (default:0) */
 declare function round(number: number, decimals?: number): number;
@@ -23,7 +26,7 @@ declare function moyenne(array: number[], nbOfDecimals?: number): number;
 /** Clean output for outside world. All undefined / null / NaN / Infinity values are changed to '-' */
 declare function cln(val: any, replacerInCaseItIsUndefinNaN?: string): any;
 /** length default 2, shortcut for 1 to 01 */
-declare function pad(numberOrStr: any, length?: number): string;
+declare function pad(numberOrStr: number | string, length?: number): string;
 /** return the number or the closest number of the range
  * * nb min max  => returns
  * * 7  5   10   => 7 // in the range
@@ -31,19 +34,20 @@ declare function pad(numberOrStr: any, length?: number): string;
  * * 99 5   10   => 10// above the max value
  */
 declare function minMax(nb: number, min: number, max: number): number;
-declare function tryCatch(callback: any, onErr?: Function): Promise<any>;
+declare function tryCatch(callback: Function, onErr?: Function): Promise<any>;
 /** minLength 8 if unique
 * @param {Number} length default: 20
 * @param {Boolean} unique default: true. Generate a real unique token base on the date. min length will be min 8 in this case
 * @param {string} mode one of ['alphanumeric', 'hexadecimal']
 * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
 */
-declare function generateToken(length?: number, unique?: boolean, mode?: string): any;
+declare function generateToken(length?: number, unique?: boolean, mode?: 'alphanumeric' | 'hexadecimal'): any;
+declare function generateObjectId(): any;
 /** Useful to join differents bits of url with normalizing slashes
  * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
  * * urlPathJoin('http:/', 'kikou.lol') => https://www.kikou.lol
  */
-declare function urlPathJoin(...bits: any[]): string;
+declare function urlPathJoin(...bits: string[]): string;
 /** path shall always be sorted before using in express
  *  to avoid a generic route like /* to catch a specific one like /bonjour
  *
@@ -52,15 +56,18 @@ declare function urlPathJoin(...bits: any[]): string;
  * @return {Array} urls modified
  */
 declare function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr: any, propInObjectOrIndexInArray: any): any;
-/**
- * Replace variables in a string like: `Hello {{userName}}!`
+declare type MiniTemplaterOptions = {
+    valueWhenNotSet?: string;
+    regexp?: RegExp;
+};
+/** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content
  * @param {Object} varz object with key => value === toReplace => replacer
  * @param {Object} options
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
-declare function miniTemplater(content: any, varz: any, options: any): any;
+declare function miniTemplater(content: string, varz: ObjectGeneric, options?: MiniTemplaterOptions): string;
 /**
  *
  * @param {Object} object main object
@@ -68,7 +75,7 @@ declare function miniTemplater(content: any, varz: any, options: any): any;
  * @param {Boolean} isMask default: true; determine the behavior of the function. If is mask, selected fields will not appear in the resulting object. If it's a select, only selected fields will appear.
  * @param {Boolean} deleteKeysInsteadOfReturningAnewObject default:false; modify the existing object instead of creating a new instance
  */
-declare function simpleObjectMaskOrSelect(object: any, maskedOrSelectedFields: any, isMask?: boolean, deleteKeysInsteadOfReturningAnewObject?: boolean): any;
+declare function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelectedFields: string[], isMask?: boolean, deleteKeysInsteadOfReturningAnewObject?: boolean): ObjectGeneric;
 /** READ ONLY, output a parsed version of process.env
  * use it like ENV().myVar
  */
@@ -128,23 +135,23 @@ declare function registerConfig(customConfig: any): void;
  * @param {Object} obj object to test against
  * @param {string} addr `a.b.c.0.1` will test if myObject has props a that has prop b. Work wit arrays as well (like `arr.0`)
  */
-declare function has(obj: object, addr: string): boolean;
+declare function has(obj: ObjectGeneric, addr: string): boolean;
 /** Find address in an object "a.b.c" IN { a : { b : {c : 'blah' }}} RETURNS 'blah'
  * @param {object} obj
  * @param {string} addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
  * @returns {any} the last item of the chain OR undefined if not found
  */
-declare function findByAddress(obj: object, addr: string): any;
+declare function findByAddress(obj: ObjectGeneric, addr: string): any;
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
-declare function objForceWrite(obj: object, addr: string, item: any): void;
+declare function objForceWrite(obj: ObjectGeneric, addr: string, item: any): void;
 /** Enforce writing subItems, only if obj.addr is empty.
  * Eg: user.name.blah will ensure all are set until the writing of the last item
  * if user.name.blah has a value it will not change it.
  * NOTE: doesn't work with arrays
  */
-declare function objForceWriteIfNotSet(obj: object, addr: string, item: any): void;
+declare function objForceWriteIfNotSet(obj: ObjectGeneric, addr: string, item: any): void;
 /** Merge mixins into class. Use it in the constructor like: mergeMixins(this, {myMixin: true}) */
 declare function mergeMixins(that: any, ...mixins: any[]): void;
 /** If a string is provided, return it as array else return the value */
@@ -156,7 +163,7 @@ declare function asArray<T extends any[] | any>(item: T): T extends undefined ? 
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */
-declare function compareArrays(arrayA?: any[], arrayB?: any[], compare?: (a: any, b: any) => boolean): {
+declare function compareArrays(arrayA: any[], arrayB: any[], compare?: (a: any, b: any) => boolean): {
     inCommon: any[];
     notInB: any[];
     notInA: any[];
@@ -669,6 +676,7 @@ declare const _: {
     sortUrlsByDeepnessInArrayOrObject: typeof sortUrlsByDeepnessInArrayOrObject;
     urlPathJoin: typeof urlPathJoin;
     miniTemplater: typeof miniTemplater;
+    generateObjectId: typeof generateObjectId;
     isBetween: typeof isBetween;
     simpleObjectMaskOrSelect: typeof simpleObjectMaskOrSelect;
     ENV: typeof ENV;
@@ -862,6 +870,6 @@ declare const _: {
     tryCatch: typeof tryCatch;
 };
 export default _;
-export { round, random, cln, pad, int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
+export { round, random, cln, pad, int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, generateObjectId, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
 validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getMonthAsInt, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };

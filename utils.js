@@ -61,11 +61,13 @@ function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
         while (token.length < length)
             token += Math.random().toString(charConvNumeric).substr(2, 1); // char alphaNumeric aléatoire
     } while (generatedTokens.includes(token));
-    if (lastTs < tokenTs) {
+    if (lastTs < tokenTs)
         generatedTokens = []; // reset generated token on new timestamp because cannot collide
-    }
     generatedTokens.push(token);
     return token;
+}
+function generateObjectId() {
+    return generateToken(24, true, 'hexadecimal');
 }
 /** Useful to join differents bits of url with normalizing slashes
  * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
@@ -103,15 +105,14 @@ function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArr
             bUrl.length - aUrl.length; // help separating / vs /blah
     });
 }
-/**
- * Replace variables in a string like: `Hello {{userName}}!`
+/** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content
  * @param {Object} varz object with key => value === toReplace => replacer
  * @param {Object} options
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
-function miniTemplater(content, varz, options) {
+function miniTemplater(content, varz, options = {}) {
     options = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
@@ -353,7 +354,7 @@ function asArray(item) {
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */
-function compareArrays(arrayA = [], arrayB = [], compare = (a, b) => a === b) {
+function compareArrays(arrayA, arrayB, compare = (a, b) => a === b) {
     return {
         inCommon: getArrayInCommon(arrayA, arrayB, compare),
         notInB: getNotInArrayA(arrayB, arrayA, compare),
@@ -2065,6 +2066,7 @@ const _ = {
     sortUrlsByDeepnessInArrayOrObject,
     urlPathJoin,
     miniTemplater,
+    generateObjectId,
     isBetween,
     simpleObjectMaskOrSelect,
     ENV,
@@ -2220,7 +2222,7 @@ const _ = {
 export default _;
 export { round, random, cln, pad, 
 // ALIASES
-int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, 
+int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, generateObjectId, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, 
 //allias
 arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
 sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability

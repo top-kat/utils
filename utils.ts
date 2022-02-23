@@ -6,6 +6,7 @@ const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
 const removeUndefinedKeys = objFilterUndefinedRecursive;
 
 type Color = [number, number, number]
+type ObjectGeneric = { [k: string]: any }
 
 type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email'
 
@@ -36,7 +37,7 @@ function moyenne(array: number[], nbOfDecimals = 2) {
 function cln(val, replacerInCaseItIsUndefinNaN = '-') { return ['undefined', undefined, 'indéfini', 'NaN', NaN, Infinity, null].includes(val) ? replacerInCaseItIsUndefinNaN : val; }
 
 /** length default 2, shortcut for 1 to 01 */
-function pad(numberOrStr, length = 2) { return ('' + numberOrStr).padStart(length, '0'); }
+function pad(numberOrStr: number | string, length = 2) { return ('' + numberOrStr).padStart(length, '0'); }
 
 /** return the number or the closest number of the range
  * * nb min max  => returns
@@ -46,7 +47,7 @@ function pad(numberOrStr, length = 2) { return ('' + numberOrStr).padStart(lengt
  */
 function minMax(nb: number, min: number, max: number) { return Math.max(min, Math.min(nb, max)); }
 
-async function tryCatch(callback, onErr: Function = () => { }) {
+async function tryCatch(callback: Function, onErr: Function = () => { }) {
     try {
         return await callback()
     } catch (err) {
@@ -63,7 +64,7 @@ let lastTs = new Date().getTime();
 * @param {string} mode one of ['alphanumeric', 'hexadecimal']
 * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
 */
-function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
+function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
     let charConvNumeric = mode === 'alphanumeric' ? 36 : 16;
     if (unique && length < 8) length = 8;
     let token
@@ -73,11 +74,13 @@ function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
         token = unique ? tokenTs.toString(charConvNumeric) : '';
         while (token.length < length) token += Math.random().toString(charConvNumeric).substr(2, 1); // char alphaNumeric aléatoire
     } while (generatedTokens.includes(token))
-    if (lastTs < tokenTs) {
-        generatedTokens = [] // reset generated token on new timestamp because cannot collide
-    }
+    if (lastTs < tokenTs) generatedTokens = [] // reset generated token on new timestamp because cannot collide
     generatedTokens.push(token)
     return token;
+}
+
+function generateObjectId() {
+    return generateToken(24, true, 'hexadecimal')
 }
 
 
@@ -85,7 +88,7 @@ function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
  * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
  * * urlPathJoin('http:/', 'kikou.lol') => https://www.kikou.lol
  */
-function urlPathJoin(...bits) {
+function urlPathJoin(...bits: string[]) {
     return bits.join('/').replace(/\/+/g, '/').replace(/(https?:)\/\/?/, '$1//');
 }
 
@@ -118,15 +121,19 @@ function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArr
     });
 }
 
-/**
- * Replace variables in a string like: `Hello {{userName}}!`
+
+type MiniTemplaterOptions = {
+    valueWhenNotSet?: string
+    regexp?: RegExp
+}
+/** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content 
  * @param {Object} varz object with key => value === toReplace => replacer
  * @param {Object} options 
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
-function miniTemplater(content, varz, options) {
+function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTemplaterOptions = {}) {
     options = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
@@ -142,7 +149,7 @@ function miniTemplater(content, varz, options) {
  * @param {Boolean} isMask default: true; determine the behavior of the function. If is mask, selected fields will not appear in the resulting object. If it's a select, only selected fields will appear.
  * @param {Boolean} deleteKeysInsteadOfReturningAnewObject default:false; modify the existing object instead of creating a new instance
  */
-function simpleObjectMaskOrSelect(object, maskedOrSelectedFields, isMask = true, deleteKeysInsteadOfReturningAnewObject = false) {
+function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelectedFields: string[], isMask = true, deleteKeysInsteadOfReturningAnewObject = false) {
     const allKeys = Object.keys(object);
     const keysToMask = allKeys.filter(keyName => {
         if (isMask) return maskedOrSelectedFields.includes(keyName);
@@ -317,7 +324,7 @@ class dataValidationUtilErrorHandler extends Error {
  * @param {Object} obj object to test against
  * @param {string} addr `a.b.c.0.1` will test if myObject has props a that has prop b. Work wit arrays as well (like `arr.0`)
  */
-function has(obj: object, addr: string) {
+function has(obj: ObjectGeneric, addr: string) {
     if (!isset(obj) || typeof obj !== 'object') return;
     let propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.'); // replace a[3] => a.3;
     let objChain = obj;
@@ -332,7 +339,7 @@ function has(obj: object, addr: string) {
  * @param {string} addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
  * @returns {any} the last item of the chain OR undefined if not found
  */
-function findByAddress(obj: object, addr: string) {
+function findByAddress(obj: ObjectGeneric, addr: string) {
     if (addr === '') return obj;
     if (!isset(obj) || typeof obj !== 'object') return console.warn('Main object in `findByAddress` function is undefined or has the wrong type');
     const propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.'); // replace .[4] AND [4] TO .4
@@ -346,7 +353,7 @@ function findByAddress(obj: object, addr: string) {
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
-function objForceWrite(obj: object, addr: string, item) {
+function objForceWrite(obj: ObjectGeneric, addr: string, item) {
     const chunks = addr.replace(/\.?\[(\d+)\]/g, '.[$1').split('.');
     let lastItem = obj;
     chunks.forEach((chunkRaw, i) => {
@@ -366,7 +373,7 @@ function objForceWrite(obj: object, addr: string, item) {
  * if user.name.blah has a value it will not change it.
  * NOTE: doesn't work with arrays
  */
-function objForceWriteIfNotSet(obj: object, addr: string, item) {
+function objForceWriteIfNotSet(obj: ObjectGeneric, addr: string, item) {
     if (!isset(findByAddress(obj, addr))) return objForceWrite(obj, addr, item);
 }
 
@@ -397,7 +404,7 @@ function asArray<T extends any[] | any>(item: T): T extends undefined ? undefine
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */
-function compareArrays(arrayA = [], arrayB = [], compare = (a, b) => a === b) {
+function compareArrays(arrayA: any[], arrayB: any[], compare = (a, b) => a === b) {
     return {
         inCommon: getArrayInCommon(arrayA, arrayB, compare),
         notInB: getNotInArrayA(arrayB, arrayA, compare),
@@ -2258,6 +2265,7 @@ const _ = {
     sortUrlsByDeepnessInArrayOrObject,
     urlPathJoin,
     miniTemplater,
+    generateObjectId,
     isBetween,
     simpleObjectMaskOrSelect,
     ENV,
@@ -2443,6 +2451,7 @@ export {
     sortUrlsByDeepnessInArrayOrObject,
     urlPathJoin,
     miniTemplater,
+    generateObjectId,
     isBetween,
     simpleObjectMaskOrSelect,
     ENV,
