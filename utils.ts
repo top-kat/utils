@@ -1171,6 +1171,9 @@ function validator(...paramsToValidate: ValidatorObject[]) {
 
 const restTestMini = {
     reset() {
+        restTestMini.nbSuccess = 0
+        restTestMini.nbError = 0
+        restTestMini.lastErrors = []
     },
     printStats() {
         // TODO print last errz
