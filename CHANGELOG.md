@@ -1,3 +1,6 @@
+### v1.0.39
+* NEW ability for restTestMini to throw error
+
 ### v1.0.37
 * add generateObjectId
 * cleaning and typing improvements
