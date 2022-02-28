@@ -436,7 +436,9 @@ declare type ValidatorObject = {
 };
 declare function validator(...paramsToValidate: ValidatorObject[]): void;
 declare const restTestMini: {
-    reset(): void;
+    throwOnErr: boolean;
+    reset(throwOnErr?: boolean): void;
+    newErr(err: any): void;
     printStats(): void;
     nbSuccess: number;
     nbError: number;
@@ -750,7 +752,9 @@ declare const _: {
     validatorReturnErrArray: typeof validatorReturnErrArray;
     assert: typeof assert;
     restTestMini: {
-        reset(): void;
+        throwOnErr: boolean;
+        reset(throwOnErr?: boolean): void;
+        newErr(err: any): void;
         printStats(): void;
         nbSuccess: number;
         nbError: number;

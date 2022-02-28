@@ -1006,10 +1006,20 @@ function validator(...paramsToValidate) {
         throw new dataValidationUtilErrorHandler(...errArray);
 }
 const restTestMini = {
-    reset() {
+    throwOnErr: false,
+    reset(throwOnErr = false) {
         restTestMini.nbSuccess = 0;
         restTestMini.nbError = 0;
         restTestMini.lastErrors = [];
+        restTestMini.throwOnErr = throwOnErr;
+    },
+    newErr(err) {
+        restTestMini.nbError++;
+        restTestMini.lastErrors.push(err);
+        if (restTestMini.throwOnErr)
+            throw new Error(err);
+        else
+            C.error(false, err);
     },
     printStats() {
         // TODO print last errz
@@ -1042,16 +1052,12 @@ function assert(msg, value, validatorObject = {}) {
             C.success(msg2);
         }
         else {
-            restTestMini.nbError++;
             const err = msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`;
-            restTestMini.lastErrors.push(err);
-            C.error(false, err);
+            restTestMini.newErr(err);
         }
     }
     catch (err) {
-        restTestMini.nbError++;
-        restTestMini.lastErrors.push(err);
-        C.error(err);
+        restTestMini.newErr(err);
     }
 }
 /** Same as validator but return a boolean
