@@ -1,3 +1,6 @@
+### v1.0.40
+* NEW forI iterate function
+
 ### v1.0.39
 * NEW ability for restTestMini to throw error
 
