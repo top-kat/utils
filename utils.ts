@@ -839,6 +839,20 @@ function getId(obj: any = {}): string {
     else if (isType(obj, 'objectId')) return obj.toString();
 }
 
+function forI(nbIterations: number, callback: (number) => void | any) {
+    for (let i = 0; i < nbIterations; i++) {
+        callback(i)
+    }
+}
+
+function forIasync(nbIterations: number, callback: (number) => void | any) {
+    for (let i = 0; i < nbIterations; i++) {
+        callback(i)
+    }
+}
+
+
+
 function cleanStackTrace(stack) {
     if (typeof stack !== 'string') return '';
     stack.replace(/home\/[^/]+\/[^/]+\//g, '');
@@ -2409,6 +2423,8 @@ const _ = {
     differenceInHours,
     differenceInDays,
     differenceInWeeks,
+    forI,
+    forIasync,
     // ALIASES
     getDateAsArrayFormatted: dateArray,
     getDateAsArray: dateStringToArray,
@@ -2519,7 +2535,8 @@ export {
     shuffleArray,
     shuffleArray as randomizeArray,
     round2,
-
+    forI,
+    forIasync,
     camelCase,
     snakeCase,
     kebabCase,

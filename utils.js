@@ -765,6 +765,16 @@ function getId(obj = {}) {
     else if (isType(obj, 'objectId'))
         return obj.toString();
 }
+function forI(nbIterations, callback) {
+    for (let i = 0; i < nbIterations; i++) {
+        callback(i);
+    }
+}
+function forIasync(nbIterations, callback) {
+    for (let i = 0; i < nbIterations; i++) {
+        callback(i);
+    }
+}
 function cleanStackTrace(stack) {
     if (typeof stack !== 'string')
         return '';
@@ -2201,6 +2211,8 @@ const _ = {
     differenceInHours,
     differenceInDays,
     differenceInWeeks,
+    forI,
+    forIasync,
     // ALIASES
     getDateAsArrayFormatted: dateArray,
     getDateAsArray: dateStringToArray,
@@ -2234,7 +2246,7 @@ export { round, random, cln, pad,
 int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, generateObjectId, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, 
 //allias
 arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
-sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
+sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, forI, forIasync, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
 validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, 
 // ALIASES
 issetOr as orIsset, 

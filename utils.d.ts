@@ -308,6 +308,8 @@ declare function filterKeys(obj: object, filter: any): any;
 declare function deleteByAddress(obj: object, addr: string): void;
 /** @return undefined if cannot find _id */
 declare function getId(obj?: any): string;
+declare function forI(nbIterations: number, callback: (number: any) => void | any): void;
+declare function forIasync(nbIterations: number, callback: (number: any) => void | any): void;
 declare function cleanStackTrace(stack: any): string;
 declare function isset(...elms: any[]): boolean;
 declare function removeCircularJSONstringify(object: any, indent?: number): string;
@@ -809,6 +811,8 @@ declare const _: {
     differenceInHours: typeof differenceInHours;
     differenceInDays: typeof differenceInDays;
     differenceInWeeks: typeof differenceInWeeks;
+    forI: typeof forI;
+    forIasync: typeof forIasync;
     getDateAsArrayFormatted: typeof dateArray;
     getDateAsArray: typeof dateStringToArray;
     convertDateAsInt: typeof getDateAsInt;
@@ -875,5 +879,5 @@ declare const _: {
 };
 export default _;
 export { round, random, cln, pad, int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, generateObjectId, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
-sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
+sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, forI, forIasync, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
 validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, issetOr as orIsset, getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, getDuration, doDateOverlap, getMonthAsInt, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, C, cliProgressBar, cliLoadingSpinner, convertAccentedCharacters, executeInDelayedLoop, timeout, runAsync, waitUntilTrue, transaction, waitForTransaction, getId, mergeMixins, mongoFilterMerger, mongoPush, tryCatch, };
