@@ -765,15 +765,22 @@ function getId(obj = {}) {
     else if (isType(obj, 'objectId'))
         return obj.toString();
 }
+/**
+ * @returns {array} return values of all callbacks
+ */
 function forI(nbIterations, callback) {
+    const results = [];
     for (let i = 0; i < nbIterations; i++) {
-        callback(i);
+        results.push(callback(i));
     }
+    return results;
 }
-function forIasync(nbIterations, callback) {
+async function forIasync(nbIterations, callback) {
+    const results = [];
     for (let i = 0; i < nbIterations; i++) {
-        callback(i);
+        results.push(await callback(i));
     }
+    return results;
 }
 function cleanStackTrace(stack) {
     if (typeof stack !== 'string')

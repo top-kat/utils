@@ -308,8 +308,11 @@ declare function filterKeys(obj: object, filter: any): any;
 declare function deleteByAddress(obj: object, addr: string): void;
 /** @return undefined if cannot find _id */
 declare function getId(obj?: any): string;
-declare function forI(nbIterations: number, callback: (number: any) => void | any): void;
-declare function forIasync(nbIterations: number, callback: (number: any) => void | any): void;
+/**
+ * @returns {array} return values of all callbacks
+ */
+declare function forI(nbIterations: number, callback: (number: any) => void | any): any[];
+declare function forIasync(nbIterations: number, callback: (number: any) => void | any): Promise<any[]>;
 declare function cleanStackTrace(stack: any): string;
 declare function isset(...elms: any[]): boolean;
 declare function removeCircularJSONstringify(object: any, indent?: number): string;

@@ -839,16 +839,23 @@ function getId(obj: any = {}): string {
     else if (isType(obj, 'objectId')) return obj.toString();
 }
 
+/**
+ * @returns {array} return values of all callbacks
+ */
 function forI(nbIterations: number, callback: (number) => void | any) {
+    const results = []
     for (let i = 0; i < nbIterations; i++) {
-        callback(i)
+        results.push(callback(i))
     }
+    return results
 }
 
-function forIasync(nbIterations: number, callback: (number) => void | any) {
+async function forIasync(nbIterations: number, callback: (number) => void | any) {
+    const results = []
     for (let i = 0; i < nbIterations; i++) {
-        callback(i)
+        results.push(await callback(i))
     }
+    return results
 }
 
 
