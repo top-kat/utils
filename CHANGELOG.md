@@ -1,3 +1,6 @@
+### v1.0.42
+* type for date function
+
 ### v1.0.40
 * NEW forI iterate function
 
