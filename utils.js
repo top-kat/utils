@@ -1446,34 +1446,22 @@ function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', sameDayAllowed
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function addDays(dateAllFormat = getDateAsInt(), numberOfDays = 1, outputFormat = 'int') {
+function addDays(dateAllFormat = getDateAsInt(), numberOfDays = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + numberOfDays * 24 * 60 * 60 * 1000);
     return getDateAs(date, outputFormat);
 }
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function addMinutes(dateAllFormat = getDateAsInt(), numberOfMinutes = 1, outputFormat = 'int') {
+function addMinutes(dateAllFormat = getDateAsInt(), numberOfMinutes = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfMinutes * 60 * 1000);
     return getDateAs(date, outputFormat);
 }
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function addHours(dateAllFormat = getDateAsInt(), numberOfHours = 1, outputFormat = 'int') {
+function addHours(dateAllFormat = getDateAsInt(), numberOfHours = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfHours * 60 * 60 * 1000);
     return getDateAs(date, outputFormat);
 }
-/**
- * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function addMonths(dateAllFormat = getDateAsInt(), numberOfMonths = 1, outputFormat = 'int') {
+function addMonths(dateAllFormat = getDateAsInt(), numberOfMonths = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCMonth(date.getUTCMonth() + numberOfMonths);
     return getDateAs(date, outputFormat);
@@ -1481,15 +1469,10 @@ function addMonths(dateAllFormat = getDateAsInt(), numberOfMonths = 1, outputFor
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addYears(dateAllFormat = getDateAsInt(), numberOfYears = 1, outputFormat = 'int') {
+function addYears(dateAllFormat = getDateAsInt(), numberOfYears = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCFullYear(date.getUTCFullYear() + numberOfYears);
     return getDateAs(date, outputFormat);
-}
-function getMonthForHuman(dateAllFormat = getDateAsInt()) {
-    let dateAsInt = getDateAsInt(dateAllFormat);
-    const [, M] = dateStringToArray(dateAsInt);
-    return M;
 }
 function getDayOfMonth(dateAllFormat = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
@@ -1514,7 +1497,7 @@ function getMinutes(dateAllFormat = getDateAsInt()) {
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function lastDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'int') {
+function lastDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     const lastDay = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, 0);
     lastDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
@@ -1523,7 +1506,7 @@ function lastDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'int') {
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function firstDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'int') {
+function firstDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     const firstDay = new Date(date.getUTCFullYear(), date.getUTCMonth(), 1);
     firstDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
@@ -1554,8 +1537,6 @@ function differenceInWeeks(startDateAllFormat, endDateAllFormat) {
  */
 function getDateAs(dateAllFormat = new Date(), outputDateFormat = 'dateInt8') {
     switch (outputDateFormat) {
-        case 'dateInt':
-        case 'int':
         case 'dateInt8':
             return getDateAsInt(dateAllFormat);
         case 'dateInt12':
@@ -1563,7 +1544,6 @@ function getDateAs(dateAllFormat = new Date(), outputDateFormat = 'dateInt8') {
         case 'humanReadableTimestamp':
             return humanReadableTimestamp(dateAllFormat);
         case 'date':
-        case 'dateObject':
         default:
             return getDateAsObject(dateAllFormat);
     }

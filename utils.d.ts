@@ -512,23 +512,27 @@ declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 |
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: string): string | number | Date;
+declare function addDays(dateAllFormat: Date | string | number, numberOfDays: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addDays(dateAllFormat: Date | string | number, numberOfDays: number, outputFormat: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: string): string | number | Date;
+declare function addMinutes(dateAllFormat: Date | string | number, numberOfMinutes: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addMinutes(dateAllFormat: Date | string | number, numberOfMinutes: number, outputFormat: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: string): string | number | Date;
+declare function addHours(dateAllFormat: Date | string | number, numberOfHours: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addHours(dateAllFormat: Date | string | number, numberOfHours: number, outputFormat: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: string): string | number | Date;
+declare function addMonths(dateAllFormat: Date | string | number, numberOfMonths: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addMonths(dateAllFormat: Date | string | number, numberOfMonths: number, outputFormat: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addYears(dateAllFormat?: Date | string | number, numberOfYears?: number, outputFormat?: string): string | number | Date;
+declare function addYears(dateAllFormat?: Date | string | number, numberOfYears?: number, outputFormat?: DateFormats): string | number | Date;
 declare function getDayOfMonth(dateAllFormat?: Date | string | number): any;
 declare function getYear(dateAllFormat?: Date | string | number): any;
 declare function getHours(dateAllFormat?: Date | string | number): any;
@@ -536,17 +540,18 @@ declare function getMinutes(dateAllFormat?: Date | string | number): any;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function lastDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: string): string | number | Date;
+declare function lastDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: DateFormats): string | number | Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function firstDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: string): string | number | Date;
+declare function firstDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: DateFormats): string | number | Date;
 declare function differenceInMilliseconds(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInSeconds(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInMinutes(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInHours(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInDays(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInWeeks(startDateAllFormat: any, endDateAllFormat: any): number;
+declare type DateFormats = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp';
 /**
 // console colored output
 // * console.log(C.green(C.dim('Hey bro !')))
