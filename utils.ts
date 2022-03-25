@@ -1614,57 +1614,60 @@ function doDateOverlap(event1, event2, fieldNameForStartDate$ = 'startDate', fie
     return (!event2[fieldNameForEndDate$] || event1[fieldNameForStartDate$] <= event2[fieldNameForEndDate$]) && (!event1[fieldNameForEndDate$] || event1[fieldNameForEndDate$] >= event2[fieldNameForStartDate$]);
 }
 
-type DateAllFormat = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp'
+type DateAllFormat = DateObjectFormat & DateStringFormats
+type DateStringFormats = 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'
+type DateObjectFormat = 'date'
 
-function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp', sameDayAllowed?: boolean): number
-function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'date', sameDayAllowed?: boolean): Date
-function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat: DateAllFormat = 'date', sameDayAllowed = false) {
+function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateStringFormats, sameDayAllowed?: boolean): number
+function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateObjectFormat, sameDayAllowed?: boolean): Date
+function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat = 'date', sameDayAllowed = false): any {
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt)) weekDayInt = (date.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6)
     const toAdd = !sameDayAllowed && date.getDay() === weekDayInt ? 7 : 0
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
-    return getDateAs(date, outputFormat);
+    return getDateAs(date, outputFormat as any);
 }
 
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addDays(dateAllFormat: Date | string | number, numberOfDays: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addDays(dateAllFormat: Date | string | number, numberOfDays: number, outputFormat: 'date'): Date
-function addDays(dateAllFormat: Date | string | number = getDateAsInt(), numberOfDays = 1, outputFormat: DateFormats = 'date') {
+function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'date'): Date
+function addDays(dateAllFormat: Date | string | number = getDateAsInt(), numberOfDays = 1, outputFormat: DateFormats = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + numberOfDays * 24 * 60 * 60 * 1000);
-    return getDateAs(date, outputFormat);
+    return getDateAs(date, outputFormat as any);
 }
+
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addMinutes(dateAllFormat: Date | string | number, numberOfMinutes: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addMinutes(dateAllFormat: Date | string | number, numberOfMinutes: number, outputFormat: 'date'): Date
-function addMinutes(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMinutes = 1, outputFormat: DateFormats = 'date') {
+function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateStringFormats): string
+function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateObjectFormat): Date
+function addMinutes(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMinutes = 1, outputFormat: DateFormats = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfMinutes * 60 * 1000);
-    return getDateAs(date, outputFormat);
+    return getDateAs(date, outputFormat as any);
 }
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addHours(dateAllFormat: Date | string | number, numberOfHours: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addHours(dateAllFormat: Date | string | number, numberOfHours: number, outputFormat: 'date'): Date
-function addHours(dateAllFormat: Date | string | number = getDateAsInt(), numberOfHours = 1, outputFormat: DateFormats = 'date') {
+function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'date'): Date
+function addHours(dateAllFormat: Date | string | number = getDateAsInt(), numberOfHours = 1, outputFormat: DateFormats = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfHours * 60 * 60 * 1000);
-    return getDateAs(date, outputFormat);
+    return getDateAs(date, outputFormat as any);
 }
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addMonths(dateAllFormat: Date | string | number, numberOfMonths: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addMonths(dateAllFormat: Date | string | number, numberOfMonths: number, outputFormat: 'date'): Date
-function addMonths(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMonths = 1, outputFormat: DateFormats = 'date') {
+function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'date'): Date
+function addMonths(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMonths = 1, outputFormat: DateFormats = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCMonth(date.getUTCMonth() + numberOfMonths);
-    return getDateAs(date, outputFormat);
+    return getDateAs(date, outputFormat as any);
 }
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
@@ -1672,7 +1675,7 @@ function addMonths(dateAllFormat: Date | string | number = getDateAsInt(), numbe
 function addYears(dateAllFormat: Date | string | number = getDateAsInt(), numberOfYears = 1, outputFormat: DateFormats = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCFullYear(date.getUTCFullYear() + numberOfYears);
-    return getDateAs(date, outputFormat);
+    return getDateAs(date, outputFormat as any);
 }
 
 function getDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt()) {
@@ -1707,7 +1710,7 @@ function lastDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(), 
     let date = getDateAsObject(dateAllFormat);
     const lastDay = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, 0);
     lastDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
-    return getDateAs(lastDay, outputFormat);
+    return getDateAs(lastDay, outputFormat as any);
 }
 
 /**
@@ -1717,7 +1720,7 @@ function firstDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(),
     let date = getDateAsObject(dateAllFormat);
     const firstDay = new Date(date.getUTCFullYear(), date.getUTCMonth(), 1);
     firstDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
-    return getDateAs(firstDay, outputFormat);
+    return getDateAs(firstDay, outputFormat as any);
 }
 
 function differenceInMilliseconds(startDateAllFormat, endDateAllFormat) {
@@ -1751,7 +1754,9 @@ type DateFormats = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp'
 /**
  * @param {String} outputDateFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDateFormat: DateFormats = 'dateInt8') {
+function getDateAs(dateAllFormat?: Date | string | number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+function getDateAs(dateAllFormat?: Date | string | number, outputFormat?: 'date'): Date
+function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDateFormat: DateFormats = 'date') {
     switch (outputDateFormat) {
         case 'dateInt8':
             return getDateAsInt(dateAllFormat);

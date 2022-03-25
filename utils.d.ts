@@ -507,32 +507,34 @@ declare function getDuration(startDate: any, endDate: any, inMinutes?: boolean):
  * @param {Boolean} strict$ if true,
  */
 declare function doDateOverlap(event1: any, event2: any, fieldNameForStartDate$?: string, fieldNameForEndDate$?: string, allowNull$?: boolean, strict$?: boolean): boolean;
-declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp', sameDayAllowed?: boolean): number;
-declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: 'date', sameDayAllowed?: boolean): Date;
+declare type DateStringFormats = 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp';
+declare type DateObjectFormat = 'date';
+declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateStringFormats, sameDayAllowed?: boolean): number;
+declare function nextWeekDay(fromDate: any, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateObjectFormat, sameDayAllowed?: boolean): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addDays(dateAllFormat: Date | string | number, numberOfDays: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
-declare function addDays(dateAllFormat: Date | string | number, numberOfDays: number, outputFormat: 'date'): Date;
+declare function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addMinutes(dateAllFormat: Date | string | number, numberOfMinutes: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
-declare function addMinutes(dateAllFormat: Date | string | number, numberOfMinutes: number, outputFormat: 'date'): Date;
+declare function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateStringFormats): string;
+declare function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateObjectFormat): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addHours(dateAllFormat: Date | string | number, numberOfHours: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
-declare function addHours(dateAllFormat: Date | string | number, numberOfHours: number, outputFormat: 'date'): Date;
+declare function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addMonths(dateAllFormat: Date | string | number, numberOfMonths: number, outputFormat: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
-declare function addMonths(dateAllFormat: Date | string | number, numberOfMonths: number, outputFormat: 'date'): Date;
+declare function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string;
+declare function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'date'): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function addYears(dateAllFormat?: Date | string | number, numberOfYears?: number, outputFormat?: DateFormats): string | number | Date;
+declare function addYears(dateAllFormat?: Date | string | number, numberOfYears?: number, outputFormat?: DateFormats): Date;
 declare function getDayOfMonth(dateAllFormat?: Date | string | number): any;
 declare function getYear(dateAllFormat?: Date | string | number): any;
 declare function getHours(dateAllFormat?: Date | string | number): any;
@@ -540,11 +542,11 @@ declare function getMinutes(dateAllFormat?: Date | string | number): any;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function lastDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: DateFormats): string | number | Date;
+declare function lastDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: DateFormats): Date;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-declare function firstDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: DateFormats): string | number | Date;
+declare function firstDayOfMonth(dateAllFormat?: Date | string | number, outputFormat?: DateFormats): Date;
 declare function differenceInMilliseconds(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInSeconds(startDateAllFormat: any, endDateAllFormat: any): number;
 declare function differenceInMinutes(startDateAllFormat: any, endDateAllFormat: any): number;

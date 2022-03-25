@@ -1532,10 +1532,7 @@ function differenceInDays(startDateAllFormat, endDateAllFormat) {
 function differenceInWeeks(startDateAllFormat, endDateAllFormat) {
     return differenceInDays(startDateAllFormat, endDateAllFormat) / 7;
 }
-/**
- * @param {String} outputDateFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
- */
-function getDateAs(dateAllFormat = new Date(), outputDateFormat = 'dateInt8') {
+function getDateAs(dateAllFormat = new Date(), outputDateFormat = 'date') {
     switch (outputDateFormat) {
         case 'dateInt8':
             return getDateAsInt(dateAllFormat);
