@@ -842,10 +842,11 @@ function getId(obj: any = {}): string {
 /**
  * @returns {array} return values of all callbacks
  */
-function forI(nbIterations: number, callback: (number) => void | any) {
+function forI(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => void | any) {
     const results = []
     for (let i = 0; i < nbIterations; i++) {
-        results.push(callback(i))
+        const prevValue = results[results.length - 1]
+        results.push(callback(i, prevValue, results))
     }
     return results
 }

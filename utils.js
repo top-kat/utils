@@ -771,7 +771,8 @@ function getId(obj = {}) {
 function forI(nbIterations, callback) {
     const results = [];
     for (let i = 0; i < nbIterations; i++) {
-        results.push(callback(i));
+        const prevValue = results[results.length - 1];
+        results.push(callback(i, prevValue, results));
     }
     return results;
 }
