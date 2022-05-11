@@ -1129,10 +1129,20 @@ function validatorReturnErrArray(...paramsToValidate) {
             return errMess('requiredVariableEmptyOrNotSet');
         if (!emptyAllowed && value === '')
             return errMess('requiredVariableEmpty');
+        const isArray = paramObj.isArray;
+        if (isArray && !Array.isArray(value))
+            return errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value });
         // TYPE
         if (isset(paramObj.type)) {
-            const types = Array.isArray(paramObj.type) ? paramObj.type : [paramObj.type]; // support for multiple type
+            const types = asArray(paramObj.type); // support for multiple type
             const areSomeTypeValid = types.some(type => {
+                if (type.endsWith('[]')) {
+                    if (!Array.isArray(value))
+                        errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value });
+                    type = type.replace('[]', '');
+                }
+                if (type === 'any')
+                    return true;
                 const allTypes = [
                     'objectId',
                     'dateInt6',

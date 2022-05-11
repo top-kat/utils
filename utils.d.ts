@@ -437,6 +437,7 @@ declare type ValidatorObject = {
     regexp?: RegExp;
     mustNotBeSet?: boolean;
     optional?: boolean;
+    isArray?: boolean;
     [k: string]: any;
 };
 declare function validator(...paramsToValidate: ValidatorObject[]): void;

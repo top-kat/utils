@@ -8,7 +8,7 @@ const removeUndefinedKeys = objFilterUndefinedRecursive;
 type Color = [number, number, number]
 type ObjectGeneric = { [k: string]: any }
 
-type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email'
+type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
 
 /** Round with custom number of decimals (default:0) */
 function round(number: number, decimals = 0) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
@@ -1184,6 +1184,7 @@ type ValidatorObject = {
     regexp?: RegExp
     mustNotBeSet?: boolean
     optional?: boolean
+    isArray?: boolean
     [k: string]: any
 }
 function validator(...paramsToValidate: ValidatorObject[]) {
@@ -1288,15 +1289,22 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
 
         // DEFINED AND NOT EMPTY
         if (!isset(value) && optional) continue;
-        if (isset(value) && paramObj.mustNotBeSet) return errMess('variableMustNotBeSet');
+        if (isset(value) && paramObj.mustNotBeSet) return errMess('variableMustNotBeSet')
         if (paramObj.mustNotBeSet) continue; // exit
-        if (!isset(value)) return errMess('requiredVariableEmptyOrNotSet');
-        if (!emptyAllowed && value === '') return errMess('requiredVariableEmpty');
+        if (!isset(value)) return errMess('requiredVariableEmptyOrNotSet')
+        if (!emptyAllowed && value === '') return errMess('requiredVariableEmpty')
+
+        const isArray = paramObj.isArray
+        if (isArray && !Array.isArray(value)) return errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value })
 
         // TYPE
         if (isset(paramObj.type)) {
-            const types = Array.isArray(paramObj.type) ? paramObj.type : [paramObj.type]; // support for multiple type
+            const types = asArray(paramObj.type) // support for multiple type
             const areSomeTypeValid = types.some(type => {
+                if (type.endsWith('[]')) {
+                    if (!Array.isArray(value)) errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value })
+                    type = type.replace('[]', '')
+                }
 
                 const allTypes: Array<BaseTypes> = [
                     'objectId',
@@ -1317,6 +1325,7 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
                     'number',
                     'bigint',
                     'year',
+                    'any',
                     //...Object.keys(configFn().customTypes)
                 ];
 
@@ -1335,7 +1344,8 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
                     array: val => Array.isArray(val),
                     object: val => !Array.isArray(val) && val !== null && typeof val === type,
                     buffer: val => Buffer.isBuffer(val),
-                    year: val => /^\d\d\d\d$/.test(val)
+                    year: val => /^\d\d\d\d$/.test(val),
+                    any: () => true,
                 };
 
                 return isset(basicTypeCheck[type]) && basicTypeCheck[type](value) ||
