@@ -8,7 +8,7 @@ declare type Color = [number, number, number];
 declare type ObjectGeneric = {
     [k: string]: any;
 };
-declare type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email';
+declare type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any';
 /** Round with custom number of decimals (default:0) */
 declare function round(number: number, decimals?: number): number;
 /** Round with custom number of decimals (default:0) */

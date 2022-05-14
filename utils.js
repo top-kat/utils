@@ -1,31 +1,50 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.reassignForbidden = exports.readOnly = exports.objFilterUndefined = exports.findByAddressAll = exports.recursiveGenericFunctionSync = exports.recursiveGenericFunction = exports.unflattenObject = exports.flattenObject = exports.mergeDeep = exports.isObject = exports.has = exports.JSONstringyParse = exports.cloneObject = exports.deepClone = exports.arrayUniqueValue = exports.randomItemInArray = exports.isNotEmptyArray = exports.pushIfNotExist = exports.arrayToObjectSorted = exports.arrayCount = exports.noDuplicateFilter = exports.getNotInArrayA = exports.getArrayDiff = exports.getArrayInCommon = exports.compareArrays = exports.asArray = exports.strAsArray = exports.objForceWriteIfNotSet = exports.objForceWrite = exports.findByAddress = exports.configFn = exports.registerConfig = exports.parseBool = exports.ENV = exports.simpleObjectMaskOrSelect = exports.isBetween = exports.generateObjectId = exports.miniTemplater = exports.urlPathJoin = exports.sortUrlsByDeepnessInArrayOrObject = exports.sumArray = exports.average = exports.moyenne = exports.generateToken = exports.minMax = exports.int = exports.pad = exports.cln = exports.random = exports.round = void 0;
+exports.isEmpty = exports.errXXXIfNotSet = exports.err500IfEmptyOrNotSet = exports.errIfEmptyOrNotSet = exports.err500IfNotSet = exports.errIfNotSet = exports.isEmptyOrNotSet = exports.issetOr = exports.isDateObject = exports.isType = exports.isValid = exports.restTestMini = exports.assert = exports.validatorReturnErrArray = exports.required = exports.validator = exports.escapeRegexp = exports.getValuesBetweenStrings = exports.getValuesBetweenSeparator = exports.allMatches = exports.firstMatch = exports.camelCaseToWords = exports.capitalize1st = exports.upperCase = exports.lowerCase = exports.pascalCase = exports.titleCase = exports.underscoreCase = exports.dashCase = exports.kebabCase = exports.snakeCase = exports.camelCase = exports.forIasync = exports.forI = exports.round2 = exports.randomizeArray = exports.shuffleArray = exports.cleanStackTrace = exports.isset = exports.removeCircularJSONstringify = exports.ensureIsArrayAndPush = exports.deleteByAddress = exports.filterKeys = exports.ensureObjectProp = exports.sortObjKeyAccordingToValue = exports.removeUndefinedKeys = exports.objFilterUndefinedRecursive = exports.mergeDeepConfigurable = exports.mergeDeepOverrideArrays = exports.readOnlyForAll = void 0;
+exports.transaction = exports.waitUntilTrue = exports.runAsync = exports.timeout = exports.executeInDelayedLoop = exports.convertAccentedCharacters = exports.cliLoadingSpinner = exports.cliProgressBar = exports.C = exports.convertDateAsObject = exports.convertDateAsInt = exports.differenceInWeeks = exports.differenceInDays = exports.differenceInHours = exports.differenceInMinutes = exports.differenceInSeconds = exports.differenceInMilliseconds = exports.lastDayOfMonth = exports.firstDayOfMonth = exports.getMinutes = exports.getHours = exports.getDayOfMonth = exports.getYear = exports.addYears = exports.addMonths = exports.addDays = exports.addHours = exports.addMinutes = exports.nextWeekDay = exports.getMonthAsInt = exports.doDateOverlap = exports.getDuration = exports.isTimeStringValid = exports.getIntAsTime = exports.getTimeAsInt = exports.dateOffset = exports.dateFormatted = exports.dateSlash = exports.dateArrayInt = exports.dateArray = exports.dateStringToArray = exports.isDateIsoOrObjectValid = exports.isDateIntOrStringValid = exports.getDateAsObject = exports.getDateAsInt = exports.humanReadableTimestamp = exports.getDateAsInt12 = exports.orIsset = exports.checkCtxIntegrity = exports.checkAllObjectValuesAreEmpty = void 0;
+exports.tryCatch = exports.mongoPush = exports.mongoFilterMerger = exports.mergeMixins = exports.getId = exports.waitForTransaction = void 0;
 // ALIASES
 const int = parseInt;
+exports.int = int;
 const average = moyenne;
+exports.average = average;
 const arrayUniqueValue = noDuplicateFilter;
+exports.arrayUniqueValue = arrayUniqueValue;
 const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
+exports.JSONstringyParse = JSONstringyParse;
 const removeUndefinedKeys = objFilterUndefinedRecursive;
+exports.removeUndefinedKeys = removeUndefinedKeys;
 /** Round with custom number of decimals (default:0) */
 function round(number, decimals = 0) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+exports.round = round;
 /** Round with custom number of decimals (default:0) */
 function round2(number, decimals = 2) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+exports.round2 = round2;
 /** Is number between two numbers (including those numbers) */
 function isBetween(number, min, max, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
+exports.isBetween = isBetween;
 /** Random number between two values with 0 decimals by default */
 function random(nb1, nb2, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
+exports.random = random;
 /** Sum all values of an array, all values MUST be numbers */
 function sumArray(array) {
     return array.filter(item => typeof item === 'number').reduce((sum, val) => isset(val) ? val + sum : sum, 0);
 }
+exports.sumArray = sumArray;
 /** Moyenne / average between array of values
  * @param {Number} round number of decimals to keep. Default:2
 */
 function moyenne(array, nbOfDecimals = 2) {
     return round(sumArray(array) / array.length, nbOfDecimals);
 }
+exports.moyenne = moyenne;
 /** Clean output for outside world. All undefined / null / NaN / Infinity values are changed to '-' */
 function cln(val, replacerInCaseItIsUndefinNaN = '-') { return ['undefined', undefined, 'indéfini', 'NaN', NaN, Infinity, null].includes(val) ? replacerInCaseItIsUndefinNaN : val; }
+exports.cln = cln;
 /** length default 2, shortcut for 1 to 01 */
 function pad(numberOrStr, length = 2) { return ('' + numberOrStr).padStart(length, '0'); }
+exports.pad = pad;
 /** return the number or the closest number of the range
  * * nb min max  => returns
  * * 7  5   10   => 7 // in the range
@@ -33,6 +52,7 @@ function pad(numberOrStr, length = 2) { return ('' + numberOrStr).padStart(lengt
  * * 99 5   10   => 10// above the max value
  */
 function minMax(nb, min, max) { return Math.max(min, Math.min(nb, max)); }
+exports.minMax = minMax;
 async function tryCatch(callback, onErr = () => { }) {
     try {
         return await callback();
@@ -41,6 +61,7 @@ async function tryCatch(callback, onErr = () => { }) {
         return await onErr(err);
     }
 }
+exports.tryCatch = tryCatch;
 let generatedTokens = []; // cache to avoid collision
 let lastTs = new Date().getTime();
 /** minLength 8 if unique
@@ -66,9 +87,11 @@ function generateToken(length = 20, unique = true, mode = 'alphanumeric') {
     generatedTokens.push(token);
     return token;
 }
+exports.generateToken = generateToken;
 function generateObjectId() {
     return generateToken(24, true, 'hexadecimal');
 }
+exports.generateObjectId = generateObjectId;
 /** Useful to join differents bits of url with normalizing slashes
  * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
  * * urlPathJoin('http:/', 'kikou.lol') => https://www.kikou.lol
@@ -76,6 +99,7 @@ function generateObjectId() {
 function urlPathJoin(...bits) {
     return bits.join('/').replace(/\/+/g, '/').replace(/(https?:)\/\/?/, '$1//');
 }
+exports.urlPathJoin = urlPathJoin;
 /** path shall always be sorted before using in express
  *  to avoid a generic route like /* to catch a specific one like /bonjour
  *
@@ -105,6 +129,7 @@ function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArr
             bUrl.length - aUrl.length; // help separating / vs /blah
     });
 }
+exports.sortUrlsByDeepnessInArrayOrObject = sortUrlsByDeepnessInArrayOrObject;
 /** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content
  * @param {Object} varz object with key => value === toReplace => replacer
@@ -120,6 +145,7 @@ function miniTemplater(content, varz, options = {}) {
     };
     return content.replace(options.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options.valueWhenNotSet);
 }
+exports.miniTemplater = miniTemplater;
 /**
  *
  * @param {Object} object main object
@@ -147,6 +173,7 @@ function simpleObjectMaskOrSelect(object, maskedOrSelectedFields, isMask = true,
         }, {});
     }
 }
+exports.simpleObjectMaskOrSelect = simpleObjectMaskOrSelect;
 /** Parse one dimention object undefined, true, false, null represented as string will be converted to primitives */
 function parseEnv(env) {
     const newEnv = {};
@@ -176,6 +203,7 @@ function ENV() {
         deleteProperty: throwErr,
     });
 }
+exports.ENV = ENV;
 /**
  * @param {any} mayBeAstring
  * @return !!value
@@ -186,6 +214,7 @@ function parseBool(mayBeAstring) {
     else
         return mayBeAstring === 'true' ? true : mayBeAstring === 'false' ? false : !!mayBeAstring;
 }
+exports.parseBool = parseBool;
 function dim(str = '') {
     return configFn().terminal.noColor ? str : `\x1b[2m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`;
 }
@@ -209,6 +238,7 @@ let config = {
 };
 /** Allow dynamic changing of config */
 function configFn() { return config; }
+exports.configFn = configFn;
 /** Register custom config
  * @param {object} customConfig { 'email': email => /.+@.+/.test(email), type2 : myTestFunction() }
  * * env: 'development',
@@ -246,6 +276,7 @@ function registerConfig(customConfig) {
     config = newconfig;
     config.isProd = config.env.includes('prod');
 }
+exports.registerConfig = registerConfig;
 //----------------------------------------
 // ERROR HANDLER
 //----------------------------------------
@@ -283,6 +314,7 @@ function has(obj, addr) {
         return isset(objChain);
     });
 }
+exports.has = has;
 /** Find address in an object "a.b.c" IN { a : { b : {c : 'blah' }}} RETURNS 'blah'
  * @param {object} obj
  * @param {string} addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
@@ -302,6 +334,7 @@ function findByAddress(obj, addr) {
     }, obj);
     return objRef;
 }
+exports.findByAddress = findByAddress;
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
@@ -324,6 +357,7 @@ function objForceWrite(obj, addr, item) {
         lastItem = lastItem[chunk];
     });
 }
+exports.objForceWrite = objForceWrite;
 /** Enforce writing subItems, only if obj.addr is empty.
  * Eg: user.name.blah will ensure all are set until the writing of the last item
  * if user.name.blah has a value it will not change it.
@@ -333,6 +367,7 @@ function objForceWriteIfNotSet(obj, addr, item) {
     if (!isset(findByAddress(obj, addr)))
         return objForceWrite(obj, addr, item);
 }
+exports.objForceWriteIfNotSet = objForceWriteIfNotSet;
 /** Merge mixins into class. Use it in the constructor like: mergeMixins(this, {myMixin: true}) */
 function mergeMixins(that, ...mixins) {
     mixins.forEach(mixin => {
@@ -341,16 +376,19 @@ function mergeMixins(that, ...mixins) {
         }
     });
 }
+exports.mergeMixins = mergeMixins;
 /** If a string is provided, return it as array else return the value */
 function strAsArray(arrOrStr) {
     return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr;
 }
+exports.strAsArray = strAsArray;
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
 function asArray(item) {
     return (typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]);
 }
+exports.asArray = asArray;
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */
@@ -361,6 +399,7 @@ function compareArrays(arrayA, arrayB, compare = (a, b) => a === b) {
         notInA: getNotInArrayA(arrayA, arrayB, compare),
     };
 }
+exports.compareArrays = compareArrays;
 /**
  * @return [] only elements that are both in arrayA and arrayB
  */
@@ -370,6 +409,7 @@ function getArrayInCommon(arrayA = [], arrayB = [], compare = (a, b) => a === b)
     else
         return arrayA.filter(a => arrayB.some(b => compare(a, b)));
 }
+exports.getArrayInCommon = getArrayInCommon;
 /**
  * @return [] only elements that are in arrayB and not in arrayA
  */
@@ -381,12 +421,14 @@ function getNotInArrayA(arrayA = [], arrayB = [], compare = (a, b) => a === b) {
     else
         return arrayB.filter(b => !arrayA.some(a => compare(a, b)));
 }
+exports.getNotInArrayA = getNotInArrayA;
 /**
  * @return [] only elements that are in neither arrayA and arrayB
  */
 function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b) {
     return [...getNotInArrayA(arrayA, arrayB, compare), ...getNotInArrayA(arrayB, arrayA, compare)];
 }
+exports.getArrayDiff = getArrayDiff;
 /** filter duplicate values in an array
  * @param {function} comparisonFn default:(a, b) => a === b. A function that shall return true if two values are considered equal
  * @return {array|function}
@@ -394,10 +436,12 @@ function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b) {
 function noDuplicateFilter(arr, comparisonFn = (a, b) => a === b) {
     return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i);
 }
+exports.noDuplicateFilter = noDuplicateFilter;
 /** Count number of occurence of item in array */
 function arrayCount(item, arr) {
     return arr.reduce((total, item2) => item === item2 ? total + 1 : total, 0);
 }
+exports.arrayCount = arrayCount;
 /**
  * Sort an array in an object of subArrays, no duplicate.
  * @param {Array} array
@@ -412,6 +456,7 @@ function arrayToObjectSorted(array, getFieldFromItem) {
     });
     return res;
 }
+exports.arrayToObjectSorted = arrayToObjectSorted;
 /**
  * @param {Function} comparisonFunction default: (itemToPush, itemAlreadyInArray) => itemToPush === itemAlreadyInArray; comparison function to consider the added item duplicate
  */
@@ -420,15 +465,19 @@ function pushIfNotExist(arrayToPushInto, valueOrArrayOfValuesToBePushed, compari
     arrayToPushInto.push(...valuesToPush);
     return arrayToPushInto;
 }
+exports.pushIfNotExist = pushIfNotExist;
 function isNotEmptyArray(arr) {
     return Array.isArray(arr) && !!arr.length;
 }
+exports.isNotEmptyArray = isNotEmptyArray;
 function randomItemInArray(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
+exports.randomItemInArray = randomItemInArray;
 function cloneObject(o) {
     return JSON.parse(JSON.stringify(o));
 }
+exports.cloneObject = cloneObject;
 /** Deep clone. WILL REMOVE circular references */
 function deepClone(obj, cache = []) {
     let copy;
@@ -462,8 +511,10 @@ function deepClone(obj, cache = []) {
     }
     return obj; // number, string...
 }
+exports.deepClone = deepClone;
 /** test if object but not array and not null (null is an object in Js) */
 function isObject(o) { return o instanceof Object && [Object, Error].includes(o.constructor); }
+exports.isObject = isObject;
 /** object and array merge
  * @warn /!\ Array will be merged and duplicate values will be deleted /!\
  * @return {Object} new object result from merge
@@ -471,6 +522,7 @@ function isObject(o) { return o instanceof Object && [Object, Error].includes(o.
 function mergeDeep(...objects) {
     return mergeDeepConfigurable((previousVal, currentVal) => [...previousVal, ...currentVal].filter((elm, i, arr) => arr.indexOf(elm) === i), (previousVal, currentVal) => mergeDeep(previousVal, currentVal), undefined, ...objects);
 }
+exports.mergeDeep = mergeDeep;
 /** object and array merge
  * @warn /!\ Array will be replaced by the latest object /!\
  * @return {Object} new object result from merge
@@ -478,6 +530,7 @@ function mergeDeep(...objects) {
 function mergeDeepOverrideArrays(...objects) {
     return mergeDeepConfigurable(undefined, (previousVal, currentVal) => mergeDeepOverrideArrays(previousVal, currentVal), undefined, ...objects);
 }
+exports.mergeDeepOverrideArrays = mergeDeepOverrideArrays;
 /** object and array merge
  * @param {Function} replacerForArrays item[key] = (prevValue, currentVal) => () When 2 values are arrays,
  * @param {Function} replacerForObjects item[key] = (prevValue, currentVal) => () When 2 values are objects,
@@ -504,6 +557,7 @@ function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, replace
         return actuallyMerged;
     }, {});
 }
+exports.mergeDeepConfigurable = mergeDeepConfigurable;
 /** { a: {b:2}} => {'a.b':2} useful for translations
  * NOTE: will remove circular references
  */
@@ -546,6 +600,7 @@ function flattenObject(data, config = {}) {
     recurse(data, '');
     return result;
 }
+exports.flattenObject = flattenObject;
 /** {'a.b':2} => { a: {b:2}} */
 function unflattenObject(data) {
     const newO = {};
@@ -553,6 +608,7 @@ function unflattenObject(data) {
         objForceWrite(newO, addr, value);
     return newO;
 }
+exports.unflattenObject = unflattenObject;
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -586,6 +642,7 @@ async function recursiveGenericFunction(item, callback, addr$ = '', lastElementK
     }
     return item;
 }
+exports.recursiveGenericFunction = recursiveGenericFunction;
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -620,11 +677,13 @@ function recursiveGenericFunctionSync(item, callback, addr$ = '', lastElementKey
     }
     return item;
 }
+exports.recursiveGenericFunctionSync = recursiveGenericFunctionSync;
 /** Remove all key/values pair if value is undefined  */
 function objFilterUndefined(o) {
     Object.keys(o).forEach(k => !isset(o[k]) && delete o[k]);
     return o;
 }
+exports.objFilterUndefined = objFilterUndefined;
 /** Lock all 1st level props of an object to read only */
 function readOnly(o) {
     const throwErr = () => { throw new dataValidationUtilErrorHandler('Cannot modify object that is read only', 500); };
@@ -634,6 +693,7 @@ function readOnly(o) {
         deleteProperty: throwErr,
     });
 }
+exports.readOnly = readOnly;
 /** Fields of the object can be created BUT NOT reassignated */
 function reassignForbidden(o) {
     return new Proxy(o, {
@@ -650,6 +710,7 @@ function reassignForbidden(o) {
         }
     });
 }
+exports.reassignForbidden = reassignForbidden;
 /** All fileds and subFields of the object will become readOnly */
 function readOnlyForAll(object) {
     recursiveGenericFunctionSync(object, (item, _, lastElementKey, parent) => {
@@ -658,6 +719,7 @@ function readOnlyForAll(object) {
     });
     return object;
 }
+exports.readOnlyForAll = readOnlyForAll;
 function objFilterUndefinedRecursive(obj) {
     if (obj) {
         const flattenedObj = flattenObject(obj);
@@ -671,6 +733,7 @@ function objFilterUndefinedRecursive(obj) {
     else
         return obj;
 }
+exports.objFilterUndefinedRecursive = objFilterUndefinedRecursive;
 /** Will return all objects matching that path. Eg: user.*.myVar */
 function findByAddressAll(obj, addr) {
     err500IfNotSet({ obj, addr });
@@ -688,6 +751,7 @@ function findByAddressAll(obj, addr) {
     });
     return matchingItems;
 }
+exports.findByAddressAll = findByAddressAll;
 function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
     const orderedObj = {};
     const sortingConst = ascending ? 1 : -1;
@@ -696,6 +760,7 @@ function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
         .forEach(key => { orderedObj[key] = unorderedObj[key]; });
     return orderedObj;
 }
+exports.sortObjKeyAccordingToValue = sortObjKeyAccordingToValue;
 /**
  * Make default value if object key do not exist
  * @param {object} obj
@@ -711,6 +776,7 @@ function ensureObjectProp(obj, addr, defaultValue, callback = o => o) {
     callback(obj[addr]);
     return obj[addr];
 }
+exports.ensureObjectProp = ensureObjectProp;
 /**
  * Maye sure obj[addr] is an array and push a value to it
  * @param {Object} obj parent object
@@ -734,6 +800,7 @@ function ensureIsArrayAndPush(obj, addr, valToPush, onlyUniqueValues) {
             objValue.push(valToPush);
     });
 }
+exports.ensureIsArrayAndPush = ensureIsArrayAndPush;
 /**
  * @param {Object} obj the object on which we want to filter the keys
  * @param {function} filterFunc function that returns true if the key match the wanted criteria
@@ -746,6 +813,7 @@ function filterKeys(obj, filter) {
     });
     return clone;
 }
+exports.filterKeys = filterKeys;
 /**
  * @param {Object} obj the object on which we want to delete a property
  * @param {Array} addr addressArray on which to delete the property
@@ -756,6 +824,7 @@ function deleteByAddress(obj, addr) {
         current = current[addr[i]];
     delete current[addr[addr.length - 1]];
 }
+exports.deleteByAddress = deleteByAddress;
 /** @return undefined if cannot find _id */
 function getId(obj = {}) {
     if (!obj)
@@ -765,6 +834,7 @@ function getId(obj = {}) {
     else if (isType(obj, 'objectId'))
         return obj.toString();
 }
+exports.getId = getId;
 /**
  * @returns {array} return values of all callbacks
  */
@@ -776,6 +846,7 @@ function forI(nbIterations, callback) {
     }
     return results;
 }
+exports.forI = forI;
 async function forIasync(nbIterations, callback) {
     const results = [];
     for (let i = 0; i < nbIterations; i++) {
@@ -783,6 +854,7 @@ async function forIasync(nbIterations, callback) {
     }
     return results;
 }
+exports.forIasync = forIasync;
 function cleanStackTrace(stack) {
     if (typeof stack !== 'string')
         return '';
@@ -824,9 +896,11 @@ function cleanStackTrace(stack) {
         .join('\n');
     return linesClean;
 }
+exports.cleanStackTrace = cleanStackTrace;
 function isset(...elms) {
     return elms.every(elm => typeof elm !== 'undefined' && elm !== null);
 }
+exports.isset = isset;
 function removeCircularJSONstringify(object, indent = 2) {
     const getCircularReplacer = () => {
         const seen = new WeakSet();
@@ -842,6 +916,7 @@ function removeCircularJSONstringify(object, indent = 2) {
     };
     return JSON.stringify(object, getCircularReplacer(), indent);
 }
+exports.removeCircularJSONstringify = removeCircularJSONstringify;
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -849,16 +924,21 @@ function shuffleArray(array) {
     }
     return array;
 }
+exports.shuffleArray = shuffleArray;
+exports.randomizeArray = shuffleArray;
 /**Eg: camelCase */
 function camelCase(...wordBits) {
     return wordBits.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('');
 }
+exports.camelCase = camelCase;
 /**Eg: snake_case
  * trimmed but not lowerCased
  */
 function snakeCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim()).join('_');
 }
+exports.snakeCase = snakeCase;
+exports.underscoreCase = snakeCase;
 /**Eg: kebab-case
  * trimmed AND lowerCased
  * undefined, null... => ''
@@ -866,26 +946,34 @@ function snakeCase(...wordBits) {
 function kebabCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('-');
 }
+exports.kebabCase = kebabCase;
+exports.dashCase = kebabCase;
 /**Eg: PascalCase undefined, null... => '' */
 function pascalCase(...wordBits) {
     return wordBits.filter(e => e).map((w, i) => capitalize1st(w)).join('');
 }
+exports.pascalCase = pascalCase;
 /**Eg: Titlecase undefined, null... => '' */
 function titleCase(...wordBits) {
     return capitalize1st(wordBits.filter(e => e).map(w => w.trim()).join(''));
 }
+exports.titleCase = titleCase;
 /**Eg: UPPERCASE undefined, null... => '' */
 function upperCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toUpperCase()).join('');
 }
+exports.upperCase = upperCase;
 /**Eg: lowercase undefined, null... => '' */
 function lowerCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('');
 }
+exports.lowerCase = lowerCase;
 function capitalize1st(str = '') { return str[0].toUpperCase() + str.slice(1); }
+exports.capitalize1st = capitalize1st;
 function camelCaseToWords(str) {
     return str ? str.trim().replace(/([A-Z])/g, '-$1').toLowerCase().split('-') : [];
 }
+exports.camelCaseToWords = camelCaseToWords;
 function escapeRegexp(str, config = {}) {
     const { parseStarChar = false } = config;
     if (parseStarChar)
@@ -893,10 +981,12 @@ function escapeRegexp(str, config = {}) {
     else
         return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 }
+exports.escapeRegexp = escapeRegexp;
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */
 function firstMatch(str, regExp) { return (str.match(regExp) || [])[1]; }
+exports.firstMatch = firstMatch;
 /** Get all matches from regexp with g flag
  * Eg: [ [full, match1, m2], [f, m1, m2]... ]
  * NOTE: the G flag will be appended to regexp
@@ -919,6 +1009,7 @@ function allMatches(str, reg) {
     }
     return arr;
 }
+exports.allMatches = allMatches;
 /** GIVEN A STRING '{ blah;2}, ['nested,(what,ever)']' AND A SEPARATOR ",""
  *  This will return the content separated by first level of separators
  *  @return ["{ blah;2}", "['nested,(what,ever)']"]
@@ -928,6 +1019,7 @@ function getValuesBetweenSeparator(str, separator, removeTrailingSpaces = true) 
     const { outer } = getValuesBetweenStrings(str, separator, undefined, undefined, undefined, removeTrailingSpaces);
     return outer;
 }
+exports.getValuesBetweenSeparator = getValuesBetweenSeparator;
 /** GIVEN A STRING "a: [ 'str', /[^]]/, '[aa]]]str', () => [ nestedArray ] ], b: ['arr']"
  * @return matching: [ "'str', /[^]]/, '[aa]]]str', () => [ nestedArray ]", "'arr'" ], between: [ "a:", ", b: " ]
  * @param str base string
@@ -995,12 +1087,20 @@ function getValuesBetweenStrings(str, openingOrSeparator, closing, ignoreBetween
     const replaceValz = arr => arr.map(v => v.replace(/§§"/g, '<<').replace(/"§§/g, '>>')).filter(v => v);
     return { inner: replaceValz(arrayValues), outer: replaceValz(betweenArray) };
 }
+exports.getValuesBetweenStrings = getValuesBetweenStrings;
 function issetOr(...elms) { return elms.some(elm => typeof elm !== 'undefined' && elm !== null); }
+exports.issetOr = issetOr;
+exports.orIsset = issetOr;
 function isEmptyOrNotSet(...elms) { return elms.some(elm => !isset(elm) || isEmpty(elm)); }
+exports.isEmptyOrNotSet = isEmptyOrNotSet;
 function errIfNotSet(objOfVarNamesWithValues, additionalMessage) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues); }
+exports.errIfNotSet = errIfNotSet;
 function err500IfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, false, objOfVarNamesWithValues); }
+exports.err500IfNotSet = err500IfNotSet;
 function errIfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, true, objOfVarNamesWithValues); }
+exports.errIfEmptyOrNotSet = errIfEmptyOrNotSet;
 function err500IfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, true, objOfVarNamesWithValues); }
+exports.err500IfEmptyOrNotSet = err500IfEmptyOrNotSet;
 function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
     let missingVars = [];
     for (let prop in objOfVarNamesWithValues) {
@@ -1010,19 +1110,25 @@ function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
     if (missingVars.length)
         throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, errCode, { origin: 'Validator', varNames: missingVars.join(', ') });
 }
+exports.errXXXIfNotSet = errXXXIfNotSet;
 function isDateObject(variable) { return variable instanceof Date; }
+exports.isDateObject = isDateObject;
 /** Check all values are set */
 function checkAllObjectValuesAreEmpty(o) { return Object.values(o).every(value => !isset(value)); }
+exports.checkAllObjectValuesAreEmpty = checkAllObjectValuesAreEmpty;
 /** Throw an error in case data passed is not a valid ctx */
 function checkCtxIntegrity(ctx) {
     if (!isset(ctx) || !isset(ctx.user))
         throw new dataValidationUtilErrorHandler('ctxNotSet', 500);
 }
+exports.checkCtxIntegrity = checkCtxIntegrity;
 function validator(...paramsToValidate) {
     const errArray = validatorReturnErrArray(...paramsToValidate);
     if (errArray.length)
         throw new dataValidationUtilErrorHandler(...errArray);
 }
+exports.validator = validator;
+exports.required = validator;
 const restTestMini = {
     throwOnErr: false,
     reset(throwOnErr = false) {
@@ -1056,6 +1162,7 @@ const restTestMini = {
     nbError: 0,
     lastErrors: []
 };
+exports.restTestMini = restTestMini;
 function assert(msg, value, validatorObject = {}) {
     try {
         if (typeof validatorObject !== 'object')
@@ -1078,6 +1185,7 @@ function assert(msg, value, validatorObject = {}) {
         restTestMini.newErr(err);
     }
 }
+exports.assert = assert;
 /** Same as validator but return a boolean
  * See {@link validator}
  */
@@ -1085,10 +1193,12 @@ function isValid(...paramsToValidate) {
     const errArray = validatorReturnErrArray(...paramsToValidate);
     return errArray.length ? false : true;
 }
+exports.isValid = isValid;
 /** Default types + custom types
  * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
  */
 function isType(value, type) { return isValid({ name: 'Is type check', value, type }); }
+exports.isType = isType;
 function validatorReturnErrArray(...paramsToValidate) {
     let paramsFormatted = [];
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
@@ -1141,8 +1251,6 @@ function validatorReturnErrArray(...paramsToValidate) {
                         errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value });
                     type = type.replace('[]', '');
                 }
-                if (type === 'any')
-                    return true;
                 const allTypes = [
                     'objectId',
                     'dateInt6',
@@ -1162,6 +1270,7 @@ function validatorReturnErrArray(...paramsToValidate) {
                     'number',
                     'bigint',
                     'year',
+                    'any',
                     //...Object.keys(configFn().customTypes)
                 ];
                 if (!allTypes.includes(type))
@@ -1179,7 +1288,8 @@ function validatorReturnErrArray(...paramsToValidate) {
                     array: val => Array.isArray(val),
                     object: val => !Array.isArray(val) && val !== null && typeof val === type,
                     buffer: val => Buffer.isBuffer(val),
-                    year: val => /^\d\d\d\d$/.test(val)
+                    year: val => /^\d\d\d\d$/.test(val),
+                    any: () => true,
                 };
                 return isset(basicTypeCheck[type]) && basicTypeCheck[type](value) ||
                     typeof value === type && type !== 'object' || // for string, number, boolean...
@@ -1231,6 +1341,7 @@ function validatorReturnErrArray(...paramsToValidate) {
     }
     return [];
 }
+exports.validatorReturnErrArray = validatorReturnErrArray;
 function isEmpty(objOrArr) {
     if (Array.isArray(objOrArr) || typeof objOrArr === 'string')
         return objOrArr.length === 0;
@@ -1239,6 +1350,7 @@ function isEmpty(objOrArr) {
     else
         false;
 }
+exports.isEmpty = isEmpty;
 function err422IfNotSet(o) {
     let m = [];
     for (let p in o)
@@ -1248,11 +1360,13 @@ function err422IfNotSet(o) {
         throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') });
 }
 function getDateAsInt12(dateAllFormat, errIfNotValid) { return getDateAsInt(dateAllFormat, errIfNotValid, true); } // alias
+exports.getDateAsInt12 = getDateAsInt12;
 function humanReadableTimestamp(dateAllFormat) {
     if (isset(dateAllFormat))
         dateAllFormat = getDateAsObject(dateAllFormat);
     return parseInt(getDateAsInt12(dateAllFormat) + pad((dateAllFormat || new Date()).getUTCSeconds()) + pad((dateAllFormat || new Date()).getUTCMilliseconds(), 3));
 }
+exports.humanReadableTimestamp = humanReadableTimestamp;
 /** format for 6/8/2018 => 20180806
  * @param dateAllFormat multiple format allowed 2012, 20120101, 201201011200, new Date(), "2019-12-08T16:19:10.341Z" and all string that new Date() can parse
  */
@@ -1278,6 +1392,8 @@ function getDateAsInt(dateAllFormat = new Date(), errIfNotValid$ = false, withHo
     isDateIntOrStringValid(dateInt, errIfNotValid$);
     return (withHoursAndMinutes$ ? dateInt : dateInt.substr(0, 8));
 }
+exports.getDateAsInt = getDateAsInt;
+exports.convertDateAsInt = getDateAsInt;
 function getMonthAsInt(dateAllFormat = new Date()) {
     let dateInt;
     if (isDateIntOrStringValid(dateAllFormat)) {
@@ -1293,6 +1409,7 @@ function getMonthAsInt(dateAllFormat = new Date()) {
     }
     return int(dateInt);
 }
+exports.getMonthAsInt = getMonthAsInt;
 /**
  * @param dateAllFormat multiple format allowed 2012, 20120101, 201201011200, new Date(), "2019-12-08T16:19:10.341Z" and all string that new Date() can parse
  */
@@ -1311,6 +1428,8 @@ function getDateAsObject(dateAllFormat = new Date(), errIfNotValid$ = true) {
     isDateIsoOrObjectValid(dateObj, errIfNotValid$);
     return dateObj;
 }
+exports.getDateAsObject = getDateAsObject;
+exports.convertDateAsObject = getDateAsObject;
 function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length) {
     if (!isset(dateStringOrInt))
         return false;
@@ -1330,6 +1449,7 @@ function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length) 
         throw new dataValidationUtilErrorHandler(`dateStringOrIntFormatInvalid`, 422, { origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: 'Needs YYYYMMDD[HHMM] between 100001010000 and 999912312359', dateArr, isYearValid: test1, isMonthValid: test2, isDayValid: test3, isHourValid: test4, isMinutesValid: test5 });
     return true;
 }
+exports.isDateIntOrStringValid = isDateIntOrStringValid;
 function isDateIsoOrObjectValid(dateIsoOrObj, outputAnError = false) {
     let dateObj = dateIsoOrObj;
     if (typeof dateIsoOrObj === 'string')
@@ -1339,6 +1459,7 @@ function isDateIsoOrObjectValid(dateIsoOrObj, outputAnError = false) {
         throw new dataValidationUtilErrorHandler('dateIsoStringOrObjectIsNotValid', 422, { origin: 'Date Object validator', isoDate: dateIsoOrObj });
     return valid;
 }
+exports.isDateIsoOrObjectValid = isDateIsoOrObjectValid;
 /** [2018,01,06] */
 function dateStringToArray(strOrInt) {
     err422IfNotSet({ strOrInt });
@@ -1353,6 +1474,7 @@ function dateStringToArray(strOrInt) {
         dateStr.substr(14, 3) || '000', // MS
     ];
 }
+exports.dateStringToArray = dateStringToArray;
 /**
  * @param dateAllFormat default: actualDate
  * @returns ['01', '01', '2019'] OR **string** if separator is provided */
@@ -1364,6 +1486,7 @@ function dateArray(dateAllFormat = getDateAsInt()) {
         dateStr.substr(0, 4), // Y
     ];
 }
+exports.dateArray = dateArray;
 /**
  * @param dateAllFormat default: actualDate
  * @returns ['01', '01', '2019'] OR **string** if separator is provided */
@@ -1375,15 +1498,19 @@ function dateArrayInt(dateAllFormat = getDateAsInt()) {
         int(dateStr.substr(0, 4)), // Y
     ];
 }
+exports.dateArrayInt = dateArrayInt;
 /**
  * @return 01/01/2012 (alias of dateArrayFormatted(date, '/'))
  */
 function dateFormatted(dateAllFormat, separator = '/') { return dateArray(dateAllFormat).join(separator); }
+exports.dateSlash = dateFormatted;
+exports.dateFormatted = dateFormatted;
 /** Date with custom offset (Ex: +2 for France) */
 function dateOffset(offsetHours, dateObj = new Date()) {
     var utc = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(), dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds());
     return new Date(utc + (3600000 * offsetHours));
 }
+exports.dateOffset = dateOffset;
 //----------------------------------------
 // TIME UTILS
 //----------------------------------------
@@ -1398,6 +1525,7 @@ function getTimeAsInt(timeOrDateInt = getDateAsInt12()) {
     else
         return 'dateInvalid';
 }
+exports.getTimeAsInt = getTimeAsInt;
 /**
  * @param {timeInt|dateInt12} Eg: 2222 OR 201201012222. Default, actual dateInt12
  * @param {String} separator default: ":"
@@ -1407,6 +1535,7 @@ function getIntAsTime(intOrDateTimeInt = getDateAsInt12(), separator = ':') {
     const tl = time.length;
     return time.substring(tl - 4, tl - 2) + separator + time.substring(tl - 2, tl);
 }
+exports.getIntAsTime = getIntAsTime;
 function isTimeStringValid(timeStr, outputAnError$ = false) {
     let timeArr = timeStr.split(':');
     let h = int(timeArr[0]);
@@ -1418,6 +1547,7 @@ function isTimeStringValid(timeStr, outputAnError$ = false) {
     else
         return test1 && test2;
 }
+exports.isTimeStringValid = isTimeStringValid;
 //----------------------------------------
 // DURATIONS
 //----------------------------------------
@@ -1434,6 +1564,7 @@ function getDuration(startDate, endDate, inMinutes = false) {
             Math.floor(((diffInSec % (24 * 3600)) % 3600) / 60), // M
         ];
 }
+exports.getDuration = getDuration;
 /** compare two object with DATE INT, if they overlap return true
  * @param {Object} event1 {startDate, endDate}
  * @param {Object} event2 {startDate, endDate}
@@ -1449,6 +1580,7 @@ function doDateOverlap(event1, event2, fieldNameForStartDate$ = 'startDate', fie
         return (!event2[fieldNameForEndDate$] || event1[fieldNameForStartDate$] < event2[fieldNameForEndDate$]) && (!event1[fieldNameForEndDate$] || event1[fieldNameForEndDate$] > event2[fieldNameForStartDate$]);
     return (!event2[fieldNameForEndDate$] || event1[fieldNameForStartDate$] <= event2[fieldNameForEndDate$]) && (!event1[fieldNameForEndDate$] || event1[fieldNameForEndDate$] >= event2[fieldNameForStartDate$]);
 }
+exports.doDateOverlap = doDateOverlap;
 function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', sameDayAllowed = false) {
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt))
@@ -1457,26 +1589,31 @@ function nextWeekDay(fromDate, weekDayInt, outputFormat = 'date', sameDayAllowed
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7);
     return getDateAs(date, outputFormat);
 }
+exports.nextWeekDay = nextWeekDay;
 function addDays(dateAllFormat = getDateAsInt(), numberOfDays = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + numberOfDays * 24 * 60 * 60 * 1000);
     return getDateAs(date, outputFormat);
 }
+exports.addDays = addDays;
 function addMinutes(dateAllFormat = getDateAsInt(), numberOfMinutes = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfMinutes * 60 * 1000);
     return getDateAs(date, outputFormat);
 }
+exports.addMinutes = addMinutes;
 function addHours(dateAllFormat = getDateAsInt(), numberOfHours = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfHours * 60 * 60 * 1000);
     return getDateAs(date, outputFormat);
 }
+exports.addHours = addHours;
 function addMonths(dateAllFormat = getDateAsInt(), numberOfMonths = 1, outputFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCMonth(date.getUTCMonth() + numberOfMonths);
     return getDateAs(date, outputFormat);
 }
+exports.addMonths = addMonths;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
@@ -1485,26 +1622,31 @@ function addYears(dateAllFormat = getDateAsInt(), numberOfYears = 1, outputForma
     date.setUTCFullYear(date.getUTCFullYear() + numberOfYears);
     return getDateAs(date, outputFormat);
 }
+exports.addYears = addYears;
 function getDayOfMonth(dateAllFormat = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [, , d] = dateStringToArray(dateAsInt);
     return d;
 }
+exports.getDayOfMonth = getDayOfMonth;
 function getYear(dateAllFormat = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [y] = dateStringToArray(dateAsInt);
     return y;
 }
+exports.getYear = getYear;
 function getHours(dateAllFormat = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [, , , h,] = dateStringToArray(dateAsInt);
     return h;
 }
+exports.getHours = getHours;
 function getMinutes(dateAllFormat = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [, , , , m] = dateStringToArray(dateAsInt);
     return m;
 }
+exports.getMinutes = getMinutes;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
@@ -1514,6 +1656,7 @@ function lastDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'date') {
     lastDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
     return getDateAs(lastDay, outputFormat);
 }
+exports.lastDayOfMonth = lastDayOfMonth;
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
@@ -1523,26 +1666,33 @@ function firstDayOfMonth(dateAllFormat = getDateAsInt(), outputFormat = 'date') 
     firstDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
     return getDateAs(firstDay, outputFormat);
 }
+exports.firstDayOfMonth = firstDayOfMonth;
 function differenceInMilliseconds(startDateAllFormat, endDateAllFormat) {
     const startDate = getDateAsObject(startDateAllFormat);
     const endDate = getDateAsObject(endDateAllFormat);
     return endDate.getTime() - startDate.getTime();
 }
+exports.differenceInMilliseconds = differenceInMilliseconds;
 function differenceInSeconds(startDateAllFormat, endDateAllFormat) {
     return differenceInMilliseconds(startDateAllFormat, endDateAllFormat) / 1000;
 }
+exports.differenceInSeconds = differenceInSeconds;
 function differenceInMinutes(startDateAllFormat, endDateAllFormat) {
     return differenceInSeconds(startDateAllFormat, endDateAllFormat) / 60;
 }
+exports.differenceInMinutes = differenceInMinutes;
 function differenceInHours(startDateAllFormat, endDateAllFormat) {
     return differenceInMinutes(startDateAllFormat, endDateAllFormat) / 60;
 }
+exports.differenceInHours = differenceInHours;
 function differenceInDays(startDateAllFormat, endDateAllFormat) {
     return differenceInHours(startDateAllFormat, endDateAllFormat) / 24;
 }
+exports.differenceInDays = differenceInDays;
 function differenceInWeeks(startDateAllFormat, endDateAllFormat) {
     return differenceInDays(startDateAllFormat, endDateAllFormat) / 7;
 }
+exports.differenceInWeeks = differenceInWeeks;
 function getDateAs(dateAllFormat = new Date(), outputDateFormat = 'date') {
     switch (outputDateFormat) {
         case 'dateInt8':
@@ -1739,6 +1889,7 @@ const C = {
     // DEPRECATED
     useTheme() { },
 };
+exports.C = C;
 function logErrPrivate(type, color, ...errors) {
     const { isProd } = configFn();
     if (errors.length === 1 && typeof errors[0].log === 'function')
@@ -1856,6 +2007,7 @@ function cliProgressBar(step, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
         process.stdout.write(`${msg}${char.repeat(step)}\x1b[0m`); // \x1b[0m == reset color
     }
 }
+exports.cliProgressBar = cliProgressBar;
 /** This allow an intuitive inline loading spinner with a check mark when loading as finished or a red cross for errors  */
 class cliLoadingSpinner {
     constructor(type = 'dots', activeProcess = process) {
@@ -1895,6 +2047,7 @@ class cliLoadingSpinner {
         return this.end(true);
     }
 }
+exports.cliLoadingSpinner = cliLoadingSpinner;
 //----------------------------------------
 // STRING UTILS
 //----------------------------------------
@@ -1920,6 +2073,7 @@ function convertAccentedCharacters(str, config = {}) {
         output = output.replace(/\s+/g, '');
     return output;
 }
+exports.convertAccentedCharacters = convertAccentedCharacters;
 //----------------------------------------
 // MONGO UTILS
 //----------------------------------------
@@ -1946,16 +2100,20 @@ function mongoFilterMerger(filterA, filterB, assignToFilterA = false) {
     else
         return { ...filterA, ...filterB };
 }
+exports.mongoFilterMerger = mongoFilterMerger;
 function mongoPush(field, value, fields) {
     if (!isset(fields.$push))
         fields.$push = {};
     fields.$push[field] = value;
 }
+exports.mongoPush = mongoPush;
 //----------------------------------------
 // TIMEOUT UTILS
 //----------------------------------------
 async function timeout(ms, fn = () => { }) { return new Promise(res => setTimeout(res, ms)).then(fn); }
+exports.timeout = timeout;
 async function runAsync(callback, milliseconds$ = 1) { return timeout(milliseconds$, callback); }
+exports.runAsync = runAsync;
 /**
  *
  * @param {Function} callback function that shall return ===true asynchronously
@@ -1979,6 +2137,7 @@ async function waitUntilTrue(callback, timeoutSec = 10, errorAfterNSeconds = tru
     if (!generalTimeout && errorAfterNSeconds)
         throw new dataValidationUtilErrorHandler(errMess, 500);
 }
+exports.waitUntilTrue = waitUntilTrue;
 const delayedLoopParams = [];
 let isExecuting = false;
 /** Allow to perform an action in a delayed loop, useful for example to avoid reaching limits on servers. This function can be securely called multiple times.
@@ -2003,6 +2162,7 @@ async function executeInDelayedLoop(callback, time = 500, errorCallback = e => C
     }
     isExecuting = false;
 }
+exports.executeInDelayedLoop = executeInDelayedLoop;
 //----------------------------------------
 // TRANSACTION
 //----------------------------------------
@@ -2044,6 +2204,7 @@ async function transaction(name, asyncCallback, timeout = 120000, doNotThrow = f
         removeItemFromQueue(name);
     });
 }
+exports.transaction = transaction;
 async function removeItemFromQueue(name) {
     if (transactionRunning[name] === true)
         return; //       v 
@@ -2065,6 +2226,7 @@ async function waitForTransaction(transactionName, forceReleaseInSeconds = 30) {
         await timeout(15);
     }
 }
+exports.waitForTransaction = waitForTransaction;
 const _ = {
     round,
     random,
@@ -2235,30 +2397,5 @@ const _ = {
     mongoPush,
     tryCatch,
 };
-export default _;
-export { round, random, cln, pad, 
-// ALIASES
-int, minMax, generateToken, moyenne, average, sumArray, sortUrlsByDeepnessInArrayOrObject, urlPathJoin, miniTemplater, generateObjectId, isBetween, simpleObjectMaskOrSelect, ENV, parseBool, registerConfig, configFn, findByAddress, objForceWrite, objForceWriteIfNotSet, strAsArray, asArray, compareArrays, getArrayInCommon, getArrayDiff, getNotInArrayA, noDuplicateFilter, arrayCount, arrayToObjectSorted, pushIfNotExist, isNotEmptyArray, randomItemInArray, 
-//allias
-arrayUniqueValue, deepClone, cloneObject, JSONstringyParse, has, isObject, mergeDeep, flattenObject, unflattenObject, recursiveGenericFunction, recursiveGenericFunctionSync, findByAddressAll, objFilterUndefined, readOnly, reassignForbidden, readOnlyForAll, mergeDeepOverrideArrays, mergeDeepConfigurable, objFilterUndefinedRecursive, removeUndefinedKeys, // alias
-sortObjKeyAccordingToValue, ensureObjectProp, filterKeys, deleteByAddress, ensureIsArrayAndPush, removeCircularJSONstringify, isset, cleanStackTrace, shuffleArray, shuffleArray as randomizeArray, round2, forI, forIasync, camelCase, snakeCase, kebabCase, kebabCase as dashCase, snakeCase as underscoreCase, titleCase, pascalCase, lowerCase, upperCase, capitalize1st, camelCaseToWords, firstMatch, allMatches, getValuesBetweenSeparator, getValuesBetweenStrings, escapeRegexp, validator, validator as required, // alias for readability
-validatorReturnErrArray, assert, restTestMini, isValid, isType, isDateObject, issetOr, isEmptyOrNotSet, errIfNotSet, err500IfNotSet, errIfEmptyOrNotSet, err500IfEmptyOrNotSet, errXXXIfNotSet, isEmpty, checkAllObjectValuesAreEmpty, checkCtxIntegrity, 
-// ALIASES
-issetOr as orIsset, 
-// DATE
-getDateAsInt12, humanReadableTimestamp, getDateAsInt, getDateAsObject, isDateIntOrStringValid, isDateIsoOrObjectValid, dateStringToArray, dateArray, dateArrayInt, dateFormatted as dateSlash, dateFormatted, dateOffset, getTimeAsInt, getIntAsTime, isTimeStringValid, 
-// isDateObject <= see validator.js
-getDuration, doDateOverlap, getMonthAsInt, nextWeekDay, addMinutes, addHours, addDays, addMonths, addYears, getYear, getDayOfMonth, getHours, getMinutes, firstDayOfMonth, lastDayOfMonth, differenceInMilliseconds, differenceInSeconds, differenceInMinutes, differenceInHours, differenceInDays, differenceInWeeks, 
-// ALIASES
-getDateAsInt as convertDateAsInt, getDateAsObject as convertDateAsObject, 
-// LOGGER
-C, cliProgressBar, cliLoadingSpinner, 
-// STRING
-convertAccentedCharacters, 
-// TIMEOUT
-executeInDelayedLoop, timeout, runAsync, waitUntilTrue, 
-// TRANSACTION
-transaction, waitForTransaction, getId, mergeMixins, 
-// MONGO
-mongoFilterMerger, mongoPush, tryCatch, };
+exports.default = _;
 //# sourceMappingURL=utils.js.map
