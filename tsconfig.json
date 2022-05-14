@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "es2020",
+        "module": "CommonJS",
         "allowSyntheticDefaultImports": true,
         "target": "ES2018",
         "noImplicitAny": false,
