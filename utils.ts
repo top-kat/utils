@@ -125,6 +125,7 @@ function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArr
 type MiniTemplaterOptions = {
     valueWhenNotSet?: string
     regexp?: RegExp
+    valueWhenContentUndefined?: string
 }
 /** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content 
@@ -133,13 +134,14 @@ type MiniTemplaterOptions = {
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
-function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTemplaterOptions = {}) {
+function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTemplaterOptions = {}): string {
     options = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
+        valueWhenContentUndefined: '',
         ...options,
     };
-    return content.replace(options.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options.valueWhenNotSet);
+    return isset(content) ? content.replace(options.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options.valueWhenNotSet) : options.valueWhenContentUndefined
 }
 
 /**
