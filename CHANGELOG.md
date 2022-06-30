@@ -1,3 +1,6 @@
+### v1.0.46
+* FIX templater undefined no error anymore
+
 ### v1.0.42
 * type for date function
 
