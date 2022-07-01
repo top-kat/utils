@@ -492,17 +492,17 @@ function cloneObject(o) {
 }
 
 /** Deep clone. WILL REMOVE circular references */
-function deepClone(obj, cache = []) {
+function deepClone<T>(obj: T, cache = []): T {
 
     let copy;
     // usefull to not modify 1st level objet by lower levels
     // this is required for the same object to be referenced not in a redundant way
     const newCache = [...cache];
-    if (obj instanceof Date) return new Date(obj)
+    if (obj instanceof Date) return new Date(obj) as any
 
     // Handle Array
     if (Array.isArray(obj)) {
-        if (newCache.includes(obj)) return [];
+        if (newCache.includes(obj)) return [] as any
         newCache.push(obj);
         copy = [];
         for (var i = 0, len = obj.length; i < len; i++) {
@@ -512,7 +512,7 @@ function deepClone(obj, cache = []) {
     }
 
     if (typeof obj === 'object' && obj !== null && Object.getPrototypeOf(obj) === Object.prototype) {
-        if (newCache.includes(obj)) return {};
+        if (newCache.includes(obj)) return {} as any
         newCache.push(obj);
         copy = {};
         for (var key in obj) {
