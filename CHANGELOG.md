@@ -1,3 +1,6 @@
+### v1.0.47
+* deep clone type improvement
+
 ### v1.0.46
 * FIX templater undefined no error anymore
 
