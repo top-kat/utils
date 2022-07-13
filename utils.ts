@@ -11,9 +11,9 @@ type ObjectGeneric = { [k: string]: any }
 type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
 
 /** Round with custom number of decimals (default:0) */
-function round(number: number, decimals = 0) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
-/** Round with custom number of decimals (default:0) */
-function round2(number: number, decimals = 2) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+function round(number: number | string, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+/** Round with custom number of decimals (default:2) */
+function round2(number: number | string, decimals = 2) { return round(number, decimals) }
 
 /** Is number between two numbers (including those numbers) */
 function isBetween(number: number, min: number, max: number, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
