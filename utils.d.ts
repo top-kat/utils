@@ -10,9 +10,9 @@ declare type ObjectGeneric = {
 };
 declare type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any';
 /** Round with custom number of decimals (default:0) */
-declare function round(number: number, decimals?: number): number;
-/** Round with custom number of decimals (default:0) */
-declare function round2(number: number, decimals?: number): number;
+declare function round(number: number | string, decimals?: number): number;
+/** Round with custom number of decimals (default:2) */
+declare function round2(number: number | string, decimals?: number): number;
 /** Is number between two numbers (including those numbers) */
 declare function isBetween(number: number, min: number, max: number, inclusive?: boolean): boolean;
 /** Random number between two values with 0 decimals by default */
@@ -59,6 +59,7 @@ declare function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr: any, propInObjec
 declare type MiniTemplaterOptions = {
     valueWhenNotSet?: string;
     regexp?: RegExp;
+    valueWhenContentUndefined?: string;
 };
 /** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content
@@ -202,7 +203,7 @@ declare function isNotEmptyArray(arr: any): boolean;
 declare function randomItemInArray<T>(array: T[]): T;
 declare function cloneObject(o: any): any;
 /** Deep clone. WILL REMOVE circular references */
-declare function deepClone(obj: any, cache?: any[]): any;
+declare function deepClone<T>(obj: T, cache?: any[]): T;
 /** test if object but not array and not null (null is an object in Js) */
 declare function isObject(o: any): boolean;
 /** object and array merge

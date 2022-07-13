@@ -16,10 +16,10 @@ exports.JSONstringyParse = JSONstringyParse;
 const removeUndefinedKeys = objFilterUndefinedRecursive;
 exports.removeUndefinedKeys = removeUndefinedKeys;
 /** Round with custom number of decimals (default:0) */
-function round(number, decimals = 0) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+function round(number, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals); }
 exports.round = round;
-/** Round with custom number of decimals (default:0) */
-function round2(number, decimals = 2) { return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+/** Round with custom number of decimals (default:2) */
+function round2(number, decimals = 2) { return round(number, decimals); }
 exports.round2 = round2;
 /** Is number between two numbers (including those numbers) */
 function isBetween(number, min, max, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
@@ -141,9 +141,10 @@ function miniTemplater(content, varz, options = {}) {
     options = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
+        valueWhenContentUndefined: '',
         ...options,
     };
-    return content.replace(options.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options.valueWhenNotSet);
+    return isset(content) ? content.replace(options.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options.valueWhenNotSet) : options.valueWhenContentUndefined;
 }
 exports.miniTemplater = miniTemplater;
 /**
