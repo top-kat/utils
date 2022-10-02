@@ -841,10 +841,7 @@ function getId(obj: any = {}): string {
     else if (isType(obj, 'objectId')) return obj.toString();
 }
 
-/**
- * @returns {array} return values of all callbacks
- */
-function forI(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => void | any) {
+function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
     const results = []
     for (let i = 0; i < nbIterations; i++) {
         const prevValue = results[results.length - 1]
@@ -853,7 +850,7 @@ function forI(nbIterations: number, callback: (number: number, previousValue, ar
     return results
 }
 
-async function forIasync(nbIterations: number, callback: (number) => void | any) {
+async function forIasync<T extends any[] | any>(nbIterations: number, callback: (number) => T): Promise<T[]> {
     const results = []
     for (let i = 0; i < nbIterations; i++) {
         results.push(await callback(i))
