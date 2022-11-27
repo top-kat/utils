@@ -1325,6 +1325,7 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
                     'bigint',
                     'year',
                     'any',
+                    'email',
                     //...Object.keys(configFn().customTypes)
                 ];
 
@@ -1344,6 +1345,7 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
                     object: val => !Array.isArray(val) && val !== null && typeof val === type,
                     buffer: val => Buffer.isBuffer(val),
                     year: val => /^\d\d\d\d$/.test(val),
+                    email: val => /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(val),
                     any: () => true,
                 };
 
