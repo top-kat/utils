@@ -1,3 +1,7 @@
+### v1.0.49
+* Add/fix email type in validator
+* imrove typings on forI function
+
 ### v1.0.47
 * deep clone type improvement
 
