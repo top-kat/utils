@@ -1343,7 +1343,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                     object: val => !Array.isArray(val) && val !== null && typeof val === type,
                     buffer: val => Buffer.isBuffer(val),
                     year: val => /^\d\d\d\d$/.test(val),
-                    email: val => /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(val),
+                    email: val => /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]+$/.test(val),
                     any: () => true,
                 };
 
