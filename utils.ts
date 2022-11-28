@@ -645,7 +645,7 @@ function unflattenObject(data) {
     return newO;
 }
 
-
+type RecursiveCallback = (item: any, addr: string, lastElementKey: string, parent: ObjectGeneric | any[]) => false | any
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -661,7 +661,7 @@ function unflattenObject(data) {
  * NOTE: will remove circular references
  * /!\ check return values
  */
-async function recursiveGenericFunction(item, callback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
+async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback });
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -701,7 +701,7 @@ async function recursiveGenericFunction(item, callback, addr$ = '', lastElementK
  * NOTE: will remove circular references
  * /!\ check return values
  */
-function recursiveGenericFunctionSync(item, callback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
+function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback });
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -821,20 +821,20 @@ function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyUniqueVa
  * @param {function} filterFunc function that returns true if the key match the wanted criteria
  */
 function filterKeys(obj: object, filter) {
-    const clone = cloneObject(obj);
+    const clone = cloneObject(obj)
     recursiveGenericFunctionSync(obj, (item, addr, lastElementKey) => {
-        if (!filter(lastElementKey)) deleteByAddress(clone, addr.split('.'));
+        if (!filter(lastElementKey)) deleteByAddress(clone, addr.split('.'))
     });
-    return clone;
+    return clone
 }
 /**
  * @param {Object} obj the object on which we want to delete a property
  * @param {Array} addr addressArray on which to delete the property
  */
-function deleteByAddress(obj: object, addr: string) {
-    let current = obj;
-    for (let i = 0; i < addr.length - 2; i++) current = current[addr[i]];
-    delete current[addr[addr.length - 1]];
+function deleteByAddress(obj: object, addr: string[]) {
+    let current = obj
+    for (let i = 0; i < addr.length - 2; i++) current = current[addr[i]]
+    delete current[addr[addr.length - 1]]
 }
 
 /** @return undefined if cannot find _id */
