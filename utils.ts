@@ -337,11 +337,11 @@ function has(obj: ObjectGeneric, addr: string) {
 }
 
 /** Find address in an object "a.b.c" IN { a : { b : {c : 'blah' }}} RETURNS 'blah'
- * @param {object} obj
- * @param {string} addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
- * @returns {any} the last item of the chain OR undefined if not found
+ * @param obj
+ * @param addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
+ * @returns the last item of the chain OR undefined if not found
  */
-function findByAddress(obj: ObjectGeneric, addr: string) {
+function findByAddress(obj: ObjectGeneric, addr: string): any | undefined {
     if (addr === '') return obj;
     if (!isset(obj) || typeof obj !== 'object') return console.warn('Main object in `findByAddress` function is undefined or has the wrong type');
     const propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.'); // replace .[4] AND [4] TO .4
@@ -350,6 +350,27 @@ function findByAddress(obj: ObjectGeneric, addr: string) {
         else return objChain[prop];
     }, obj);
     return objRef
+}
+
+
+/** Will return all objects matching that path. Eg: user.*.myVar */
+function findByAddressAll(obj, addr, returnAddresses: true): Array<[string, any]>
+function findByAddressAll(obj, addr, returnAddresses: false): Array<any>
+function findByAddressAll(obj, addr, returnAddresses = false) {
+    err500IfNotSet({ obj, addr });
+    if (addr === '') return obj;
+    const addrRegexp = new RegExp('^' + addr
+        .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
+        .replace(/\./g, '\\.')
+        .replace(/\.\*/g, '.[^.[]+') // replace * by [^. (all but a point or a bracket)]
+        + '$');
+
+    const matchingItems = []
+
+    recursiveGenericFunctionSync(obj, (item, address) => {
+        if (addrRegexp.test(address)) matchingItems.push(returnAddresses ? [address, item] : item)
+    })
+    return matchingItems;
 }
 
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
@@ -750,24 +771,6 @@ function objFilterUndefinedRecursive(obj) {
         });
         return unflattenObject(flattenedObj);
     } else return obj;
-}
-
-/** Will return all objects matching that path. Eg: user.*.myVar */
-function findByAddressAll(obj, addr) {
-    err500IfNotSet({ obj, addr });
-    if (addr === '') return obj;
-    const addrRegexp = new RegExp('^' + addr
-        .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
-        .replace(/\./g, '\\.')
-        .replace(/\.\*/g, '.[^.[]+') // replace * by [^. (all but a point or a bracket)]
-        + '$');
-
-    const matchingItems = [];
-
-    recursiveGenericFunctionSync(obj, (item, address) => {
-        if (addrRegexp.test(address)) matchingItems.push(item);
-    });
-    return matchingItems;
 }
 
 function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
