@@ -1,3 +1,6 @@
+### v1.0.58
+* BREAKING remove export default
+
 ### v1.0.57
 * improve typings for recursive generic
 
