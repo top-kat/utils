@@ -144,8 +144,8 @@ declare function has(obj: ObjectGeneric, addr: string): boolean;
  */
 declare function findByAddress(obj: ObjectGeneric, addr: string): any | undefined;
 /** Will return all objects matching that path. Eg: user.*.myVar */
-declare function findByAddressAll(obj: any, addr: any, returnAddresses: true): Array<[string, any]>;
-declare function findByAddressAll(obj: any, addr: any, returnAddresses: false): Array<any>;
+declare function findByAddressAll(obj: any, addr: any, returnAddresses?: true): Array<[string, any]>;
+declare function findByAddressAll(obj: any, addr: any, returnAddresses?: false): Array<any>;
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */

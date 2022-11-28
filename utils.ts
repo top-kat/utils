@@ -354,8 +354,8 @@ function findByAddress(obj: ObjectGeneric, addr: string): any | undefined {
 
 
 /** Will return all objects matching that path. Eg: user.*.myVar */
-function findByAddressAll(obj, addr, returnAddresses: true): Array<[string, any]>
-function findByAddressAll(obj, addr, returnAddresses: false): Array<any>
+function findByAddressAll(obj, addr, returnAddresses?: true): Array<[string, any]>
+function findByAddressAll(obj, addr, returnAddresses?: false): Array<any>
 function findByAddressAll(obj, addr, returnAddresses = false) {
     err500IfNotSet({ obj, addr });
     if (addr === '') return obj;
