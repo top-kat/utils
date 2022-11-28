@@ -1,3 +1,6 @@
+### v1.0.51
+* add param to `findByAddressAll` returnAddresses for returning found items alongside their address
+
 ### v1.0.49
 * Add/fix email type in validator
 * imrove typings on forI function
