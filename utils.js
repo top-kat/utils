@@ -1,20 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.reassignForbidden = exports.readOnly = exports.objFilterUndefined = exports.findByAddressAll = exports.recursiveGenericFunctionSync = exports.recursiveGenericFunction = exports.unflattenObject = exports.flattenObject = exports.mergeDeep = exports.isObject = exports.has = exports.JSONstringyParse = exports.cloneObject = exports.deepClone = exports.arrayUniqueValue = exports.randomItemInArray = exports.isNotEmptyArray = exports.pushIfNotExist = exports.arrayToObjectSorted = exports.arrayCount = exports.noDuplicateFilter = exports.getNotInArrayA = exports.getArrayDiff = exports.getArrayInCommon = exports.compareArrays = exports.asArray = exports.strAsArray = exports.objForceWriteIfNotSet = exports.objForceWrite = exports.findByAddress = exports.configFn = exports.registerConfig = exports.parseBool = exports.ENV = exports.simpleObjectMaskOrSelect = exports.isBetween = exports.generateObjectId = exports.miniTemplater = exports.urlPathJoin = exports.sortUrlsByDeepnessInArrayOrObject = exports.sumArray = exports.average = exports.moyenne = exports.generateToken = exports.minMax = exports.int = exports.pad = exports.cln = exports.random = exports.round = void 0;
-exports.isEmpty = exports.errXXXIfNotSet = exports.err500IfEmptyOrNotSet = exports.errIfEmptyOrNotSet = exports.err500IfNotSet = exports.errIfNotSet = exports.isEmptyOrNotSet = exports.issetOr = exports.isDateObject = exports.isType = exports.isValid = exports.restTestMini = exports.assert = exports.validatorReturnErrArray = exports.required = exports.validator = exports.escapeRegexp = exports.getValuesBetweenStrings = exports.getValuesBetweenSeparator = exports.allMatches = exports.firstMatch = exports.camelCaseToWords = exports.capitalize1st = exports.upperCase = exports.lowerCase = exports.pascalCase = exports.titleCase = exports.underscoreCase = exports.dashCase = exports.kebabCase = exports.snakeCase = exports.camelCase = exports.forIasync = exports.forI = exports.round2 = exports.randomizeArray = exports.shuffleArray = exports.cleanStackTrace = exports.isset = exports.removeCircularJSONstringify = exports.ensureIsArrayAndPush = exports.deleteByAddress = exports.filterKeys = exports.ensureObjectProp = exports.sortObjKeyAccordingToValue = exports.removeUndefinedKeys = exports.objFilterUndefinedRecursive = exports.mergeDeepConfigurable = exports.mergeDeepOverrideArrays = exports.readOnlyForAll = void 0;
-exports.transaction = exports.waitUntilTrue = exports.runAsync = exports.timeout = exports.executeInDelayedLoop = exports.convertAccentedCharacters = exports.cliLoadingSpinner = exports.cliProgressBar = exports.C = exports.convertDateAsObject = exports.convertDateAsInt = exports.differenceInWeeks = exports.differenceInDays = exports.differenceInHours = exports.differenceInMinutes = exports.differenceInSeconds = exports.differenceInMilliseconds = exports.lastDayOfMonth = exports.firstDayOfMonth = exports.getMinutes = exports.getHours = exports.getDayOfMonth = exports.getYear = exports.addYears = exports.addMonths = exports.addDays = exports.addHours = exports.addMinutes = exports.nextWeekDay = exports.getMonthAsInt = exports.doDateOverlap = exports.getDuration = exports.isTimeStringValid = exports.getIntAsTime = exports.getTimeAsInt = exports.dateOffset = exports.dateFormatted = exports.dateSlash = exports.dateArrayInt = exports.dateArray = exports.dateStringToArray = exports.isDateIsoOrObjectValid = exports.isDateIntOrStringValid = exports.getDateAsObject = exports.getDateAsInt = exports.humanReadableTimestamp = exports.getDateAsInt12 = exports.orIsset = exports.checkCtxIntegrity = exports.checkAllObjectValuesAreEmpty = void 0;
-exports.tryCatch = exports.mongoPush = exports.mongoFilterMerger = exports.mergeMixins = exports.getId = exports.waitForTransaction = void 0;
+exports.mergeDeepOverrideArrays = exports.mergeDeep = exports.isObject = exports.deepClone = exports.cloneObject = exports.randomItemInArray = exports.isNotEmptyArray = exports.pushIfNotExist = exports.arrayToObjectSorted = exports.arrayCount = exports.noDuplicateFilter = exports.getArrayDiff = exports.getNotInArrayA = exports.getArrayInCommon = exports.compareArrays = exports.asArray = exports.strAsArray = exports.mergeMixins = exports.objForceWriteIfNotSet = exports.objForceWrite = exports.findByAddressAll = exports.findByAddress = exports.has = exports.registerConfig = exports.configFn = exports.dim = exports.parseBool = exports.ENV = exports.parseEnv = exports.simpleObjectMaskOrSelect = exports.miniTemplater = exports.sortUrlsByDeepnessInArrayOrObject = exports.urlPathJoin = exports.generateObjectId = exports.generateToken = exports.tryCatch = exports.minMax = exports.pad = exports.cln = exports.moyenne = exports.sumArray = exports.random = exports.isBetween = exports.round2 = exports.round = exports.removeUndefinedKeys = exports.JSONstringyParse = exports.arrayUniqueValue = exports.average = exports.int = void 0;
+exports.isValid = exports.assert = exports.restTestMini = exports.validator = exports.checkCtxIntegrity = exports.checkAllObjectValuesAreEmpty = exports.isDateObject = exports.errXXXIfNotSet = exports.err500IfEmptyOrNotSet = exports.errIfEmptyOrNotSet = exports.err500IfNotSet = exports.errIfNotSet = exports.isEmptyOrNotSet = exports.issetOr = exports.getValuesBetweenStrings = exports.getValuesBetweenSeparator = exports.allMatches = exports.firstMatch = exports.escapeRegexp = exports.camelCaseToWords = exports.capitalize1st = exports.lowerCase = exports.upperCase = exports.titleCase = exports.pascalCase = exports.kebabCase = exports.snakeCase = exports.camelCase = exports.shuffleArray = exports.removeCircularJSONstringify = exports.isset = exports.cleanStackTrace = exports.forIasync = exports.forI = exports.getId = exports.deleteByAddress = exports.filterKeys = exports.ensureIsArrayAndPush = exports.ensureObjectProp = exports.sortObjKeyAccordingToValue = exports.objFilterUndefinedRecursive = exports.readOnlyForAll = exports.reassignForbidden = exports.readOnly = exports.objFilterUndefined = exports.recursiveGenericFunctionSync = exports.recursiveGenericFunction = exports.unflattenObject = exports.flattenObject = exports.mergeDeepConfigurable = void 0;
+exports.timeout = exports.mongoPush = exports.mongoFilterMerger = exports.convertAccentedCharacters = exports.cliProgressBar = exports.stringifyExtraInfos = exports.stringifyInstanceOfError = exports.logErrPrivate = exports.C = exports.logger = exports.getDateAs = exports.differenceInWeeks = exports.differenceInDays = exports.differenceInHours = exports.differenceInMinutes = exports.differenceInSeconds = exports.differenceInMilliseconds = exports.firstDayOfMonth = exports.lastDayOfMonth = exports.getMinutes = exports.getHours = exports.getYear = exports.getDayOfMonth = exports.addYears = exports.addMonths = exports.addHours = exports.addMinutes = exports.addDays = exports.nextWeekDay = exports.doDateOverlap = exports.getDuration = exports.isTimeStringValid = exports.getIntAsTime = exports.getTimeAsInt = exports.dateOffset = exports.dateFormatted = exports.dateArrayInt = exports.dateArray = exports.dateStringToArray = exports.isDateIsoOrObjectValid = exports.isDateIntOrStringValid = exports.getDateAsObject = exports.getMonthAsInt = exports.getDateAsInt = exports.humanReadableTimestamp = exports.getDateAsInt12 = exports.err422IfNotSet = exports.isEmpty = exports.validatorReturnErrArray = exports.isType = void 0;
+exports.waitForTransaction = exports.removeItemFromQueue = exports.transaction = exports.executeInDelayedLoop = exports.waitUntilTrue = exports.runAsync = void 0;
 // ALIASES
-const int = parseInt;
-exports.int = int;
-const average = moyenne;
-exports.average = average;
-const arrayUniqueValue = noDuplicateFilter;
-exports.arrayUniqueValue = arrayUniqueValue;
+exports.int = parseInt;
+exports.average = moyenne;
+exports.arrayUniqueValue = noDuplicateFilter;
 const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
 exports.JSONstringyParse = JSONstringyParse;
-const removeUndefinedKeys = objFilterUndefinedRecursive;
-exports.removeUndefinedKeys = removeUndefinedKeys;
+exports.removeUndefinedKeys = objFilterUndefinedRecursive;
 /** Round with custom number of decimals (default:0) */
 function round(number, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals); }
 exports.round = round;
@@ -193,6 +189,7 @@ function parseEnv(env) {
     }
     return newEnv;
 }
+exports.parseEnv = parseEnv;
 /** READ ONLY, output a parsed version of process.env
  * use it like ENV().myVar
  */
@@ -219,6 +216,7 @@ exports.parseBool = parseBool;
 function dim(str = '') {
     return configFn().terminal.noColor ? str : `\x1b[2m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`;
 }
+exports.dim = dim;
 let config = {
     env: 'development',
     isProd: false,
@@ -609,7 +607,7 @@ function flattenObject(data, config = {}) {
                     result[prop] = {};
             }
             catch (error) {
-                C.warning('Circular reference in flattenObject, impossible to parse');
+                exports.C.warning('Circular reference in flattenObject, impossible to parse');
             }
         }
         else
@@ -922,7 +920,6 @@ function shuffleArray(array) {
     return array;
 }
 exports.shuffleArray = shuffleArray;
-exports.randomizeArray = shuffleArray;
 /**Eg: camelCase */
 function camelCase(...wordBits) {
     return wordBits.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('');
@@ -935,7 +932,6 @@ function snakeCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim()).join('_');
 }
 exports.snakeCase = snakeCase;
-exports.underscoreCase = snakeCase;
 /**Eg: kebab-case
  * trimmed AND lowerCased
  * undefined, null... => ''
@@ -944,7 +940,6 @@ function kebabCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('-');
 }
 exports.kebabCase = kebabCase;
-exports.dashCase = kebabCase;
 /**Eg: PascalCase undefined, null... => '' */
 function pascalCase(...wordBits) {
     return wordBits.filter(e => e).map((w, i) => capitalize1st(w)).join('');
@@ -993,13 +988,13 @@ function allMatches(str, reg) {
     let matches;
     const arr = [];
     if (typeof str !== 'string')
-        C.error('Not a string provided as first argument for allMatches()');
+        exports.C.error('Not a string provided as first argument for allMatches()');
     else {
         reg = new RegExp(reg, 'g');
         while ((matches = reg.exec(str))) {
             arr.push(matches);
             if (i++ > 99) {
-                C.error('error', 'Please provide the G flag in regexp for allMatches');
+                exports.C.error('error', 'Please provide the G flag in regexp for allMatches');
                 break;
             }
         }
@@ -1087,7 +1082,6 @@ function getValuesBetweenStrings(str, openingOrSeparator, closing, ignoreBetween
 exports.getValuesBetweenStrings = getValuesBetweenStrings;
 function issetOr(...elms) { return elms.some(elm => typeof elm !== 'undefined' && elm !== null); }
 exports.issetOr = issetOr;
-exports.orIsset = issetOr;
 function isEmptyOrNotSet(...elms) { return elms.some(elm => !isset(elm) || isEmpty(elm)); }
 exports.isEmptyOrNotSet = isEmptyOrNotSet;
 function errIfNotSet(objOfVarNamesWithValues, additionalMessage) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues); }
@@ -1125,41 +1119,39 @@ function validator(...paramsToValidate) {
         throw new dataValidationUtilErrorHandler(...errArray);
 }
 exports.validator = validator;
-exports.required = validator;
-const restTestMini = {
+exports.restTestMini = {
     throwOnErr: false,
     reset(throwOnErr = false) {
-        restTestMini.nbSuccess = 0;
-        restTestMini.nbError = 0;
-        restTestMini.lastErrors = [];
-        restTestMini.throwOnErr = throwOnErr;
+        exports.restTestMini.nbSuccess = 0;
+        exports.restTestMini.nbError = 0;
+        exports.restTestMini.lastErrors = [];
+        exports.restTestMini.throwOnErr = throwOnErr;
     },
     newErr(err) {
-        restTestMini.nbError++;
-        restTestMini.lastErrors.push(err);
-        if (restTestMini.throwOnErr)
+        exports.restTestMini.nbError++;
+        exports.restTestMini.lastErrors.push(err);
+        if (exports.restTestMini.throwOnErr)
             throw new Error(err);
         else
-            C.error(false, err);
+            exports.C.error(false, err);
     },
     printStats() {
         // TODO print last errz
-        C.info(`ERRORS RESUME =========`);
-        if (restTestMini.lastErrors.length)
-            C.log('\n\n\n');
-        for (const lastErr of restTestMini.lastErrors)
-            C.error(false, lastErr);
-        C.log('\n\n\n');
-        C.info(`STATS =========`);
-        C.info(`Total: ${restTestMini.nbSuccess + restTestMini.nbError}`);
-        C.success(`Success: ${restTestMini.nbSuccess}`);
-        C.error(false, `    Errors: ${restTestMini.nbError}`);
+        exports.C.info(`ERRORS RESUME =========`);
+        if (exports.restTestMini.lastErrors.length)
+            exports.C.log('\n\n\n');
+        for (const lastErr of exports.restTestMini.lastErrors)
+            exports.C.error(false, lastErr);
+        exports.C.log('\n\n\n');
+        exports.C.info(`STATS =========`);
+        exports.C.info(`Total: ${exports.restTestMini.nbSuccess + exports.restTestMini.nbError}`);
+        exports.C.success(`Success: ${exports.restTestMini.nbSuccess}`);
+        exports.C.error(false, `    Errors: ${exports.restTestMini.nbError}`);
     },
     nbSuccess: 0,
     nbError: 0,
     lastErrors: []
 };
-exports.restTestMini = restTestMini;
 function assert(msg, value, validatorObject = {}) {
     try {
         if (typeof validatorObject !== 'object')
@@ -1170,16 +1162,16 @@ function assert(msg, value, validatorObject = {}) {
         const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject);
         const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`;
         if (!isset(errMsg)) {
-            restTestMini.nbSuccess++;
-            C.success(msg2);
+            exports.restTestMini.nbSuccess++;
+            exports.C.success(msg2);
         }
         else {
             const err = msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`;
-            restTestMini.newErr(err);
+            exports.restTestMini.newErr(err);
         }
     }
     catch (err) {
-        restTestMini.newErr(err);
+        exports.restTestMini.newErr(err);
     }
 }
 exports.assert = assert;
@@ -1358,6 +1350,7 @@ function err422IfNotSet(o) {
     if (m.length)
         throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') });
 }
+exports.err422IfNotSet = err422IfNotSet;
 function getDateAsInt12(dateAllFormat, errIfNotValid) { return getDateAsInt(dateAllFormat, errIfNotValid, true); } // alias
 exports.getDateAsInt12 = getDateAsInt12;
 function humanReadableTimestamp(dateAllFormat) {
@@ -1392,7 +1385,6 @@ function getDateAsInt(dateAllFormat = new Date(), errIfNotValid$ = false, withHo
     return (withHoursAndMinutes$ ? dateInt : dateInt.substr(0, 8));
 }
 exports.getDateAsInt = getDateAsInt;
-exports.convertDateAsInt = getDateAsInt;
 function getMonthAsInt(dateAllFormat = new Date()) {
     let dateInt;
     if (isDateIntOrStringValid(dateAllFormat)) {
@@ -1406,7 +1398,7 @@ function getMonthAsInt(dateAllFormat = new Date()) {
         //let dateArr = dateAllFormat.toString().split(); // we cannot use ISOString
         dateInt = '' + date.getUTCFullYear() + pad(date.getUTCMonth() + 1);
     }
-    return int(dateInt);
+    return (0, exports.int)(dateInt);
 }
 exports.getMonthAsInt = getMonthAsInt;
 /**
@@ -1428,22 +1420,21 @@ function getDateAsObject(dateAllFormat = new Date(), errIfNotValid$ = true) {
     return dateObj;
 }
 exports.getDateAsObject = getDateAsObject;
-exports.convertDateAsObject = getDateAsObject;
 function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length) {
     if (!isset(dateStringOrInt))
         return false;
     const dateStr = dateStringOrInt.toString();
     if (length && dateStr.length !== length)
         throw new dataValidationUtilErrorHandler(`wrongLengthForDateInt`, 422, { origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: `${dateStringOrInt} length !== ${length}` });
-    if ((typeof dateStringOrInt === 'object' && isNaN(int(dateStr))) || ![4, 6, 8, 10, 12, 17].includes(dateStr.length))
+    if ((typeof dateStringOrInt === 'object' && isNaN((0, exports.int)(dateStr))) || ![4, 6, 8, 10, 12, 17].includes(dateStr.length))
         return false;
     const dateArr = dateStringToArray(dateStringOrInt);
     const [y, M, d, h, m] = dateArr;
-    const test1 = dateArr.length >= 3 && int(y) >= 1000; // Y
-    const test2 = int(M) <= 12 && int(M) > 0; // M
-    const test3 = !isset(d) || int(d) <= 31 && int(d) > 0; // D
-    const test4 = !isset(h) || (int(h) <= 23 && int(h) >= 0); // H
-    const test5 = !isset(m) || (int(m) <= 59 && int(m) >= 0); // M
+    const test1 = dateArr.length >= 3 && (0, exports.int)(y) >= 1000; // Y
+    const test2 = (0, exports.int)(M) <= 12 && (0, exports.int)(M) > 0; // M
+    const test3 = !isset(d) || (0, exports.int)(d) <= 31 && (0, exports.int)(d) > 0; // D
+    const test4 = !isset(h) || ((0, exports.int)(h) <= 23 && (0, exports.int)(h) >= 0); // H
+    const test5 = !isset(m) || ((0, exports.int)(m) <= 59 && (0, exports.int)(m) >= 0); // M
     if (outputAnError && !(test1 && test2 && test3 && test4 && test5))
         throw new dataValidationUtilErrorHandler(`dateStringOrIntFormatInvalid`, 422, { origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: 'Needs YYYYMMDD[HHMM] between 100001010000 and 999912312359', dateArr, isYearValid: test1, isMonthValid: test2, isDayValid: test3, isHourValid: test4, isMinutesValid: test5 });
     return true;
@@ -1492,9 +1483,9 @@ exports.dateArray = dateArray;
 function dateArrayInt(dateAllFormat = getDateAsInt()) {
     const dateStr = getDateAsInt(dateAllFormat).toString();
     return [
-        int(dateStr.substr(6, 2)),
-        int(dateStr.substr(4, 2)),
-        int(dateStr.substr(0, 4)), // Y
+        (0, exports.int)(dateStr.substr(6, 2)),
+        (0, exports.int)(dateStr.substr(4, 2)),
+        (0, exports.int)(dateStr.substr(0, 4)), // Y
     ];
 }
 exports.dateArrayInt = dateArrayInt;
@@ -1502,7 +1493,6 @@ exports.dateArrayInt = dateArrayInt;
  * @return 01/01/2012 (alias of dateArrayFormatted(date, '/'))
  */
 function dateFormatted(dateAllFormat, separator = '/') { return dateArray(dateAllFormat).join(separator); }
-exports.dateSlash = dateFormatted;
 exports.dateFormatted = dateFormatted;
 /** Date with custom offset (Ex: +2 for France) */
 function dateOffset(offsetHours, dateObj = new Date()) {
@@ -1517,10 +1507,10 @@ exports.dateOffset = dateOffset;
 function getTimeAsInt(timeOrDateInt = getDateAsInt12()) {
     if (isDateIntOrStringValid(timeOrDateInt)) {
         const tl = timeOrDateInt.toString().length;
-        return int(timeOrDateInt.toString().substring(tl - 4, tl));
+        return (0, exports.int)(timeOrDateInt.toString().substring(tl - 4, tl));
     }
     else if (typeof timeOrDateInt === 'string' && timeOrDateInt.length === 5 && timeOrDateInt.includes(':'))
-        return int(timeOrDateInt.replace(':', ''));
+        return (0, exports.int)(timeOrDateInt.replace(':', ''));
     else
         return 'dateInvalid';
 }
@@ -1537,8 +1527,8 @@ function getIntAsTime(intOrDateTimeInt = getDateAsInt12(), separator = ':') {
 exports.getIntAsTime = getIntAsTime;
 function isTimeStringValid(timeStr, outputAnError$ = false) {
     let timeArr = timeStr.split(':');
-    let h = int(timeArr[0]);
-    let m = int(timeArr[1]);
+    let h = (0, exports.int)(timeArr[0]);
+    let m = (0, exports.int)(timeArr[1]);
     let test1 = h >= 0 && h < 24;
     let test2 = m >= 0 && m < 60;
     if (outputAnError$ && !(test1 && test2))
@@ -1705,10 +1695,11 @@ function getDateAs(dateAllFormat = new Date(), outputDateFormat = 'date') {
             return getDateAsObject(dateAllFormat);
     }
 }
+exports.getDateAs = getDateAs;
 //----------------------------------------
 // LOGGER
 //----------------------------------------
-const logger = {
+exports.logger = {
     log(str, type = 'log') {
         const { preprocessLog } = configFn();
         if (typeof preprocessLog === 'function')
@@ -1719,13 +1710,13 @@ const logger = {
             console.warn(str);
         else
             console.log(str);
-        logger.raw.push(str + `\n`);
-        logger.raw = logger.raw.slice(logger.raw.length - configFn().nbOfLogsToKeep, logger.raw.length);
+        exports.logger.raw.push(str + `\n`);
+        exports.logger.raw = exports.logger.raw.slice(exports.logger.raw.length - configFn().nbOfLogsToKeep, exports.logger.raw.length);
     },
     /**
      * @param {String[]|String} inputLogs
      */
-    toHtml(inputLogs = [...logger.raw]) {
+    toHtml(inputLogs = [...exports.logger.raw]) {
         if (!Array.isArray(inputLogs))
             inputLogs = [inputLogs];
         const code2css = {
@@ -1754,7 +1745,7 @@ const logger = {
         });
         return `<div style='color:#ccc'>${htmlLogs}<br></div>`;
     },
-    toText(inputLogs = [...logger.raw]) {
+    toText(inputLogs = [...exports.logger.raw]) {
         const str = Array.isArray(inputLogs) ? inputLogs.join('\n') : inputLogs;
         return str.replace(/\x1b\[.*?m/g, '');
     },
@@ -1768,18 +1759,18 @@ const logger = {
 // * or C.line('MY TITLE', 53)
 // * or C.gradientize(myLongString)
 */
-const C = {
-    dim: str => C.output(2, str),
-    green: str => C.output(32, str),
-    red: str => C.output(31, str),
-    yellow: str => C.output(33, str),
-    grey: str => C.output(2, str),
-    magenta: str => C.output(35, str),
-    cyan: str => C.output(36, str),
-    blue: str => C.output(34, str),
+exports.C = {
+    dim: str => exports.C.output(2, str),
+    green: str => exports.C.output(32, str),
+    red: str => exports.C.output(31, str),
+    yellow: str => exports.C.output(33, str),
+    grey: str => exports.C.output(2, str),
+    magenta: str => exports.C.output(35, str),
+    cyan: str => exports.C.output(36, str),
+    blue: str => exports.C.output(34, str),
     primary: str => {
         const primary = configFn().terminal.theme.primary;
-        return C.rgb(...primary) + str + C.reset;
+        return exports.C.rgb(...primary) + str + exports.C.reset;
     },
     reset: '\x1b[0m',
     output: (code, str = '') => configFn().terminal.noColor ? str : `\x1b[${code}m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`,
@@ -1816,7 +1807,7 @@ const C = {
             return;
         const padX = ' '.repeat(paddingX);
         str = padX + (isset(clr) ? this.rgb(...clr) : '') + str.toString().replace(/\n/g, '\n' + padX + (isset(clr) ? this.rgb(...clr) : ''));
-        logger.log(str + this.reset, 'log');
+        exports.logger.log(str + this.reset, 'log');
     },
     info(...str) {
         str.forEach((s, i) => {
@@ -1888,7 +1879,6 @@ const C = {
     // DEPRECATED
     useTheme() { },
 };
-exports.C = C;
 function logErrPrivate(type, color, ...errors) {
     const { isProd } = configFn();
     if (errors.length === 1 && typeof errors[0].log === 'function')
@@ -1903,9 +1893,9 @@ function logErrPrivate(type, color, ...errors) {
             return '';
         else if (typeof err === 'string') {
             if (i === 0)
-                return C.rgb(...color) + symbol + err + C.reset;
+                return exports.C.rgb(...color) + symbol + err + exports.C.reset;
             else
-                return err.split('\n').map(val => C.dim(val)).join('\n');
+                return err.split('\n').map(val => exports.C.dim(val)).join('\n');
         }
         else if (err instanceof Error) {
             const { str, stackTrace: stkTrc } = stringifyInstanceOfError(err, type, color);
@@ -1915,7 +1905,7 @@ function logErrPrivate(type, color, ...errors) {
         }
         else if (typeof err === 'object') {
             let msg = '';
-            msg += removeCircularJSONstringify(err, 2).split('\n').map(val => C.dim(val)).join('\n') + '\n';
+            msg += removeCircularJSONstringify(err, 2).split('\n').map(val => exports.C.dim(val)).join('\n') + '\n';
             const { str, stackTrace: stkTrc } = stringifyExtraInfos(err.extraInfo || err, type, color);
             if (stkTrc)
                 stackTrace = stkTrc;
@@ -1938,9 +1928,10 @@ function logErrPrivate(type, color, ...errors) {
         if (displayStack) {
             messages.push(isProd ? stackTrace : cleanStackTrace(stackTrace) + '\n');
         }
-        logger.log(messages.join(''), type);
+        exports.logger.log(messages.join(''), type);
     }
 }
+exports.logErrPrivate = logErrPrivate;
 function stringifyInstanceOfError(err, type = 'error', color = [255, 0, 0], level = 0) {
     if (level > 5)
         return { str: '' };
@@ -1949,7 +1940,7 @@ function stringifyInstanceOfError(err, type = 'error', color = [255, 0, 0], leve
     const symbol = type === 'error' ? '✘ ' : '⚠ ';
     const title = err.msg || err.message || err.id || (err.stack ? err.stack.split('\n')[0] : 'Error');
     // Err mess
-    str += C.rgb(...color) + symbol + title + C.reset + '\n';
+    str += exports.C.rgb(...color) + symbol + title + exports.C.reset + '\n';
     if (err.stack)
         stackTrace = err.stack; // more relevant
     // ExtraInfos
@@ -1961,15 +1952,16 @@ function stringifyInstanceOfError(err, type = 'error', color = [255, 0, 0], leve
     }
     return { str, stackTrace };
 }
+exports.stringifyInstanceOfError = stringifyInstanceOfError;
 function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
     let stackTrace;
-    const originalError = [C.dim(`ORIGINAL ERROR ${'-'.repeat(39)}\n`)];
+    const originalError = [exports.C.dim(`ORIGINAL ERROR ${'-'.repeat(39)}\n`)];
     if (extraInfoOriginal instanceof Error) { // case where error is passed directly to extraInfos
         return stringifyInstanceOfError(extraInfoOriginal, type, color);
     }
     else {
         const extraInfo = { ...extraInfoOriginal };
-        const extraInfos = [C.dim(`EXTRA INFOS ${'-'.repeat(41)}\n`)];
+        const extraInfos = [exports.C.dim(`EXTRA INFOS ${'-'.repeat(41)}\n`)];
         if (typeof extraInfo === 'object' && Object.keys(extraInfo).length) {
             for (const itemName in extraInfo) {
                 if (extraInfo[itemName] instanceof Error) {
@@ -1985,7 +1977,7 @@ function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
                 .replace(/(?:^\s*{(?:\n {2})?|}\s*$)/g, '')
                 .replace(/\n {2}/g, '\n')
                 .split('\n')
-                .map(val => C.dim(val)).join('\n') + '\n');
+                .map(val => exports.C.dim(val)).join('\n') + '\n');
         }
         return {
             str: (extraInfos.length > 1 ? extraInfos.join('') : '') + (originalError.length > 1 ? originalError.join('') + '\n' : ''),
@@ -1993,6 +1985,7 @@ function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
         };
     }
 }
+exports.stringifyExtraInfos = stringifyExtraInfos;
 /**
  * Call this at each steps of your progress and change the step value
  * @param {Number} step Number of "char" to output
@@ -2031,14 +2024,14 @@ class cliLoadingSpinner {
             this.activeProcess.stdout.clearLine();
             this.activeProcess.stdout.cursorTo(0);
             const symbol = this.animFrames[this.frameNb++ % this.animFrames.length];
-            this.activeProcess.stdout.write(C.primary(symbol) + ' ' + this.progressMessage);
+            this.activeProcess.stdout.write(exports.C.primary(symbol) + ' ' + this.progressMessage);
         }, this.frameRate);
     }
     end(error = false) {
         clearInterval(this.interval);
         this.activeProcess.stdout.clearLine();
         this.activeProcess.stdout.cursorTo(0);
-        this.activeProcess.stdout.write(error ? C.red('✘ ' + this.progressMessage + '\n\n')
+        this.activeProcess.stdout.write(error ? exports.C.red('✘ ' + this.progressMessage + '\n\n')
             : '\x1b[32m✓ ' + this.progressMessage + '\n\n');
         this.progressMessage = '';
     }
@@ -2046,7 +2039,6 @@ class cliLoadingSpinner {
         return this.end(true);
     }
 }
-exports.cliLoadingSpinner = cliLoadingSpinner;
 //----------------------------------------
 // STRING UTILS
 //----------------------------------------
@@ -2144,7 +2136,7 @@ let isExecuting = false;
  * @param {Number} time default: 500ms;
  * @param {Function} errorCallback default: e => C.error(e)
  */
-async function executeInDelayedLoop(callback, time = 500, errorCallback = e => C.error(e)) {
+async function executeInDelayedLoop(callback, time = 500, errorCallback = e => exports.C.error(e)) {
     delayedLoopParams.push([callback, time, errorCallback]);
     if (isExecuting)
         return;
@@ -2186,11 +2178,11 @@ async function transaction(name, asyncCallback, timeout = 120000, doNotThrow = f
         transactionRunning[name] = false;
     return await new Promise((resolve, reject) => {
         if (doNotThrow)
-            reject = C.error;
+            reject = exports.C.error;
         queue[name].push(async () => {
             try {
                 setTimeout(() => {
-                    C.warning('Transaction Timout'); // in case not catched
+                    exports.C.warning('Transaction Timout'); // in case not catched
                     reject(new Error('transactionTimeout'));
                 }, timeout);
                 const res = await asyncCallback();
@@ -2212,6 +2204,7 @@ async function removeItemFromQueue(name) {
         await queue[name].shift()(); //   II
     transactionRunning[name] = false; //              \==/_______II
 } //                                                    l  v_v_v _I
+exports.removeItemFromQueue = removeItemFromQueue;
 //                                                       11    11
 /** Wait for a transaction to complete without creating a new transaction
  *
@@ -2226,175 +2219,4 @@ async function waitForTransaction(transactionName, forceReleaseInSeconds = 30) {
     }
 }
 exports.waitForTransaction = waitForTransaction;
-const _ = {
-    round,
-    random,
-    cln,
-    pad,
-    // ALIASES
-    int,
-    minMax,
-    generateToken,
-    moyenne,
-    average,
-    sumArray,
-    sortUrlsByDeepnessInArrayOrObject,
-    urlPathJoin,
-    miniTemplater,
-    generateObjectId,
-    isBetween,
-    simpleObjectMaskOrSelect,
-    ENV,
-    parseBool,
-    registerConfig,
-    configFn,
-    findByAddress,
-    objForceWrite,
-    objForceWriteIfNotSet,
-    strAsArray,
-    asArray,
-    compareArrays,
-    getArrayInCommon,
-    getArrayDiff,
-    getNotInArrayA,
-    noDuplicateFilter,
-    arrayCount,
-    arrayToObjectSorted,
-    pushIfNotExist,
-    isNotEmptyArray,
-    randomItemInArray,
-    //allias
-    arrayUniqueValue,
-    deepClone,
-    cloneObject,
-    JSONstringyParse,
-    has,
-    isObject,
-    mergeDeep,
-    flattenObject,
-    unflattenObject,
-    recursiveGenericFunction,
-    recursiveGenericFunctionSync,
-    findByAddressAll,
-    objFilterUndefined,
-    readOnly,
-    reassignForbidden,
-    readOnlyForAll,
-    mergeDeepOverrideArrays,
-    mergeDeepConfigurable,
-    objFilterUndefinedRecursive,
-    removeUndefinedKeys,
-    sortObjKeyAccordingToValue,
-    ensureObjectProp,
-    filterKeys,
-    deleteByAddress,
-    ensureIsArrayAndPush,
-    removeCircularJSONstringify,
-    isset,
-    cleanStackTrace,
-    shuffleArray,
-    randomizeArray: shuffleArray,
-    round2,
-    camelCase,
-    snakeCase,
-    kebabCase,
-    dashCase: kebabCase,
-    underscoreCase: snakeCase,
-    titleCase,
-    pascalCase,
-    lowerCase,
-    upperCase,
-    capitalize1st,
-    camelCaseToWords,
-    firstMatch,
-    allMatches,
-    getValuesBetweenSeparator,
-    getValuesBetweenStrings,
-    escapeRegexp,
-    validator,
-    required: validator,
-    validatorReturnErrArray,
-    assert,
-    restTestMini,
-    isValid,
-    isType,
-    isDateObject,
-    issetOr,
-    isEmptyOrNotSet,
-    errIfNotSet,
-    err500IfNotSet,
-    errIfEmptyOrNotSet,
-    err500IfEmptyOrNotSet,
-    errXXXIfNotSet,
-    isEmpty,
-    checkAllObjectValuesAreEmpty,
-    checkCtxIntegrity,
-    // ALIASES
-    orIsset: issetOr,
-    // DATE
-    getDateAsInt12,
-    humanReadableTimestamp,
-    getDateAsInt,
-    getDateAsObject,
-    isDateIntOrStringValid,
-    isDateIsoOrObjectValid,
-    dateStringToArray,
-    dateArrayFormatted: dateArray,
-    dateFormatted,
-    dateSlash: dateFormatted,
-    dateOffset,
-    getTimeAsInt,
-    getIntAsTime,
-    isTimeStringValid,
-    getDuration,
-    doDateOverlap,
-    getMonthAsInt,
-    nextWeekDay,
-    addMinutes,
-    addHours,
-    addDays,
-    addMonths,
-    addYears,
-    getYear,
-    getDayOfMonth,
-    getHours,
-    getMinutes,
-    firstDayOfMonth,
-    lastDayOfMonth,
-    differenceInMilliseconds,
-    differenceInSeconds,
-    differenceInMinutes,
-    differenceInHours,
-    differenceInDays,
-    differenceInWeeks,
-    forI,
-    forIasync,
-    // ALIASES
-    getDateAsArrayFormatted: dateArray,
-    getDateAsArray: dateStringToArray,
-    convertDateAsInt: getDateAsInt,
-    convertDateAsObject: getDateAsObject,
-    // LOGGER
-    C,
-    cliProgressBar,
-    cliLoadingSpinner,
-    outputLogs: logger,
-    // STRING
-    convertAccentedCharacters,
-    // TIMEOUT
-    executeInDelayedLoop,
-    timeout,
-    runAsync,
-    waitUntilTrue,
-    // TRANSACTION
-    transaction,
-    waitForTransaction,
-    getId,
-    mergeMixins,
-    // MONGO
-    mongoFilterMerger,
-    mongoPush,
-    tryCatch,
-};
-exports.default = _;
 //# sourceMappingURL=utils.js.map
