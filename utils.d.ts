@@ -138,11 +138,14 @@ declare function registerConfig(customConfig: any): void;
  */
 declare function has(obj: ObjectGeneric, addr: string): boolean;
 /** Find address in an object "a.b.c" IN { a : { b : {c : 'blah' }}} RETURNS 'blah'
- * @param {object} obj
- * @param {string} addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
- * @returns {any} the last item of the chain OR undefined if not found
+ * @param obj
+ * @param addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
+ * @returns the last item of the chain OR undefined if not found
  */
-declare function findByAddress(obj: ObjectGeneric, addr: string): any;
+declare function findByAddress(obj: ObjectGeneric, addr: string): any | undefined;
+/** Will return all objects matching that path. Eg: user.*.myVar */
+declare function findByAddressAll(obj: any, addr: any, returnAddresses: true): Array<[string, any]>;
+declare function findByAddressAll(obj: any, addr: any, returnAddresses: false): Array<any>;
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
@@ -276,8 +279,6 @@ declare function reassignForbidden(o: any): any;
 /** All fileds and subFields of the object will become readOnly */
 declare function readOnlyForAll(object: any): any;
 declare function objFilterUndefinedRecursive(obj: any): any;
-/** Will return all objects matching that path. Eg: user.*.myVar */
-declare function findByAddressAll(obj: any, addr: any): any;
 declare function sortObjKeyAccordingToValue(unorderedObj: any, ascending?: boolean): {};
 /**
  * Make default value if object key do not exist
@@ -309,11 +310,8 @@ declare function filterKeys(obj: object, filter: any): any;
 declare function deleteByAddress(obj: object, addr: string): void;
 /** @return undefined if cannot find _id */
 declare function getId(obj?: any): string;
-/**
- * @returns {array} return values of all callbacks
- */
-declare function forI(nbIterations: number, callback: (number: number, previousValue: any, arrayOfPreviousValues: any[]) => void | any): any[];
-declare function forIasync(nbIterations: number, callback: (number: any) => void | any): Promise<any[]>;
+declare function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue: any, arrayOfPreviousValues: any[]) => T): T[];
+declare function forIasync<T extends any[] | any>(nbIterations: number, callback: (number: any) => T): Promise<T[]>;
 declare function cleanStackTrace(stack: any): string;
 declare function isset(...elms: any[]): boolean;
 declare function removeCircularJSONstringify(object: any, indent?: number): string;

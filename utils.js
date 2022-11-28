@@ -317,9 +317,9 @@ function has(obj, addr) {
 }
 exports.has = has;
 /** Find address in an object "a.b.c" IN { a : { b : {c : 'blah' }}} RETURNS 'blah'
- * @param {object} obj
- * @param {string} addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
- * @returns {any} the last item of the chain OR undefined if not found
+ * @param obj
+ * @param addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
+ * @returns the last item of the chain OR undefined if not found
  */
 function findByAddress(obj, addr) {
     if (addr === '')
@@ -336,6 +336,23 @@ function findByAddress(obj, addr) {
     return objRef;
 }
 exports.findByAddress = findByAddress;
+function findByAddressAll(obj, addr, returnAddresses = false) {
+    err500IfNotSet({ obj, addr });
+    if (addr === '')
+        return obj;
+    const addrRegexp = new RegExp('^' + addr
+        .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
+        .replace(/\./g, '\\.')
+        .replace(/\.\*/g, '.[^.[]+') // replace * by [^. (all but a point or a bracket)]
+        + '$');
+    const matchingItems = [];
+    recursiveGenericFunctionSync(obj, (item, address) => {
+        if (addrRegexp.test(address))
+            matchingItems.push(returnAddresses ? [address, item] : item);
+    });
+    return matchingItems;
+}
+exports.findByAddressAll = findByAddressAll;
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
@@ -735,24 +752,6 @@ function objFilterUndefinedRecursive(obj) {
         return obj;
 }
 exports.objFilterUndefinedRecursive = objFilterUndefinedRecursive;
-/** Will return all objects matching that path. Eg: user.*.myVar */
-function findByAddressAll(obj, addr) {
-    err500IfNotSet({ obj, addr });
-    if (addr === '')
-        return obj;
-    const addrRegexp = new RegExp('^' + addr
-        .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
-        .replace(/\./g, '\\.')
-        .replace(/\.\*/g, '.[^.[]+') // replace * by [^. (all but a point or a bracket)]
-        + '$');
-    const matchingItems = [];
-    recursiveGenericFunctionSync(obj, (item, address) => {
-        if (addrRegexp.test(address))
-            matchingItems.push(item);
-    });
-    return matchingItems;
-}
-exports.findByAddressAll = findByAddressAll;
 function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
     const orderedObj = {};
     const sortingConst = ascending ? 1 : -1;
@@ -836,9 +835,6 @@ function getId(obj = {}) {
         return obj.toString();
 }
 exports.getId = getId;
-/**
- * @returns {array} return values of all callbacks
- */
 function forI(nbIterations, callback) {
     const results = [];
     for (let i = 0; i < nbIterations; i++) {
@@ -1272,6 +1268,7 @@ function validatorReturnErrArray(...paramsToValidate) {
                     'bigint',
                     'year',
                     'any',
+                    'email',
                     //...Object.keys(configFn().customTypes)
                 ];
                 if (!allTypes.includes(type))
@@ -1290,6 +1287,7 @@ function validatorReturnErrArray(...paramsToValidate) {
                     object: val => !Array.isArray(val) && val !== null && typeof val === type,
                     buffer: val => Buffer.isBuffer(val),
                     year: val => /^\d\d\d\d$/.test(val),
+                    email: val => /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(val),
                     any: () => true,
                 };
                 return isset(basicTypeCheck[type]) && basicTypeCheck[type](value) ||
