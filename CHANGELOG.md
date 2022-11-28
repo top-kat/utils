@@ -1,3 +1,6 @@
+### v1.0.57
+* improve typings for recursive generic
+
 ### v1.0.51
 * add param to `findByAddressAll` returnAddresses for returning found items alongside their address
 
