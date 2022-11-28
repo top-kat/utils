@@ -1,43 +1,43 @@
 // ALIASES
-const int = parseInt;
-const average = moyenne;
-const arrayUniqueValue = noDuplicateFilter;
-const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
-const removeUndefinedKeys = objFilterUndefinedRecursive;
+export const int = parseInt;
+export const average = moyenne;
+export const arrayUniqueValue = noDuplicateFilter;
+export const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
+export const removeUndefinedKeys = objFilterUndefinedRecursive;
 
 type Color = [number, number, number]
 type ObjectGeneric = { [k: string]: any }
 
-type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
+export type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
 
 /** Round with custom number of decimals (default:0) */
-function round(number: number | string, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals); }
+export function round(number: number | string, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals); }
 /** Round with custom number of decimals (default:2) */
-function round2(number: number | string, decimals = 2) { return round(number, decimals) }
+export function round2(number: number | string, decimals = 2) { return round(number, decimals) }
 
 /** Is number between two numbers (including those numbers) */
-function isBetween(number: number, min: number, max: number, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
+export function isBetween(number: number, min: number, max: number, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min; }
 
 /** Random number between two values with 0 decimals by default */
-function random(nb1: number, nb2: number, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
+export function random(nb1: number, nb2: number, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals); }
 
 /** Sum all values of an array, all values MUST be numbers */
-function sumArray(array: number[]) {
+export function sumArray(array: number[]) {
     return array.filter(item => typeof item === 'number').reduce((sum, val) => isset(val) ? val + sum : sum, 0);
 }
 
 /** Moyenne / average between array of values 
  * @param {Number} round number of decimals to keep. Default:2
 */
-function moyenne(array: number[], nbOfDecimals = 2) {
+export function moyenne(array: number[], nbOfDecimals = 2) {
     return round(sumArray(array) / array.length, nbOfDecimals);
 }
 
 /** Clean output for outside world. All undefined / null / NaN / Infinity values are changed to '-' */
-function cln(val, replacerInCaseItIsUndefinNaN = '-') { return ['undefined', undefined, 'indéfini', 'NaN', NaN, Infinity, null].includes(val) ? replacerInCaseItIsUndefinNaN : val; }
+export function cln(val, replacerInCaseItIsUndefinNaN = '-') { return ['undefined', undefined, 'indéfini', 'NaN', NaN, Infinity, null].includes(val) ? replacerInCaseItIsUndefinNaN : val; }
 
 /** length default 2, shortcut for 1 to 01 */
-function pad(numberOrStr: number | string, length = 2) { return ('' + numberOrStr).padStart(length, '0'); }
+export function pad(numberOrStr: number | string, length = 2) { return ('' + numberOrStr).padStart(length, '0'); }
 
 /** return the number or the closest number of the range
  * * nb min max  => returns
@@ -45,9 +45,9 @@ function pad(numberOrStr: number | string, length = 2) { return ('' + numberOrSt
  * * 2  5   10   => 5 // below the min value
  * * 99 5   10   => 10// above the max value
  */
-function minMax(nb: number, min: number, max: number) { return Math.max(min, Math.min(nb, max)); }
+export function minMax(nb: number, min: number, max: number) { return Math.max(min, Math.min(nb, max)); }
 
-async function tryCatch(callback: Function, onErr: Function = () => { }) {
+export async function tryCatch(callback: Function, onErr: Function = () => { }) {
     try {
         return await callback()
     } catch (err) {
@@ -64,7 +64,7 @@ let lastTs = new Date().getTime();
 * @param {string} mode one of ['alphanumeric', 'hexadecimal']
 * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
 */
-function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
+export function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
     let charConvNumeric = mode === 'alphanumeric' ? 36 : 16;
     if (unique && length < 8) length = 8;
     let token
@@ -79,7 +79,7 @@ function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexad
     return token;
 }
 
-function generateObjectId() {
+export function generateObjectId() {
     return generateToken(24, true, 'hexadecimal')
 }
 
@@ -88,7 +88,7 @@ function generateObjectId() {
  * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
  * * urlPathJoin('http:/', 'kikou.lol') => https://www.kikou.lol
  */
-function urlPathJoin(...bits: string[]) {
+export function urlPathJoin(...bits: string[]) {
     return bits.join('/').replace(/\/+/g, '/').replace(/(https?:)\/\/?/, '$1//');
 }
 
@@ -99,7 +99,7 @@ function urlPathJoin(...bits: string[]) {
  * @param {String} propInObjectOrIndexInArray
  * @return {Array} urls modified
  */
-function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArray) {
+export function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArray) {
     // SORTING BY
     // Deepness => /user vs /user/contract
     // simply count the / occurence to sort deepest path first to avoid concurrence or routes mislead
@@ -122,7 +122,7 @@ function sortUrlsByDeepnessInArrayOrObject(urlObjOrArr, propInObjectOrIndexInArr
 }
 
 
-type MiniTemplaterOptions = {
+export type MiniTemplaterOptions = {
     valueWhenNotSet?: string
     regexp?: RegExp
     valueWhenContentUndefined?: string
@@ -134,7 +134,7 @@ type MiniTemplaterOptions = {
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
-function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTemplaterOptions = {}): string {
+export function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTemplaterOptions = {}): string {
     options = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
@@ -151,7 +151,7 @@ function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTempla
  * @param {Boolean} isMask default: true; determine the behavior of the function. If is mask, selected fields will not appear in the resulting object. If it's a select, only selected fields will appear.
  * @param {Boolean} deleteKeysInsteadOfReturningAnewObject default:false; modify the existing object instead of creating a new instance
  */
-function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelectedFields: string[], isMask = true, deleteKeysInsteadOfReturningAnewObject = false) {
+export function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelectedFields: string[], isMask = true, deleteKeysInsteadOfReturningAnewObject = false) {
     const allKeys = Object.keys(object);
     const keysToMask = allKeys.filter(keyName => {
         if (isMask) return maskedOrSelectedFields.includes(keyName);
@@ -169,7 +169,7 @@ function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelectedFields:
 }
 
 /** Parse one dimention object undefined, true, false, null represented as string will be converted to primitives */
-function parseEnv(env) {
+export function parseEnv(env) {
     const newEnv = {};
     for (const k in env) {
         const val = env[k];
@@ -185,7 +185,7 @@ function parseEnv(env) {
 /** READ ONLY, output a parsed version of process.env
  * use it like ENV().myVar
  */
-function ENV(): { [key: string]: any } {
+export function ENV(): { [key: string]: any } {
     const throwErr = () => { throw new Error('Please use process.env to write to env'); };
     return new Proxy(parseEnv(process.env), {
         set: throwErr,
@@ -198,17 +198,17 @@ function ENV(): { [key: string]: any } {
  * @param {any} mayBeAstring 
  * @return !!value
  */
-function parseBool(mayBeAstring: string | boolean | number): boolean {
+export function parseBool(mayBeAstring: string | boolean | number): boolean {
     if (typeof mayBeAstring === 'boolean') return mayBeAstring;
     else return mayBeAstring === 'true' ? true : mayBeAstring === 'false' ? false : !!mayBeAstring;
 }
 
 
-function dim(str = '') {
+export function dim(str = '') {
     return configFn().terminal.noColor ? str : `\x1b[2m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`;
 }
 
-type Config = {
+export type Config = {
     env: string;
     isProd: boolean;
     nbOfLogsToKeep: number
@@ -250,7 +250,7 @@ let config: Config = {
 };
 
 /** Allow dynamic changing of config */
-function configFn() { return config; }
+export function configFn() { return config; }
 
 
 /** Register custom config
@@ -272,7 +272,7 @@ function configFn() { return config; }
  * *     }
  * * },
  */
-function registerConfig(customConfig) {
+export function registerConfig(customConfig) {
     if (!isset(customConfig.terminal)) customConfig.terminal = {};
     const newconfig = {
         ...config,
@@ -326,7 +326,7 @@ class dataValidationUtilErrorHandler extends Error {
  * @param {Object} obj object to test against
  * @param {string} addr `a.b.c.0.1` will test if myObject has props a that has prop b. Work wit arrays as well (like `arr.0`)
  */
-function has(obj: ObjectGeneric, addr: string) {
+export function has(obj: ObjectGeneric, addr: string) {
     if (!isset(obj) || typeof obj !== 'object') return;
     let propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.'); // replace a[3] => a.3;
     let objChain = obj;
@@ -341,7 +341,7 @@ function has(obj: ObjectGeneric, addr: string) {
  * @param addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
  * @returns the last item of the chain OR undefined if not found
  */
-function findByAddress(obj: ObjectGeneric, addr: string): any | undefined {
+export function findByAddress(obj: ObjectGeneric, addr: string): any | undefined {
     if (addr === '') return obj;
     if (!isset(obj) || typeof obj !== 'object') return console.warn('Main object in `findByAddress` function is undefined or has the wrong type');
     const propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.'); // replace .[4] AND [4] TO .4
@@ -354,9 +354,9 @@ function findByAddress(obj: ObjectGeneric, addr: string): any | undefined {
 
 
 /** Will return all objects matching that path. Eg: user.*.myVar */
-function findByAddressAll(obj, addr, returnAddresses?: true): Array<[string, any]>
-function findByAddressAll(obj, addr, returnAddresses?: false): Array<any>
-function findByAddressAll(obj, addr, returnAddresses = false) {
+export function findByAddressAll(obj, addr, returnAddresses?: true): Array<[string, any]>
+export function findByAddressAll(obj, addr, returnAddresses?: false): Array<any>
+export function findByAddressAll(obj, addr, returnAddresses = false) {
     err500IfNotSet({ obj, addr });
     if (addr === '') return obj;
     const addrRegexp = new RegExp('^' + addr
@@ -376,7 +376,7 @@ function findByAddressAll(obj, addr, returnAddresses = false) {
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
-function objForceWrite(obj: ObjectGeneric, addr: string, item) {
+export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
     const chunks = addr.replace(/\.?\[(\d+)\]/g, '.[$1').split('.');
     let lastItem = obj;
     chunks.forEach((chunkRaw, i) => {
@@ -396,12 +396,12 @@ function objForceWrite(obj: ObjectGeneric, addr: string, item) {
  * if user.name.blah has a value it will not change it.
  * NOTE: doesn't work with arrays
  */
-function objForceWriteIfNotSet(obj: ObjectGeneric, addr: string, item) {
+export function objForceWriteIfNotSet(obj: ObjectGeneric, addr: string, item) {
     if (!isset(findByAddress(obj, addr))) return objForceWrite(obj, addr, item);
 }
 
 /** Merge mixins into class. Use it in the constructor like: mergeMixins(this, {myMixin: true}) */
-function mergeMixins(that, ...mixins) {
+export function mergeMixins(that, ...mixins) {
     mixins.forEach(mixin => {
         for (const method in mixin) {
             that[method] = mixin[method];
@@ -413,21 +413,21 @@ function mergeMixins(that, ...mixins) {
 
 
 /** If a string is provided, return it as array else return the value */
-function strAsArray(arrOrStr) {
+export function strAsArray(arrOrStr) {
     return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr;
 }
 
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
-function asArray<T extends any[] | any>(item: T): T extends undefined ? undefined : T extends any[] ? T : T[] {
+export function asArray<T extends any[] | any>(item: T): T extends undefined ? undefined : T extends any[] ? T : T[] {
     return ((typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]) as T extends undefined ? undefined : T extends any[] ? T : T[])
 }
 
 /** Array comparison
  * @return {object} { inCommon, notInB, notInA }
  */
-function compareArrays(arrayA: any[], arrayB: any[], compare = (a, b) => a === b) {
+export function compareArrays(arrayA: any[], arrayB: any[], compare = (a, b) => a === b) {
     return {
         inCommon: getArrayInCommon(arrayA, arrayB, compare),
         notInB: getNotInArrayA(arrayB, arrayA, compare),
@@ -438,7 +438,7 @@ function compareArrays(arrayA: any[], arrayB: any[], compare = (a, b) => a === b
 /**
  * @return [] only elements that are both in arrayA and arrayB
  */
-function getArrayInCommon(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
+export function getArrayInCommon(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
     if (!Array.isArray(arrayA) || !Array.isArray(arrayB)) return [];
     else return arrayA.filter(a => arrayB.some(b => compare(a, b)));
 }
@@ -446,7 +446,7 @@ function getArrayInCommon(arrayA = [], arrayB = [], compare = (a, b) => a === b)
 /**
  * @return [] only elements that are in arrayB and not in arrayA
  */
-function getNotInArrayA(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
+export function getNotInArrayA(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
     if (!Array.isArray(arrayA) && Array.isArray(arrayB)) return arrayB;
     else if (!Array.isArray(arrayB)) return [];
     else return arrayB.filter(b => !arrayA.some(a => compare(a, b)));
@@ -455,7 +455,7 @@ function getNotInArrayA(arrayA = [], arrayB = [], compare = (a, b) => a === b): 
 /**
  * @return [] only elements that are in neither arrayA and arrayB
  */
-function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
+export function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
     return [...getNotInArrayA(arrayA, arrayB, compare), ...getNotInArrayA(arrayB, arrayA, compare)];
 }
 
@@ -463,12 +463,12 @@ function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b): an
  * @param {function} comparisonFn default:(a, b) => a === b. A function that shall return true if two values are considered equal
  * @return {array|function}
  */
-function noDuplicateFilter(arr, comparisonFn = (a, b) => a === b): any[] {
+export function noDuplicateFilter(arr, comparisonFn = (a, b) => a === b): any[] {
     return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i);
 }
 
 /** Count number of occurence of item in array */
-function arrayCount(item: any, arr: any[]): number {
+export function arrayCount(item: any, arr: any[]): number {
     return arr.reduce((total, item2) => item === item2 ? total + 1 : total, 0)
 }
 
@@ -478,7 +478,7 @@ function arrayCount(item: any, arr: any[]): number {
  * @param {function} getFieldFromItem (itemOfArray) => field[String|Number]
  * tell me how you want to sort your Array
  */
-function arrayToObjectSorted(array, getFieldFromItem) {
+export function arrayToObjectSorted(array, getFieldFromItem) {
     const res = {};
 
     array.forEach(item => {
@@ -492,28 +492,28 @@ function arrayToObjectSorted(array, getFieldFromItem) {
 /**
  * @param {Function} comparisonFunction default: (itemToPush, itemAlreadyInArray) => itemToPush === itemAlreadyInArray; comparison function to consider the added item duplicate
  */
-function pushIfNotExist(arrayToPushInto, valueOrArrayOfValuesToBePushed, comparisonFunction = (a, b) => a === b): any[] {
+export function pushIfNotExist(arrayToPushInto, valueOrArrayOfValuesToBePushed, comparisonFunction = (a, b) => a === b): any[] {
     const valuesToPush = asArray(valueOrArrayOfValuesToBePushed).filter(a => !arrayToPushInto.some(b => comparisonFunction(a, b)));
     arrayToPushInto.push(...valuesToPush);
     return arrayToPushInto;
 }
 
-function isNotEmptyArray(arr): boolean {
+export function isNotEmptyArray(arr): boolean {
     return Array.isArray(arr) && !!arr.length;
 }
 
-function randomItemInArray<T>(array: T[]): T {
+export function randomItemInArray<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)];
 }
 
 
 
-function cloneObject(o) {
+export function cloneObject(o) {
     return JSON.parse(JSON.stringify(o));
 }
 
 /** Deep clone. WILL REMOVE circular references */
-function deepClone<T>(obj: T, cache = []): T {
+export function deepClone<T>(obj: T, cache = []): T {
 
     let copy;
     // usefull to not modify 1st level objet by lower levels
@@ -548,13 +548,13 @@ function deepClone<T>(obj: T, cache = []): T {
 }
 
 /** test if object but not array and not null (null is an object in Js) */
-function isObject(o: any): boolean { return o instanceof Object && [Object, Error].includes(o.constructor); }
+export function isObject(o: any): boolean { return o instanceof Object && [Object, Error].includes(o.constructor); }
 
 /** object and array merge
  * @warn /!\ Array will be merged and duplicate values will be deleted /!\
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified*/
-function mergeDeep(...objects) {
+export function mergeDeep(...objects) {
     return mergeDeepConfigurable(
         (previousVal, currentVal) => [...previousVal, ...currentVal].filter((elm, i, arr) => arr.indexOf(elm) === i),
         (previousVal, currentVal) => mergeDeep(previousVal, currentVal),
@@ -567,7 +567,7 @@ function mergeDeep(...objects) {
  * @warn /!\ Array will be replaced by the latest object /!\
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified */
-function mergeDeepOverrideArrays(...objects) {
+export function mergeDeepOverrideArrays(...objects) {
     return mergeDeepConfigurable(
         undefined,
         (previousVal, currentVal) => mergeDeepOverrideArrays(previousVal, currentVal),
@@ -584,7 +584,7 @@ function mergeDeepOverrideArrays(...objects) {
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified
  */
-function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, replacerForObjects, replacerDefault = (prev, curr) => curr, ...objects) {
+export function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, replacerForObjects, replacerDefault = (prev, curr) => curr, ...objects) {
     return objects.reduce((actuallyMerged, obj) => {
         Object.keys(obj).forEach(key => {
             const previousVal = actuallyMerged[key];
@@ -606,7 +606,7 @@ function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, replace
 /** { a: {b:2}} => {'a.b':2} useful for translations
  * NOTE: will remove circular references
  */
-function flattenObject(data, config: { withoutArraySyntax?: boolean, withArraySyntaxMinified?: boolean } = {}) {
+export function flattenObject(data, config: { withoutArraySyntax?: boolean, withArraySyntaxMinified?: boolean } = {}) {
     const { withoutArraySyntax = false, withArraySyntaxMinified = false } = config
     const result = {};
     const seenObjects = []; // avoidCircular reference to infinite loop
@@ -639,13 +639,13 @@ function flattenObject(data, config: { withoutArraySyntax?: boolean, withArraySy
 }
 
 /** {'a.b':2} => { a: {b:2}} */
-function unflattenObject(data) {
+export function unflattenObject(data) {
     const newO = {}
     for (const [addr, value] of Object.entries(data)) objForceWrite(newO, addr, value)
     return newO;
 }
 
-type RecursiveCallback = (item: any, addr: string, lastElementKey: string, parent: ObjectGeneric | any[]) => false | any
+export type RecursiveCallback = (item: any, addr: string, lastElementKey: string, parent: ObjectGeneric | any[]) => false | any
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -661,7 +661,7 @@ type RecursiveCallback = (item: any, addr: string, lastElementKey: string, paren
  * NOTE: will remove circular references
  * /!\ check return values
  */
-async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
+export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback });
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -701,7 +701,7 @@ async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: R
  * NOTE: will remove circular references
  * /!\ check return values
  */
-function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
+export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback });
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -722,13 +722,13 @@ function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: Rec
 }
 
 /** Remove all key/values pair if value is undefined  */
-function objFilterUndefined(o) {
+export function objFilterUndefined(o) {
     Object.keys(o).forEach(k => !isset(o[k]) && delete o[k]);
     return o;
 }
 
 /** Lock all 1st level props of an object to read only */
-function readOnly(o) {
+export function readOnly(o) {
     const throwErr = () => { throw new dataValidationUtilErrorHandler('Cannot modify object that is read only', 500); };
     return new Proxy(o, {
         set: throwErr,
@@ -738,7 +738,7 @@ function readOnly(o) {
 }
 
 /** Fields of the object can be created BUT NOT reassignated */
-function reassignForbidden(o) {
+export function reassignForbidden(o) {
     return new Proxy(o, {
         defineProperty: function (that, key, value) {
             if (key in that) throw new dataValidationUtilErrorHandler(`Cannot reassign the property ${key.toString()} of this object`, 500);
@@ -754,14 +754,14 @@ function reassignForbidden(o) {
 }
 
 /** All fileds and subFields of the object will become readOnly */
-function readOnlyForAll(object) {
+export function readOnlyForAll(object) {
     recursiveGenericFunctionSync(object, (item, _, lastElementKey, parent) => {
         if (typeof item === 'object') parent[lastElementKey] = readOnly(item);
     });
     return object;
 }
 
-function objFilterUndefinedRecursive(obj) {
+export function objFilterUndefinedRecursive(obj) {
     if (obj) {
         const flattenedObj = flattenObject(obj);
         Object.keys(flattenedObj).forEach(key => {
@@ -773,7 +773,7 @@ function objFilterUndefinedRecursive(obj) {
     } else return obj;
 }
 
-function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
+export function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
     const orderedObj = {};
     const sortingConst = ascending ? 1 : -1;
     Object.keys(unorderedObj)
@@ -790,7 +790,7 @@ function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
  * @param {function} callback (obj[addr]) => processValue. Eg: myObjAddr => myObjAddr.push('bikou')
  * @return obj[addr] eventually processed by the callback
  */
-function ensureObjectProp(obj: object, addr: string, defaultValue, callback = o => o) {
+export function ensureObjectProp(obj: object, addr: string, defaultValue, callback = o => o) {
     err500IfNotSet({ obj, addr, defaultValue, callback });
     if (!isset(obj[addr])) obj[addr] = defaultValue;
     callback(obj[addr]);
@@ -805,7 +805,7 @@ function ensureObjectProp(obj: object, addr: string, defaultValue, callback = o 
  * @param {Boolean} onlyUniqueValues default:false; may be true or a comparision function; (a,b) => return true if they are the same like (a, b) => a.name === b.name
  * @return obj[addr] eventually processed by the callback
  */
-function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyUniqueValues: Function) {
+export function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyUniqueValues: Function) {
     return ensureObjectProp(obj, addr, [], objValue => {
         if (isset(onlyUniqueValues)) {
             let duplicateFound = false;
@@ -820,7 +820,7 @@ function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyUniqueVa
  * @param {Object} obj the object on which we want to filter the keys
  * @param {function} filterFunc function that returns true if the key match the wanted criteria
  */
-function filterKeys(obj: object, filter) {
+export function filterKeys(obj: object, filter) {
     const clone = cloneObject(obj)
     recursiveGenericFunctionSync(obj, (item, addr, lastElementKey) => {
         if (!filter(lastElementKey)) deleteByAddress(clone, addr.split('.'))
@@ -831,20 +831,20 @@ function filterKeys(obj: object, filter) {
  * @param {Object} obj the object on which we want to delete a property
  * @param {Array} addr addressArray on which to delete the property
  */
-function deleteByAddress(obj: object, addr: string[]) {
+export function deleteByAddress(obj: object, addr: string[]) {
     let current = obj
     for (let i = 0; i < addr.length - 2; i++) current = current[addr[i]]
     delete current[addr[addr.length - 1]]
 }
 
 /** @return undefined if cannot find _id */
-function getId(obj: any = {}): string {
+export function getId(obj: any = {}): string {
     if (!obj) return; // null case
     if (obj._id) return obj._id.toString();
     else if (isType(obj, 'objectId')) return obj.toString();
 }
 
-function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
+export function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
     const results = []
     for (let i = 0; i < nbIterations; i++) {
         const prevValue = results[results.length - 1]
@@ -853,7 +853,7 @@ function forI<T extends any[] | any>(nbIterations: number, callback: (number: nu
     return results
 }
 
-async function forIasync<T extends any[] | any>(nbIterations: number, callback: (number) => T): Promise<T[]> {
+export async function forIasync<T extends any[] | any>(nbIterations: number, callback: (number) => T): Promise<T[]> {
     const results = []
     for (let i = 0; i < nbIterations; i++) {
         results.push(await callback(i))
@@ -863,7 +863,7 @@ async function forIasync<T extends any[] | any>(nbIterations: number, callback: 
 
 
 
-function cleanStackTrace(stack) {
+export function cleanStackTrace(stack) {
     if (typeof stack !== 'string') return '';
     stack.replace(/home\/[^/]+\/[^/]+\//g, '');
     const lines = stack.split('\n');
@@ -904,10 +904,10 @@ function cleanStackTrace(stack) {
 }
 
 
-function isset(...elms) {
+export function isset(...elms) {
     return elms.every(elm => typeof elm !== 'undefined' && elm !== null);
 }
-function removeCircularJSONstringify(object, indent = 2) {
+export function removeCircularJSONstringify(object, indent = 2) {
     const getCircularReplacer = () => {
         const seen = new WeakSet();
         return (key, value) => {
@@ -925,7 +925,7 @@ function removeCircularJSONstringify(object, indent = 2) {
 }
 
 
-function shuffleArray(array) {
+export function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -935,52 +935,52 @@ function shuffleArray(array) {
 
 
 /**Eg: camelCase */
-function camelCase(...wordBits) {
+export function camelCase(...wordBits) {
     return wordBits.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('');
 }
 
 /**Eg: snake_case
  * trimmed but not lowerCased
  */
-function snakeCase(...wordBits) {
+export function snakeCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim()).join('_');
 }
 /**Eg: kebab-case
  * trimmed AND lowerCased
  * undefined, null... => ''
  */
-function kebabCase(...wordBits) {
+export function kebabCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('-');
 }
 /**Eg: PascalCase undefined, null... => '' */
-function pascalCase(...wordBits) {
+export function pascalCase(...wordBits) {
     return wordBits.filter(e => e).map((w, i) => capitalize1st(w)).join('');
 }
 
 /**Eg: Titlecase undefined, null... => '' */
-function titleCase(...wordBits) {
+export function titleCase(...wordBits) {
     return capitalize1st(wordBits.filter(e => e).map(w => w.trim()).join(''));
 }
 
 /**Eg: UPPERCASE undefined, null... => '' */
-function upperCase(...wordBits) {
+export function upperCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toUpperCase()).join('');
 }
 
 /**Eg: lowercase undefined, null... => '' */
-function lowerCase(...wordBits) {
+export function lowerCase(...wordBits) {
     return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('');
 }
 
-function capitalize1st(str = '') { return str[0].toUpperCase() + str.slice(1); }
+export function capitalize1st(str = '') { return str[0].toUpperCase() + str.slice(1); }
 
-function camelCaseToWords(str) {
+export function camelCaseToWords(str) {
     return str ? str.trim().replace(/([A-Z])/g, '-$1').toLowerCase().split('-') : [];
 }
 
 
 
-function escapeRegexp(str: string, config: { parseStarChar?: boolean } = {}): string {
+export function escapeRegexp(str: string, config: { parseStarChar?: boolean } = {}): string {
     const { parseStarChar = false } = config
     if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, '.*')
     else return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -989,13 +989,13 @@ function escapeRegexp(str: string, config: { parseStarChar?: boolean } = {}): st
 /** Get first match of the first capturing group of regexp
  * Eg: const basePath = firstMatch(apiFile, /basePath = '(.*?)'/); will get what is inside quotes
  */
-function firstMatch(str: string, regExp: RegExp): string | undefined { return (str.match(regExp) || [])[1]; }
+export function firstMatch(str: string, regExp: RegExp): string | undefined { return (str.match(regExp) || [])[1]; }
 
 /** Get all matches from regexp with g flag
  * Eg: [ [full, match1, m2], [f, m1, m2]... ]
  * NOTE: the G flag will be appended to regexp
  */
-function allMatches(str: string, reg: RegExp): string[] {
+export function allMatches(str: string, reg: RegExp): string[] {
     let i = 0;
     let matches;
     const arr = [];
@@ -1017,7 +1017,7 @@ function allMatches(str: string, reg: RegExp): string[] {
  *  This will return the content separated by first level of separators
  *  @return ["{ blah;2}", "['nested,(what,ever)']"]
  */
-function getValuesBetweenSeparator(str: string, separator: string, removeTrailingSpaces = true) {
+export function getValuesBetweenSeparator(str: string, separator: string, removeTrailingSpaces = true) {
     err500IfEmptyOrNotSet({ separator, str });
     const { outer } = getValuesBetweenStrings(str, separator, undefined, undefined, undefined, removeTrailingSpaces);
     return outer;
@@ -1032,7 +1032,7 @@ function getValuesBetweenSeparator(str: string, separator: string, removeTrailin
  * @param ignoreBetweenOpen default ['\'', '`', '"', '/'], when reaching an opening char, it will ignore all until it find the corresponding closing char
  * @param ignoreBetweenClose default ['\'', '`', '"', '/'] list of corresponding closing chars
  */
-function getValuesBetweenStrings(str: string, openingOrSeparator, closing, ignoreBetweenOpen = ['\'', '`', '"', '/'], ignoreBetweenClose = ['\'', '`', '"', '/'], removeTrailingSpaces = true) {
+export function getValuesBetweenStrings(str: string, openingOrSeparator, closing, ignoreBetweenOpen = ['\'', '`', '"', '/'], ignoreBetweenClose = ['\'', '`', '"', '/'], removeTrailingSpaces = true) {
     err500IfEmptyOrNotSet({ openingOrSeparator, str });
 
     str = str.replace(/<</g, '§§"').replace(/>>/g, '"§§');
@@ -1096,19 +1096,19 @@ function getValuesBetweenStrings(str: string, openingOrSeparator, closing, ignor
 
 
 
-function issetOr(...elms) { return elms.some(elm => typeof elm !== 'undefined' && elm !== null); }
+export function issetOr(...elms) { return elms.some(elm => typeof elm !== 'undefined' && elm !== null); }
 
-function isEmptyOrNotSet(...elms) { return elms.some(elm => !isset(elm) || isEmpty(elm)); }
+export function isEmptyOrNotSet(...elms) { return elms.some(elm => !isset(elm) || isEmpty(elm)); }
 
-function errIfNotSet(objOfVarNamesWithValues, additionalMessage) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues); }
+export function errIfNotSet(objOfVarNamesWithValues, additionalMessage) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues); }
 
-function err500IfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, false, objOfVarNamesWithValues); }
+export function err500IfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, false, objOfVarNamesWithValues); }
 
-function errIfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, true, objOfVarNamesWithValues); }
+export function errIfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, true, objOfVarNamesWithValues); }
 
-function err500IfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, true, objOfVarNamesWithValues); }
+export function err500IfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, true, objOfVarNamesWithValues); }
 
-function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
+export function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
     let missingVars = [];
     for (let prop in objOfVarNamesWithValues) {
         if (!isset(objOfVarNamesWithValues[prop]) || (checkEmpty && isEmpty(objOfVarNamesWithValues[prop]))) missingVars.push(prop);
@@ -1117,13 +1117,13 @@ function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
 }
 
 
-function isDateObject(variable) { return variable instanceof Date; }
+export function isDateObject(variable) { return variable instanceof Date; }
 
 /** Check all values are set */
-function checkAllObjectValuesAreEmpty(o) { return Object.values(o).every(value => !isset(value)); }
+export function checkAllObjectValuesAreEmpty(o) { return Object.values(o).every(value => !isset(value)); }
 
 /** Throw an error in case data passed is not a valid ctx */
-function checkCtxIntegrity(ctx) {
+export function checkCtxIntegrity(ctx) {
     if (!isset(ctx) || !isset(ctx.user)) throw new dataValidationUtilErrorHandler('ctxNotSet', 500);
 }
 
@@ -1168,7 +1168,7 @@ function checkCtxIntegrity(ctx) {
     )
 ----------------------------------------*/
 
-type ValidatorObject = {
+export type ValidatorObject = {
     name?: string
     value?: any
     type?: BaseTypes
@@ -1189,12 +1189,12 @@ type ValidatorObject = {
     isArray?: boolean
     [k: string]: any
 }
-function validator(...paramsToValidate: ValidatorObject[]) {
+export function validator(...paramsToValidate: ValidatorObject[]) {
     const errArray = validatorReturnErrArray(...paramsToValidate);
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray);
 }
 
-const restTestMini = {
+export const restTestMini = {
     throwOnErr: false,
     reset(throwOnErr = false) {
         restTestMini.nbSuccess = 0
@@ -1224,7 +1224,7 @@ const restTestMini = {
     lastErrors: []
 }
 
-function assert(msg: string, value: any, validatorObject: ValidatorObject | number | boolean | string = {}) {
+export function assert(msg: string, value: any, validatorObject: ValidatorObject | number | boolean | string = {}) {
     try {
         if (typeof validatorObject !== 'object') validatorObject = { eq: validatorObject }
         const issetCheck = isEmpty(validatorObject)
@@ -1247,7 +1247,7 @@ function assert(msg: string, value: any, validatorObject: ValidatorObject | numb
 /** Same as validator but return a boolean
  * See {@link validator}
  */
-function isValid(...paramsToValidate) {
+export function isValid(...paramsToValidate) {
     const errArray = validatorReturnErrArray(...paramsToValidate);
     return errArray.length ? false : true;
 }
@@ -1255,9 +1255,9 @@ function isValid(...paramsToValidate) {
 /** Default types + custom types
  * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
  */
-function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }); }
+export function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }); }
 
-function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?] {
+export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?] {
     let paramsFormatted = [];
 
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
@@ -1404,21 +1404,21 @@ function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [strin
 }
 
 
-function isEmpty(objOrArr: object | any[] | string | null | undefined) {
+export function isEmpty(objOrArr: object | any[] | string | null | undefined) {
     if (Array.isArray(objOrArr) || typeof objOrArr === 'string') return objOrArr.length === 0
     else if (typeof objOrArr == 'object' && objOrArr !== null && !(objOrArr instanceof Date)) return Object.keys(objOrArr).length === 0
     else false
 }
 
-function err422IfNotSet(o) {
+export function err422IfNotSet(o) {
     let m = []
     for (let p in o) if (!isset(o[p])) m.push(p)
     if (m.length) throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') })
 }
 
-function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?): string { return getDateAsInt(dateAllFormat, errIfNotValid, true); } // alias
+export function getDateAsInt12(dateAllFormat?: Date | string | number, errIfNotValid?): string { return getDateAsInt(dateAllFormat, errIfNotValid, true); } // alias
 
-function humanReadableTimestamp(dateAllFormat: any): number {
+export function humanReadableTimestamp(dateAllFormat: any): number {
     if (isset(dateAllFormat)) dateAllFormat = getDateAsObject(dateAllFormat);
     return parseInt(getDateAsInt12(dateAllFormat) + pad((dateAllFormat || new Date()).getUTCSeconds()) + pad((dateAllFormat || new Date()).getUTCMilliseconds(), 3));
 }
@@ -1426,7 +1426,7 @@ function humanReadableTimestamp(dateAllFormat: any): number {
 /** format for 6/8/2018 => 20180806
  * @param dateAllFormat multiple format allowed 2012, 20120101, 201201011200, new Date(), "2019-12-08T16:19:10.341Z" and all string that new Date() can parse
  */
-function getDateAsInt(dateAllFormat: Date | string | number = new Date(), errIfNotValid$ = false, withHoursAndMinutes$ = false): string { // optional
+export function getDateAsInt(dateAllFormat: Date | string | number = new Date(), errIfNotValid$ = false, withHoursAndMinutes$ = false): string { // optional
     let dateInt;
     if (typeof dateAllFormat === 'string' && dateAllFormat.includes('/')) {
         // 01/01/2020 format
@@ -1447,7 +1447,7 @@ function getDateAsInt(dateAllFormat: Date | string | number = new Date(), errIfN
 }
 
 
-function getMonthAsInt(dateAllFormat: Date | string | number = new Date()): number {
+export function getMonthAsInt(dateAllFormat: Date | string | number = new Date()): number {
     let dateInt;
     if (isDateIntOrStringValid(dateAllFormat)) {
         // we can pass an int or string format (20180106)
@@ -1463,7 +1463,7 @@ function getMonthAsInt(dateAllFormat: Date | string | number = new Date()): numb
 /** 
  * @param dateAllFormat multiple format allowed 2012, 20120101, 201201011200, new Date(), "2019-12-08T16:19:10.341Z" and all string that new Date() can parse
  */
-function getDateAsObject(dateAllFormat: any = new Date(), errIfNotValid$ = true): Date {
+export function getDateAsObject(dateAllFormat: any = new Date(), errIfNotValid$ = true): Date {
     let dateObj = dateAllFormat;
     if (isDateIntOrStringValid(dateAllFormat)) {
         const [y, M, d, h, m] = dateStringToArray(dateAllFormat);
@@ -1477,7 +1477,7 @@ function getDateAsObject(dateAllFormat: any = new Date(), errIfNotValid$ = true)
     return dateObj;
 }
 
-function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length?): boolean {
+export function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length?): boolean {
     if (!isset(dateStringOrInt)) return false
     const dateStr = dateStringOrInt.toString();
 
@@ -1498,7 +1498,7 @@ function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, length?)
     return true;
 }
 
-function isDateIsoOrObjectValid(dateIsoOrObj, outputAnError = false) {
+export function isDateIsoOrObjectValid(dateIsoOrObj, outputAnError = false) {
     let dateObj: Date | number | string = dateIsoOrObj;
     if (typeof dateIsoOrObj === 'string') dateObj = new Date(dateIsoOrObj);
     let valid = dateObj instanceof Date;
@@ -1507,7 +1507,7 @@ function isDateIsoOrObjectValid(dateIsoOrObj, outputAnError = false) {
 }
 
 /** [2018,01,06] */
-function dateStringToArray(strOrInt) {
+export function dateStringToArray(strOrInt) {
     err422IfNotSet({ strOrInt });
 
     const dateStr = strOrInt.toString();
@@ -1525,7 +1525,7 @@ function dateStringToArray(strOrInt) {
 /**
  * @param dateAllFormat default: actualDate
  * @returns ['01', '01', '2019'] OR **string** if separator is provided */
-function dateArray(dateAllFormat: Date | string | number = getDateAsInt()): [string, string, string] {
+export function dateArray(dateAllFormat: Date | string | number = getDateAsInt()): [string, string, string] {
     const dateStr = getDateAsInt(dateAllFormat).toString();
     return [
         dateStr.substr(6, 2), // D
@@ -1537,7 +1537,7 @@ function dateArray(dateAllFormat: Date | string | number = getDateAsInt()): [str
 /**
  * @param dateAllFormat default: actualDate
  * @returns ['01', '01', '2019'] OR **string** if separator is provided */
-function dateArrayInt(dateAllFormat: Date | string | number = getDateAsInt()): [number, number, number] {
+export function dateArrayInt(dateAllFormat: Date | string | number = getDateAsInt()): [number, number, number] {
     const dateStr = getDateAsInt(dateAllFormat).toString();
     return [
         int(dateStr.substr(6, 2)), // D
@@ -1550,10 +1550,10 @@ function dateArrayInt(dateAllFormat: Date | string | number = getDateAsInt()): [
 /**
  * @return 01/01/2012 (alias of dateArrayFormatted(date, '/'))
  */
-function dateFormatted(dateAllFormat: Date | string | number, separator = '/') { return dateArray(dateAllFormat).join(separator); }
+export function dateFormatted(dateAllFormat: Date | string | number, separator = '/') { return dateArray(dateAllFormat).join(separator); }
 
 /** Date with custom offset (Ex: +2 for France) */
-function dateOffset(offsetHours, dateObj = new Date()) {
+export function dateOffset(offsetHours, dateObj = new Date()) {
 
     var utc = Date.UTC(dateObj.getUTCFullYear(), dateObj.getUTCMonth(), dateObj.getUTCDate(),
         dateObj.getUTCHours(), dateObj.getUTCMinutes(), dateObj.getUTCSeconds());
@@ -1566,7 +1566,7 @@ function dateOffset(offsetHours, dateObj = new Date()) {
 //----------------------------------------
 
 /**  */
-function getTimeAsInt(timeOrDateInt: any = getDateAsInt12()) {
+export function getTimeAsInt(timeOrDateInt: any = getDateAsInt12()) {
     if (isDateIntOrStringValid(timeOrDateInt)) {
         const tl = timeOrDateInt.toString().length;
         return int(timeOrDateInt.toString().substring(tl - 4, tl));
@@ -1579,13 +1579,13 @@ function getTimeAsInt(timeOrDateInt: any = getDateAsInt12()) {
  * @param {timeInt|dateInt12} Eg: 2222 OR 201201012222. Default, actual dateInt12
  * @param {String} separator default: ":"
  */
-function getIntAsTime(intOrDateTimeInt = getDateAsInt12(), separator = ':') {
+export function getIntAsTime(intOrDateTimeInt = getDateAsInt12(), separator = ':') {
     const time = intOrDateTimeInt.toString().padStart(4, '0');
     const tl = time.length;
     return time.substring(tl - 4, tl - 2) + separator + time.substring(tl - 2, tl);
 }
 
-function isTimeStringValid(timeStr, outputAnError$ = false) {
+export function isTimeStringValid(timeStr, outputAnError$ = false) {
     let timeArr = timeStr.split(':');
     let h = int(timeArr[0]);
     let m = int(timeArr[1]);
@@ -1599,7 +1599,7 @@ function isTimeStringValid(timeStr, outputAnError$ = false) {
 // DURATIONS
 //----------------------------------------
 
-function getDuration(startDate, endDate, inMinutes = false) {
+export function getDuration(startDate, endDate, inMinutes = false) {
     const startDateO = getDateAsObject(startDate);
     const endDateO = getDateAsObject(endDate);
     let diffInSec = Math.floor(endDateO.getTime() / 1000) - Math.floor(startDateO.getTime() / 1000);
@@ -1620,7 +1620,7 @@ function getDuration(startDate, endDate, inMinutes = false) {
  * @param {Boolean} allowNull$ if false, retrun false if any of the startdates or enddates are not set
  * @param {Boolean} strict$ if true, 
  */
-function doDateOverlap(event1, event2, fieldNameForStartDate$ = 'startDate', fieldNameForEndDate$ = 'endDate', allowNull$ = true, strict$ = false) {
+export function doDateOverlap(event1, event2, fieldNameForStartDate$ = 'startDate', fieldNameForEndDate$ = 'endDate', allowNull$ = true, strict$ = false) {
     if (!allowNull$ && !isset(event1[fieldNameForStartDate$], event1[fieldNameForEndDate$], event2[fieldNameForStartDate$], event2[fieldNameForEndDate$])) return false;
 
     if (strict$)
@@ -1629,13 +1629,13 @@ function doDateOverlap(event1, event2, fieldNameForStartDate$ = 'startDate', fie
     return (!event2[fieldNameForEndDate$] || event1[fieldNameForStartDate$] <= event2[fieldNameForEndDate$]) && (!event1[fieldNameForEndDate$] || event1[fieldNameForEndDate$] >= event2[fieldNameForStartDate$]);
 }
 
-type DateAllFormat = DateObjectFormat & DateStringFormats
+type DateAllFormat = DateObjectFormat | DateStringFormats
 type DateStringFormats = 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'
 type DateObjectFormat = 'date'
 
-function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateStringFormats, sameDayAllowed?: boolean): number
-function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateObjectFormat, sameDayAllowed?: boolean): Date
-function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat = 'date', sameDayAllowed = false): any {
+export function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateStringFormats, sameDayAllowed?: boolean): number
+export function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateObjectFormat, sameDayAllowed?: boolean): Date
+export function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat = 'date', sameDayAllowed = false): any {
     const date = getDateAsObject(fromDate);
     if (!isset(weekDayInt)) weekDayInt = (date.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6)
     const toAdd = !sameDayAllowed && date.getDay() === weekDayInt ? 7 : 0
@@ -1646,9 +1646,9 @@ function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFor
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'date'): Date
-function addDays(dateAllFormat: Date | string | number = getDateAsInt(), numberOfDays = 1, outputFormat: DateFormats = 'date'): any {
+export function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+export function addDays(dateAllFormat?: Date | string | number, numberOfDays?: number, outputFormat?: 'date'): Date
+export function addDays(dateAllFormat: Date | string | number = getDateAsInt(), numberOfDays = 1, outputFormat: DateAllFormat = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + numberOfDays * 24 * 60 * 60 * 1000);
     return getDateAs(date, outputFormat as any);
@@ -1657,9 +1657,9 @@ function addDays(dateAllFormat: Date | string | number = getDateAsInt(), numberO
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateStringFormats): string
-function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateObjectFormat): Date
-function addMinutes(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMinutes = 1, outputFormat: DateFormats = 'date'): any {
+export function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateStringFormats): string
+export function addMinutes(dateAllFormat?: Date | string | number, numberOfMinutes?: number, outputFormat?: DateObjectFormat): Date
+export function addMinutes(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMinutes = 1, outputFormat: DateAllFormat = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfMinutes * 60 * 1000);
     return getDateAs(date, outputFormat as any);
@@ -1667,9 +1667,9 @@ function addMinutes(dateAllFormat: Date | string | number = getDateAsInt(), numb
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'date'): Date
-function addHours(dateAllFormat: Date | string | number = getDateAsInt(), numberOfHours = 1, outputFormat: DateFormats = 'date'): any {
+export function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+export function addHours(dateAllFormat?: Date | string | number, numberOfHours?: number, outputFormat?: 'date'): Date
+export function addHours(dateAllFormat: Date | string | number = getDateAsInt(), numberOfHours = 1, outputFormat: DateAllFormat = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setTime(date.getTime() + 1 * numberOfHours * 60 * 60 * 1000);
     return getDateAs(date, outputFormat as any);
@@ -1677,9 +1677,9 @@ function addHours(dateAllFormat: Date | string | number = getDateAsInt(), number
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'date'): Date
-function addMonths(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMonths = 1, outputFormat: DateFormats = 'date'): any {
+export function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+export function addMonths(dateAllFormat?: Date | string | number, numberOfMonths?: number, outputFormat?: 'date'): Date
+export function addMonths(dateAllFormat: Date | string | number = getDateAsInt(), numberOfMonths = 1, outputFormat: DateAllFormat = 'date'): any {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCMonth(date.getUTCMonth() + numberOfMonths);
     return getDateAs(date, outputFormat as any);
@@ -1687,32 +1687,32 @@ function addMonths(dateAllFormat: Date | string | number = getDateAsInt(), numbe
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function addYears(dateAllFormat: Date | string | number = getDateAsInt(), numberOfYears = 1, outputFormat: DateFormats = 'date') {
+export function addYears(dateAllFormat: Date | string | number = getDateAsInt(), numberOfYears = 1, outputFormat: DateAllFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     date.setUTCFullYear(date.getUTCFullYear() + numberOfYears);
     return getDateAs(date, outputFormat as any);
 }
 
-function getDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt()) {
+export function getDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [, , d] = dateStringToArray(dateAsInt);
     return d;
 }
 
-function getYear(dateAllFormat: Date | string | number = getDateAsInt()) {
+export function getYear(dateAllFormat: Date | string | number = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [y] = dateStringToArray(dateAsInt);
     return y;
 }
 
 
-function getHours(dateAllFormat: Date | string | number = getDateAsInt()) {
+export function getHours(dateAllFormat: Date | string | number = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [, , , h,] = dateStringToArray(dateAsInt);
     return h;
 }
 
-function getMinutes(dateAllFormat: Date | string | number = getDateAsInt()) {
+export function getMinutes(dateAllFormat: Date | string | number = getDateAsInt()) {
     let dateAsInt = getDateAsInt(dateAllFormat);
     const [, , , , m] = dateStringToArray(dateAsInt);
     return m;
@@ -1721,7 +1721,7 @@ function getMinutes(dateAllFormat: Date | string | number = getDateAsInt()) {
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function lastDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(), outputFormat: DateFormats = 'date') {
+export function lastDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(), outputFormat: DateAllFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     const lastDay = new Date(date.getUTCFullYear(), date.getUTCMonth() + 1, 0);
     lastDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
@@ -1731,47 +1731,45 @@ function lastDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(), 
 /**
  * @param {String} outputFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function firstDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(), outputFormat: DateFormats = 'date') {
+export function firstDayOfMonth(dateAllFormat: Date | string | number = getDateAsInt(), outputFormat: DateAllFormat = 'date') {
     let date = getDateAsObject(dateAllFormat);
     const firstDay = new Date(date.getUTCFullYear(), date.getUTCMonth(), 1);
     firstDay.setUTCHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
     return getDateAs(firstDay, outputFormat as any);
 }
 
-function differenceInMilliseconds(startDateAllFormat, endDateAllFormat) {
+export function differenceInMilliseconds(startDateAllFormat, endDateAllFormat) {
     const startDate = getDateAsObject(startDateAllFormat);
     const endDate = getDateAsObject(endDateAllFormat);
     return endDate.getTime() - startDate.getTime();
 }
 
-function differenceInSeconds(startDateAllFormat, endDateAllFormat) {
+export function differenceInSeconds(startDateAllFormat, endDateAllFormat) {
     return differenceInMilliseconds(startDateAllFormat, endDateAllFormat) / 1000;
 }
 
-function differenceInMinutes(startDateAllFormat, endDateAllFormat) {
+export function differenceInMinutes(startDateAllFormat, endDateAllFormat) {
     return differenceInSeconds(startDateAllFormat, endDateAllFormat) / 60;
 }
 
-function differenceInHours(startDateAllFormat, endDateAllFormat) {
+export function differenceInHours(startDateAllFormat, endDateAllFormat) {
     return differenceInMinutes(startDateAllFormat, endDateAllFormat) / 60;
 }
 
-function differenceInDays(startDateAllFormat, endDateAllFormat) {
+export function differenceInDays(startDateAllFormat, endDateAllFormat) {
     return differenceInHours(startDateAllFormat, endDateAllFormat) / 24;
 }
 
-function differenceInWeeks(startDateAllFormat, endDateAllFormat) {
+export function differenceInWeeks(startDateAllFormat, endDateAllFormat) {
     return differenceInDays(startDateAllFormat, endDateAllFormat) / 7;
 }
-
-type DateFormats = 'dateInt8' | 'dateInt12' | 'date' | 'humanReadableTimestamp'
 
 /**
  * @param {String} outputDateFormat dateInt, dateInt8, dateInt12, date, humanReadableTimestamp, int (dateInt8)
  */
-function getDateAs(dateAllFormat?: Date | string | number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
-function getDateAs(dateAllFormat?: Date | string | number, outputFormat?: 'date'): Date
-function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDateFormat: DateFormats = 'date') {
+export function getDateAs(dateAllFormat?: Date | string | number, outputFormat?: 'dateInt8' | 'dateInt12' | 'humanReadableTimestamp'): string
+export function getDateAs(dateAllFormat?: Date | string | number, outputFormat?: 'date'): Date
+export function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDateFormat: DateAllFormat = 'date') {
     switch (outputDateFormat) {
         case 'dateInt8':
             return getDateAsInt(dateAllFormat);
@@ -1790,7 +1788,7 @@ function getDateAs(dateAllFormat: Date | string | number = new Date(), outputDat
 // LOGGER
 //----------------------------------------
 
-const logger = {
+export const logger = {
     log(str, type = 'log') {
         const { preprocessLog } = configFn();
         if (typeof preprocessLog === 'function') str = preprocessLog(str) || str;
@@ -1846,7 +1844,7 @@ const logger = {
 // * or C.line('MY TITLE', 53)
 // * or C.gradientize(myLongString)
 */
-const C = {
+export const C = {
     dim: str => C.output(2, str), // opacity 0.5
     green: str => C.output(32, str),
     red: str => C.output(31, str),
@@ -1965,7 +1963,7 @@ const C = {
     useTheme() { },
 };
 
-function logErrPrivate(type, color: Color, ...errors) {
+export function logErrPrivate(type, color: Color, ...errors) {
     const { isProd } = configFn();
 
     if (errors.length === 1 && typeof errors[0].log === 'function') return errors[0].log()
@@ -2009,7 +2007,7 @@ function logErrPrivate(type, color: Color, ...errors) {
     }
 }
 
-function stringifyInstanceOfError(err, type = 'error', color: Color = [255, 0, 0], level = 0) { // level = keep track of recursions
+export function stringifyInstanceOfError(err, type = 'error', color: Color = [255, 0, 0], level = 0) { // level = keep track of recursions
     if (level > 5) return { str: '' };
     let str = '';
     let stackTrace;
@@ -2027,7 +2025,7 @@ function stringifyInstanceOfError(err, type = 'error', color: Color = [255, 0, 0
     return { str, stackTrace };
 }
 
-function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
+export function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
     let stackTrace;
     const originalError = [C.dim(`ORIGINAL ERROR ${'-'.repeat(39)}\n`)];
     if (extraInfoOriginal instanceof Error) { // case where error is passed directly to extraInfos
@@ -2066,7 +2064,7 @@ function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
  * @param {String} char Default: '.'
  * @param {String} msg String before char. Final output will be `${str}${char.repeat(step)}`
  */
-function cliProgressBar(step, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
+export function cliProgressBar(step, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
     if (isset(process) && isset(process.stdout) && isset(process.stdout.clearLine)) {
         process.stdout.clearLine(0);
         process.stdout.cursorTo(0);
@@ -2134,7 +2132,7 @@ class cliLoadingSpinner {
  * @param {Object} config { removeSpecialChars: false, removeNumbers: false, removeSpaces: false }
  * @returns String with all accentued char replaced by their non accentued version + config formattting
  */
-function convertAccentedCharacters(str, config: { removeNumbers?: boolean, removeSpecialChars?: boolean, removeSpaces?: boolean } = {}) {
+export function convertAccentedCharacters(str, config: { removeNumbers?: boolean, removeSpecialChars?: boolean, removeSpaces?: boolean } = {}) {
     let output = str
         .replace(/[àáâãäå]/g, 'a')
         .replace(/ç/g, 'c')
@@ -2158,7 +2156,7 @@ function convertAccentedCharacters(str, config: { removeNumbers?: boolean, remov
  * @param {Object} filterB 
  * @param {Boolean} assignToFilterA defualt false: if true, it will modify filterA, else it will return merged filters as a new object
  */
-function mongoFilterMerger(filterA, filterB, assignToFilterA = false) {
+export function mongoFilterMerger(filterA, filterB, assignToFilterA = false) {
     if (isset(filterA.$and) && isset(filterB.$and)) {
         filterA.$and.push(...filterB.$and);
         delete filterB.$and;
@@ -2174,7 +2172,7 @@ function mongoFilterMerger(filterA, filterB, assignToFilterA = false) {
     } else return { ...filterA, ...filterB };
 }
 
-function mongoPush(field: string, value: any, fields: { [k: string]: any }) {
+export function mongoPush(field: string, value: any, fields: { [k: string]: any }) {
     if (!isset(fields.$push)) fields.$push = {}
     fields.$push[field] = value;
 }
@@ -2185,9 +2183,9 @@ function mongoPush(field: string, value: any, fields: { [k: string]: any }) {
 //----------------------------------------
 
 
-async function timeout(ms, fn = () => { }) { return new Promise(res => setTimeout(res, ms)).then(fn); }
+export async function timeout(ms, fn = () => { }) { return new Promise(res => setTimeout(res, ms)).then(fn); }
 
-async function runAsync(callback, milliseconds$ = 1) { return timeout(milliseconds$, callback); }
+export async function runAsync(callback, milliseconds$ = 1) { return timeout(milliseconds$, callback); }
 
 /**
  * 
@@ -2196,7 +2194,7 @@ async function runAsync(callback, milliseconds$ = 1) { return timeout(millisecon
  * @param {Boolean|String} errorAfterNSeconds default:true output an error in case of timeout, can be the displayed error message
  * @param {*} cliOutput write a cli progress to show that a process is running
  */
-async function waitUntilTrue(callback, timeoutSec = 10, errorAfterNSeconds = true, cliOutput = true) {
+export async function waitUntilTrue(callback, timeoutSec = 10, errorAfterNSeconds = true, cliOutput = true) {
     let generalTimeout = true;
     let step = 3;
     const errMess = typeof errorAfterNSeconds === 'string' ? 'Timeout: ' + errorAfterNSeconds : 'Timeout for waitUntilTrue() callback';
@@ -2220,7 +2218,7 @@ let isExecuting = false;
  * @param {Number} time default: 500ms;
  * @param {Function} errorCallback default: e => C.error(e)
  */
-async function executeInDelayedLoop(callback, time = 500, errorCallback = e => C.error(e)) {
+export async function executeInDelayedLoop(callback, time = 500, errorCallback = e => C.error(e)) {
     delayedLoopParams.push([callback, time, errorCallback]);
     if (isExecuting) return;
     isExecuting = true;
@@ -2252,7 +2250,7 @@ const queue = { __default: [] };
  * @param {Number} timeout default: 120000 (120s) will throw an error if transaction time is higher that this amount of ms
  * @returns {Promise}
  */
-async function transaction(name, asyncCallback, timeout = 120000, doNotThrow = false) {
+export async function transaction(name, asyncCallback, timeout = 120000, doNotThrow = false) {
     if (typeof name === 'function') {
         asyncCallback = name;
         name = '__default';
@@ -2278,7 +2276,7 @@ async function transaction(name, asyncCallback, timeout = 120000, doNotThrow = f
     });
 }
 
-async function removeItemFromQueue(name) {//               meoww!
+export async function removeItemFromQueue(name) {//               meoww!
     if (transactionRunning[name] === true) return; //       v 
     transactionRunning[name] = true; //               A  A       /\
     while (queue[name].length) await queue[name].shift()(); //   II
@@ -2289,7 +2287,7 @@ async function removeItemFromQueue(name) {//               meoww!
 /** Wait for a transaction to complete without creating a new transaction
  * 
  */
-async function waitForTransaction(transactionName, forceReleaseInSeconds = 30) {
+export async function waitForTransaction(transactionName, forceReleaseInSeconds = 30) {
     let brk = false;
     setTimeout(() => brk = true, forceReleaseInSeconds * 1000);
     while (isset(transactionRunning[transactionName]) && transactionRunning[transactionName] === true) {
@@ -2297,376 +2295,3 @@ async function waitForTransaction(transactionName, forceReleaseInSeconds = 30) {
         await timeout(15);
     }
 }
-
-const _ = {
-    round,
-    random,
-    cln,
-    pad,
-    // ALIASES
-    int,
-    minMax,
-    generateToken,
-    moyenne,
-    average,
-    sumArray,
-    sortUrlsByDeepnessInArrayOrObject,
-    urlPathJoin,
-    miniTemplater,
-    generateObjectId,
-    isBetween,
-    simpleObjectMaskOrSelect,
-    ENV,
-    parseBool,
-
-    registerConfig,
-    configFn,
-    findByAddress,
-    objForceWrite,
-    objForceWriteIfNotSet,
-
-
-
-    strAsArray,
-    asArray,
-    compareArrays,
-    getArrayInCommon,
-    getArrayDiff,
-    getNotInArrayA,
-    noDuplicateFilter,
-    arrayCount,
-    arrayToObjectSorted,
-    pushIfNotExist,
-    isNotEmptyArray,
-    randomItemInArray,
-    //allias
-    arrayUniqueValue,
-
-
-    deepClone,
-    cloneObject,
-    JSONstringyParse,
-    has,
-    isObject,
-    mergeDeep,
-    flattenObject,
-    unflattenObject,
-    recursiveGenericFunction,
-    recursiveGenericFunctionSync,
-    findByAddressAll,
-    objFilterUndefined,
-    readOnly,
-    reassignForbidden,
-    readOnlyForAll,
-    mergeDeepOverrideArrays,
-    mergeDeepConfigurable,
-    objFilterUndefinedRecursive,
-    removeUndefinedKeys, // alias
-    sortObjKeyAccordingToValue,
-    ensureObjectProp,
-    filterKeys,
-    deleteByAddress,
-    ensureIsArrayAndPush,
-    removeCircularJSONstringify,
-
-    isset,
-    cleanStackTrace,
-    shuffleArray,
-    randomizeArray: shuffleArray,
-    round2,
-
-    camelCase,
-    snakeCase,
-    kebabCase,
-    dashCase: kebabCase,
-    underscoreCase: snakeCase,
-    titleCase,
-    pascalCase,
-    lowerCase,
-    upperCase,
-    capitalize1st,
-    camelCaseToWords,
-
-    firstMatch,
-    allMatches,
-    getValuesBetweenSeparator,
-    getValuesBetweenStrings,
-    escapeRegexp,
-
-    validator,
-    required: validator, // alias for readability
-    validatorReturnErrArray,
-    assert,
-    restTestMini,
-    isValid,
-    isType,
-    isDateObject,
-    issetOr,
-    isEmptyOrNotSet,
-    errIfNotSet,
-    err500IfNotSet,
-    errIfEmptyOrNotSet,
-    err500IfEmptyOrNotSet,
-    errXXXIfNotSet,
-    isEmpty,
-    checkAllObjectValuesAreEmpty,
-    checkCtxIntegrity,
-    // ALIASES
-    orIsset: issetOr,
-
-    // DATE
-    getDateAsInt12,
-    humanReadableTimestamp,
-    getDateAsInt,
-    getDateAsObject,
-    isDateIntOrStringValid,
-    isDateIsoOrObjectValid,
-    dateStringToArray,
-    dateArrayFormatted: dateArray,
-    dateFormatted,
-    dateSlash: dateFormatted,
-    dateOffset,
-    getTimeAsInt,
-    getIntAsTime,
-    isTimeStringValid,
-    getDuration,
-    doDateOverlap,
-    getMonthAsInt,
-    nextWeekDay,
-    addMinutes,
-    addHours,
-    addDays,
-    addMonths,
-    addYears,
-    getYear,
-    getDayOfMonth,
-    getHours,
-    getMinutes,
-    firstDayOfMonth,
-    lastDayOfMonth,
-    differenceInMilliseconds,
-    differenceInSeconds,
-    differenceInMinutes,
-    differenceInHours,
-    differenceInDays,
-    differenceInWeeks,
-    forI,
-    forIasync,
-    // ALIASES
-    getDateAsArrayFormatted: dateArray,
-    getDateAsArray: dateStringToArray,
-    convertDateAsInt: getDateAsInt,
-    convertDateAsObject: getDateAsObject,
-
-    // LOGGER
-    C,
-    cliProgressBar,
-    cliLoadingSpinner,
-    outputLogs: logger,
-
-    // STRING
-    convertAccentedCharacters,
-
-    // TIMEOUT
-    executeInDelayedLoop,
-    timeout,
-    runAsync,
-    waitUntilTrue,
-
-    // TRANSACTION
-    transaction,
-    waitForTransaction,
-    getId,
-    mergeMixins,
-
-    // MONGO
-    mongoFilterMerger,
-    mongoPush,
-    tryCatch,
-}
-
-export default _;
-export {
-    round,
-    random,
-    cln,
-    pad,
-    // ALIASES
-    int,
-    minMax,
-    generateToken,
-    moyenne,
-    average,
-    sumArray,
-    sortUrlsByDeepnessInArrayOrObject,
-    urlPathJoin,
-    miniTemplater,
-    generateObjectId,
-    isBetween,
-    simpleObjectMaskOrSelect,
-    ENV,
-    parseBool,
-
-    registerConfig,
-    configFn,
-    findByAddress,
-    objForceWrite,
-    objForceWriteIfNotSet,
-
-
-
-    strAsArray,
-    asArray,
-    compareArrays,
-    getArrayInCommon,
-    getArrayDiff,
-    getNotInArrayA,
-    noDuplicateFilter,
-    arrayCount,
-    arrayToObjectSorted,
-    pushIfNotExist,
-    isNotEmptyArray,
-    randomItemInArray,
-    //allias
-    arrayUniqueValue,
-
-
-    deepClone,
-    cloneObject,
-    JSONstringyParse,
-    has,
-    isObject,
-    mergeDeep,
-    flattenObject,
-    unflattenObject,
-    recursiveGenericFunction,
-    recursiveGenericFunctionSync,
-    findByAddressAll,
-    objFilterUndefined,
-    readOnly,
-    reassignForbidden,
-    readOnlyForAll,
-    mergeDeepOverrideArrays,
-    mergeDeepConfigurable,
-    objFilterUndefinedRecursive,
-    removeUndefinedKeys, // alias
-    sortObjKeyAccordingToValue,
-    ensureObjectProp,
-    filterKeys,
-    deleteByAddress,
-    ensureIsArrayAndPush,
-    removeCircularJSONstringify,
-
-    isset,
-    cleanStackTrace,
-    shuffleArray,
-    shuffleArray as randomizeArray,
-    round2,
-    forI,
-    forIasync,
-    camelCase,
-    snakeCase,
-    kebabCase,
-    kebabCase as dashCase,
-    snakeCase as underscoreCase,
-    titleCase,
-    pascalCase,
-    lowerCase,
-    upperCase,
-    capitalize1st,
-    camelCaseToWords,
-
-    firstMatch,
-    allMatches,
-    getValuesBetweenSeparator,
-    getValuesBetweenStrings,
-    escapeRegexp,
-
-    validator,
-    validator as required, // alias for readability
-    validatorReturnErrArray,
-    assert,
-    restTestMini,
-    isValid,
-    isType,
-    isDateObject,
-    issetOr,
-    isEmptyOrNotSet,
-    errIfNotSet,
-    err500IfNotSet,
-    errIfEmptyOrNotSet,
-    err500IfEmptyOrNotSet,
-    errXXXIfNotSet,
-    isEmpty,
-    checkAllObjectValuesAreEmpty,
-    checkCtxIntegrity,
-    // ALIASES
-    issetOr as orIsset,
-
-    // DATE
-    getDateAsInt12,
-    humanReadableTimestamp,
-    getDateAsInt,
-    getDateAsObject,
-    isDateIntOrStringValid,
-    isDateIsoOrObjectValid,
-    dateStringToArray,
-    dateArray,
-    dateArrayInt,
-    dateFormatted as dateSlash,
-    dateFormatted,
-    dateOffset,
-    getTimeAsInt,
-    getIntAsTime,
-    isTimeStringValid,
-    // isDateObject <= see validator.js
-    getDuration,
-    doDateOverlap,
-    getMonthAsInt,
-    nextWeekDay,
-    addMinutes,
-    addHours,
-    addDays,
-    addMonths,
-    addYears,
-    getYear,
-    getDayOfMonth,
-    getHours,
-    getMinutes,
-    firstDayOfMonth,
-    lastDayOfMonth,
-    differenceInMilliseconds,
-    differenceInSeconds,
-    differenceInMinutes,
-    differenceInHours,
-    differenceInDays,
-    differenceInWeeks,
-    // ALIASES
-    getDateAsInt as convertDateAsInt,
-    getDateAsObject as convertDateAsObject,
-
-    // LOGGER
-    C,
-    cliProgressBar,
-    cliLoadingSpinner,
-
-    // STRING
-    convertAccentedCharacters,
-
-    // TIMEOUT
-    executeInDelayedLoop,
-    timeout,
-    runAsync,
-    waitUntilTrue,
-
-    // TRANSACTION
-    transaction,
-    waitForTransaction,
-    getId,
-    mergeMixins,
-
-    // MONGO
-    mongoFilterMerger,
-    mongoPush,
-    tryCatch,
-};
