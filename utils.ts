@@ -1,9 +1,4 @@
-// ALIASES
-export const int = parseInt;
-export const average = moyenne;
-export const arrayUniqueValue = noDuplicateFilter;
-export const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
-export const removeUndefinedKeys = objFilterUndefinedRecursive;
+
 
 type Color = [number, number, number]
 type ObjectGeneric = { [k: string]: any }
@@ -2295,3 +2290,15 @@ export async function waitForTransaction(transactionName, forceReleaseInSeconds 
         await timeout(15);
     }
 }
+
+// ALIASES
+export const int = parseInt;
+export const average = moyenne;
+export const arrayUniqueValue = noDuplicateFilter;
+export const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o));
+export const removeUndefinedKeys = objFilterUndefinedRecursive;
+export const randomizeArray = shuffleArray
+export const dashCase = kebabCase
+export const underscoreCase = snakeCase
+export const required = validator // alias for readability
+export const orIsset = issetOr

@@ -1,8 +1,3 @@
-export declare const int: typeof parseInt;
-export declare const average: typeof moyenne;
-export declare const arrayUniqueValue: typeof noDuplicateFilter;
-export declare const JSONstringyParse: (o: any) => any;
-export declare const removeUndefinedKeys: typeof objFilterUndefinedRecursive;
 declare type Color = [number, number, number];
 declare type ObjectGeneric = {
     [k: string]: any;
@@ -686,4 +681,14 @@ export declare function removeItemFromQueue(name: any): Promise<void>;
  *
  */
 export declare function waitForTransaction(transactionName: any, forceReleaseInSeconds?: number): Promise<void>;
+export declare const int: typeof parseInt;
+export declare const average: typeof moyenne;
+export declare const arrayUniqueValue: typeof noDuplicateFilter;
+export declare const JSONstringyParse: (o: any) => any;
+export declare const removeUndefinedKeys: typeof objFilterUndefinedRecursive;
+export declare const randomizeArray: typeof shuffleArray;
+export declare const dashCase: typeof kebabCase;
+export declare const underscoreCase: typeof snakeCase;
+export declare const required: typeof validator;
+export declare const orIsset: typeof issetOr;
 export {};
