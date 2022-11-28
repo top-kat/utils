@@ -237,6 +237,7 @@ declare function flattenObject(data: any, config?: {
 }): {};
 /** {'a.b':2} => { a: {b:2}} */
 declare function unflattenObject(data: any): {};
+declare type RecursiveCallback = (item: any, addr: string, lastElementKey: string, parent: ObjectGeneric | any[]) => false | any;
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -252,7 +253,7 @@ declare function unflattenObject(data: any): {};
  * NOTE: will remove circular references
  * /!\ check return values
  */
-declare function recursiveGenericFunction(item: any, callback: any, addr$?: string, lastElementKey?: string, parent?: any, techFieldToAvoidCircularDependency?: any[]): Promise<any>;
+declare function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$?: string, lastElementKey?: string, parent?: any, techFieldToAvoidCircularDependency?: any[]): Promise<any[] | ObjectGeneric>;
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -269,7 +270,7 @@ declare function recursiveGenericFunction(item: any, callback: any, addr$?: stri
  * NOTE: will remove circular references
  * /!\ check return values
  */
-declare function recursiveGenericFunctionSync(item: any, callback: any, addr$?: string, lastElementKey?: string, parent?: any, techFieldToAvoidCircularDependency?: any[]): any;
+declare function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$?: string, lastElementKey?: string, parent?: any, techFieldToAvoidCircularDependency?: any[]): any[] | ObjectGeneric;
 /** Remove all key/values pair if value is undefined  */
 declare function objFilterUndefined(o: any): any;
 /** Lock all 1st level props of an object to read only */
@@ -307,7 +308,7 @@ declare function filterKeys(obj: object, filter: any): any;
  * @param {Object} obj the object on which we want to delete a property
  * @param {Array} addr addressArray on which to delete the property
  */
-declare function deleteByAddress(obj: object, addr: string): void;
+declare function deleteByAddress(obj: object, addr: string[]): void;
 /** @return undefined if cannot find _id */
 declare function getId(obj?: any): string;
 declare function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue: any, arrayOfPreviousValues: any[]) => T): T[];
