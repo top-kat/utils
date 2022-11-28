@@ -343,7 +343,7 @@ function findByAddressAll(obj, addr, returnAddresses = false) {
     const addrRegexp = new RegExp('^' + addr
         .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
         .replace(/\./g, '\\.')
-        .replace(/\.\*/g, '.[^.[]+') // replace * by [^. (all but a point or a bracket)]
+        .replace(/\.\*/g, '.[^.]+') // replace * by [^. (all but a point)]
         + '$');
     const matchingItems = [];
     recursiveGenericFunctionSync(obj, (item, address) => {
