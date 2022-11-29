@@ -6,7 +6,7 @@
   "description": "UTILS BIG TIME",
   "author": "538ROMEO",
   "license": "ISC",
-  "main": ".dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "bump:major": "npm run build & node node_modules/bump-simple/bump-simple.js --major",

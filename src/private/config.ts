@@ -1,5 +1,5 @@
 import { Color } from './types'
-import { isset } from 'src/isset'
+import { isset } from '../isset'
 
 export type Config = {
     env: string
