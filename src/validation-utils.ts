@@ -3,7 +3,6 @@
 //----------------------------------------
 import { dataValidationUtilErrorHandler } from "./private/error-handler"
 import { isset } from "./isset"
-import { C } from "./logger-utils"
 import { isDateIsoOrObjectValid, isDateIntOrStringValid, isTimeStringValid } from "./date-utils"
 import { asArray } from "./array-utils"
 import { configFn } from "./private/config"
@@ -92,55 +91,6 @@ export function validator(...paramsToValidate: ValidatorObject[]) {
     if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray)
 }
 
-export const restTestMini = {
-    throwOnErr: false,
-    reset(throwOnErr = false) {
-        restTestMini.nbSuccess = 0
-        restTestMini.nbError = 0
-        restTestMini.lastErrors = []
-        restTestMini.throwOnErr = throwOnErr
-    },
-    newErr(err) {
-        restTestMini.nbError++
-        restTestMini.lastErrors.push(err)
-        if (restTestMini.throwOnErr) throw new Error(err)
-        else C.error(false, err)
-    },
-    printStats() {
-        // TODO print last errz
-        C.info(`ERRORS RESUME =========`)
-        if (restTestMini.lastErrors.length) C.log('\n\n\n')
-        for (const lastErr of restTestMini.lastErrors) C.error(false, lastErr)
-        C.log('\n\n\n')
-        C.info(`STATS =========`)
-        C.info(`Total: ${restTestMini.nbSuccess + restTestMini.nbError}`)
-        C.success(`Success: ${restTestMini.nbSuccess}`)
-        C.error(false, `    Errors: ${restTestMini.nbError}`)
-    },
-    nbSuccess: 0,
-    nbError: 0,
-    lastErrors: []
-}
-
-export function assert(msg: string, value: any, validatorObject: ValidatorObject | number | boolean | string = {}) {
-    try {
-        if (typeof validatorObject !== 'object') validatorObject = { eq: validatorObject }
-        const issetCheck = isEmpty(validatorObject)
-        validatorObject.value = value
-        validatorObject.name = msg
-        const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObject)
-        const msg2 = msg + ` ${issetCheck ? 'isset' : `${JSON.stringify({ ...validatorObject, name: undefined, value: undefined })}`}`
-        if (!isset(errMsg)) {
-            restTestMini.nbSuccess++
-            C.success(msg2)
-        } else {
-            const err = msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`
-            restTestMini.newErr(err)
-        }
-    } catch (err) {
-        restTestMini.newErr(err)
-    }
-}
 
 /** Same as validator but return a boolean
  * See {@link validator}
