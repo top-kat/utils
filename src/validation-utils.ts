@@ -25,9 +25,6 @@ export function checkCtxIntegrity(ctx) {
     if (!isset(ctx) || !isset(ctx.user)) throw new dataValidationUtilErrorHandler('ctxNotSet', 500)
 }
 
-/** test if object but not array and not null (null is an object in Js) */
-export function isObject(o: any): boolean { return o instanceof Object && [Object, Error].includes(o.constructor) }
-
 /**
 ## VALIDATOR
 

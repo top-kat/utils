@@ -5,9 +5,8 @@ import { ObjectGeneric } from "./private/types"
 import { err500IfNotSet } from "./error-utils"
 import { recursiveGenericFunctionSync } from "./loop-utils"
 import { isset } from "./isset"
-import { isObject } from "./validation-utils"
+import { isObject } from "./is-object"
 import { dataValidationUtilErrorHandler } from "./private/error-handler"
-import { C } from "./logger-utils"
 
 /**
  * 
@@ -182,22 +181,6 @@ export function deleteByAddress(obj: object, addr: string[]) {
     delete current[addr[addr.length - 1]]
 }
 
-export function removeCircularJSONstringify(object, indent = 2) {
-    const getCircularReplacer = () => {
-        const seen = new WeakSet()
-        return (key, value) => {
-            if (typeof value === 'object' && value !== null) {
-                if (seen.has(value)) {
-                    return
-                }
-                seen.add(value)
-            }
-            return value
-        }
-    }
-
-    return JSON.stringify(object, getCircularReplacer(), indent)
-}
 
 
 /** Remove all key/values pair if value is undefined  */
@@ -357,7 +340,7 @@ export function flattenObject(data, config: { withoutArraySyntax?: boolean, with
 
                 if (isEmpty && prop) result[prop] = {}
             } catch (error) {
-                C.warning('Circular reference in flattenObject, impossible to parse')
+                console.warn('Circular reference in flattenObject, impossible to parse')
             }
         } else result[prop] = cur
     }

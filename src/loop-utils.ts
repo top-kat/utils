@@ -3,7 +3,7 @@
 //----------------------------------------
 import { ObjectGeneric } from "./private/types"
 import { err500IfNotSet } from "./error-utils"
-import { isType, isObject } from "./validation-utils"
+import { isObject } from "./is-object"
 
 export function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
     const results = []
@@ -24,7 +24,7 @@ export async function forIasync<T extends any[] | any>(nbIterations: number, cal
 
 
 
-export type RecursiveCallback = (item: any, addr: string, lastElementKey: string, parent: ObjectGeneric | any[]) => false | any
+export type RecursiveCallback = (item: any, addr: string, lastElementKey: string | number, parent: ObjectGeneric | any[]) => false | any
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -40,7 +40,7 @@ export type RecursiveCallback = (item: any, addr: string, lastElementKey: string
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
+export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback })
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -48,7 +48,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
 
         if (result !== false) {
             const addr = addr$ ? addr$ + '.' : ''
-            if (isType(item, 'array')) {
+            if (Array.isArray(item)) {
                 techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(item.map(
                     (e, i) => recursiveGenericFunction(e, callback, addr + '[' + i + ']', i, item, techFieldToAvoidCircularDependency)
@@ -80,7 +80,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey = '', parent?, techFieldToAvoidCircularDependency = []) {
+export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback })
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -88,7 +88,7 @@ export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callba
 
         if (result !== false) {
             const addr = addr$ ? addr$ + '.' : ''
-            if (isType(item, 'array')) {
+            if (Array.isArray(item)) {
                 techFieldToAvoidCircularDependency.push(item) // do not up one level
                 item.forEach((e, i) => recursiveGenericFunctionSync(e, callback, addr + '[' + i + ']', i, item, techFieldToAvoidCircularDependency))
             } else if (isObject(item)) {

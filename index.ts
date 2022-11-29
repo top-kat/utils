@@ -14,13 +14,16 @@ export * from 'src/validation-utils'
 export * from 'src/transaction-utils'
 export * from 'src/timer-utils'
 export * from 'src/is-empty'
+export * from 'src/remove-circular-json-stringify'
+export * from 'src/is-object'
 export { registerConfig } from 'src/private/config'
 
 import { moyenne } from 'src/math-utils'
 import { kebabCase, snakeCase } from 'src/string-utils'
 import { shuffleArray, noDuplicateFilter } from 'src/array-utils'
 import { issetOr, validator } from 'src/validation-utils'
-import { objFilterUndefinedRecursive, removeCircularJSONstringify } from 'src/object-utils'
+import { objFilterUndefinedRecursive } from 'src/object-utils'
+import { removeCircularJSONstringify } from 'src/remove-circular-json-stringify'
 
 // ALIASES
 export const int = parseInt

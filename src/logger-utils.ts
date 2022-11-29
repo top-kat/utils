@@ -4,7 +4,7 @@
 import { configFn } from "./private/config"
 import { isset } from "./isset"
 import { Color } from "./private/types"
-import { removeCircularJSONstringify } from "./object-utils"
+import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
 import { cleanStackTrace } from "./error-utils"
 
 export const logger = {
