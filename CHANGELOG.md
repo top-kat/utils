@@ -1,3 +1,7 @@
+### v1.1.1
+* test OK
+* NEW WTF utils removed circular dependencies
+
 ### v1.0.58
 * BREAKING remove export default
 
