@@ -1,20 +1,15 @@
 {
     "compilerOptions": {
-        "target": "ES2016",
+        "target": "ES2018",
         "module": "commonjs",
-        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
-        "allowJs": true,
         "noImplicitAny": false,
+        "declaration": true,
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*"
-            ]
-        },
+        "paths": {},
         "types": [
             "node"
         ]
