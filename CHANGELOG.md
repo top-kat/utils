@@ -1,3 +1,6 @@
+### v1.1.5
+* add isset to validator (improves readability)
+
 ### v1.1.1
 * test OK
 * NEW WTF utils removed circular dependencies
