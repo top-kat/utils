@@ -77,7 +77,7 @@ export const C = {
         return C.rgb(...primary) + str + C.reset
     },
     reset: '\x1b[0m',
-    output: (code, str = '') => configFn().terminal.noColor ? str : `\x1b[${code}m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`,
+    output: (code, str = '') => configFn().terminal.noColor ? str : `\x1b[${code}m${str}\x1b[0m`,
     // true RGB colors B-*
     rgb: (r, g = 0, b = 0) => configFn().terminal.noColor || !isset(r, g, b) ? '' : `\x1b[38;2;${r};${g};${b}m`,
     bg: (r?, g?, b?) => configFn().terminal.noColor || !isset(r, g, b) ? '' : `${'\x1b['}48;2;${r};${g};${b}m`,
