@@ -1,15 +1,15 @@
 # TOPKAT-UTILS
 
-Here are my utils for nodeJs - ReactJs - MongoDB stack. It's strength is that it has a straight functional naming and is fast and lightweight. It includes a logger with color handling, data validation utils, date utils, mongoDb utils. Check the list above for the function list:
+Here are my utils for nodeJs / ReactJs. 
+
+It's strength is that it has a straight functional naming and is fast and lightweight. It includes a logger with color handling, data validation utils, date utils, mongoDb utils. Check the list above for the function list:
 
 ``` javascript
 const topkatUtils = {
-    round,
-    random,
+    isset, // most useful check undefined or null values but not falsey
+    random, // random number between two values
     cln, // clean string for print. Eg: undefined, null, NaN => '-'
     pad, // simple padStart for numbers
-    // ALIASES
-    int,
     /** return the number or the closest number of the range
      * * nb min max  => returns
      * * 7  5   10   => 7 // in the range
@@ -17,14 +17,7 @@ const topkatUtils = {
      * * 99 5   10   => 10// above the max value
      */
     minMax, // 
-    /** Generate random unique tokens (minLength 8 if unique) 
-     * @param {Number} length default: 20
-     * @param {Boolean} unique default: true. Generate a real unique token base on the date. min length will be min 8 in this case
-     * @param {string} mode one of ['alphanumeric', 'hexadecimal']
-     * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
-     */
-    generateToken,
-    moyenne,
+    generateToken(length, isUnique, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric'): string,
     // average between array of values. Eg: [5, 15] => 10 
     average,
     // sum values in an array
@@ -36,6 +29,8 @@ const topkatUtils = {
     // miniTemplater(`Hello {{template}}`, {template: 'John'}) => `Hello John`
     miniTemplater,
     // is number between
+    asArray,
+    compareArrays,
     isBetween,
     simpleObjectMaskOrSelect,
     ENV,
@@ -50,8 +45,6 @@ const topkatUtils = {
 
 
     strAsArray,
-    asArray,
-    compareArrays,
     getArrayInCommon,
     getArrayDiff,
     getNotInArrayA,
@@ -90,7 +83,6 @@ const topkatUtils = {
     ensureIsArrayAndPush,
     removeCircularJSONstringify,
 
-    isset,
     cleanStackTrace,
     shuffleArray,
     randomizeArray: shuffleArray,

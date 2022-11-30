@@ -4,9 +4,13 @@
   "type": "commonjs",
   "private": false,
   "description": "UTILS BIG TIME",
-  "author": "538ROMEO",
+  "author": "topkat",
   "license": "ISC",
   "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/top-kat/utils"
+  },
   "scripts": {
     "build": "tsc",
     "bump:major": "npm run build & node node_modules/bump-simple/bump-simple.js --major",
