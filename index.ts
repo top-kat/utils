@@ -16,6 +16,7 @@ export * from './src/timer-utils'
 export * from './src/is-empty'
 export * from './src/remove-circular-json-stringify'
 export * from './src/is-object'
+export * from './src/regexp-utils'
 export { registerConfig } from './src/private/config'
 
 import { moyenne } from './src/math-utils'

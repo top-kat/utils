@@ -82,6 +82,7 @@ export type ValidatorObject = {
     emptyAllowed?: boolean
     regexp?: RegExp
     mustNotBeSet?: boolean
+    isset?: boolean
     optional?: boolean
     isArray?: boolean
     [k: string]: any
@@ -106,7 +107,7 @@ export function isValid(...paramsToValidate) {
 export function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }) }
 
 export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?] {
-    let paramsFormatted = []
+    let paramsFormatted: ValidatorObject[] = []
 
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
     paramsToValidate.forEach(param => {
@@ -124,6 +125,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         let value = paramObj.value
         let optional = paramObj.optional || false
         let emptyAllowed = optional || paramObj.emptyAllowed || false
+        if (paramObj.isset === false) paramObj.mustNotBeSet = true // ALIAS 
         const errMess = (msg, extraInfos = {}, errCode = 422): [string, number, object] => [msg, errCode, { origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
 
         // accept syntax { 'myVar.var2': myVar.var2, ... }
