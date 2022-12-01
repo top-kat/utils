@@ -56,7 +56,6 @@ export function cleanStackTrace(stack) {
         'at Array.forEach (<anonymous>)',
     ]
     const linesClean = lines
-        .filter(l => !removeIfContain.some(text => l.includes(text)))
         .map((line, i) => {
             if (i === 0) return ''
             else {
@@ -64,6 +63,7 @@ export function cleanStackTrace(stack) {
                 return fileName ? `\x1b[2m${start}\x1b[0m${fileName}\x1b[2m${end}\x1b[0m` : `\x1b[2m${line}\x1b[0m`
             }
         })
+        .filter(l => l && !removeIfContain.some(text => l.includes(text)))
         .join('\n')
     return linesClean
 }
