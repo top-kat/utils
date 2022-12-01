@@ -7,6 +7,7 @@ import { isDateIsoOrObjectValid, isDateIntOrStringValid, isTimeStringValid } fro
 import { asArray } from "./array-utils"
 import { configFn } from "./private/config"
 import { isEmpty } from "./is-empty"
+import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
 
 export type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
 
@@ -206,7 +207,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                     typeof value === type && type !== 'object' || // for string, number, boolean...
                     isset(configFn().customTypes[type]) && configFn().customTypes[type].test(value)
             })
-            if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value) })
+            if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value), gotValue: removeCircularJSONstringify(value) })
         }
 
         // GREATER / LESS
