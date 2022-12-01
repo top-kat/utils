@@ -113,7 +113,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
     paramsToValidate.forEach(param => {
         if (typeof param !== 'object' || Array.isArray(param))
-            throw new dataValidationUtilErrorHandler(`wrongTypeForDataValidatorArgument`, 500, { origin: 'Generic validator', expected: 'object', actualType: Array.isArray(param) ? 'array' : typeof param })
+            throw new dataValidationUtilErrorHandler(`wrongTypeForDataValidatorArgument`, 500, { origin: 'Generic validator', expectedType: 'object', actualType: Array.isArray(param) ? 'array' : typeof param })
 
         // parse => name: {myVar1: 'blah, myvar2: myvar2}
         if (typeof param.name === 'object' && !Array.isArray(param.name))
@@ -148,14 +148,14 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         if (!emptyAllowed && value === '') return errMess('requiredVariableEmpty')
 
         const isArray = paramObj.isArray
-        if (isArray && !Array.isArray(value)) return errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value })
+        if (isArray && !Array.isArray(value)) return errMess('wrongTypeForVar', { expectedType: 'array', gotType: typeof value })
 
         // TYPE
         if (isset(paramObj.type)) {
             const types = asArray(paramObj.type) // support for multiple type
             const areSomeTypeValid = types.some(type => {
                 if (type.endsWith('[]')) {
-                    if (!Array.isArray(value)) errMess('wrongTypeForVar', { expectedTypes: 'array', gotType: typeof value })
+                    if (!Array.isArray(value)) errMess('wrongTypeForVar', { expectedType: 'array', gotType: typeof value })
                     type = type.replace('[]', '')
                 }
 
@@ -207,7 +207,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                     typeof value === type && type !== 'object' || // for string, number, boolean...
                     isset(configFn().customTypes[type]) && configFn().customTypes[type].test(value)
             })
-            if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value), gotValue: removeCircularJSONstringify(value) })
+            if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value), gotValue: removeCircularJSONstringify(value).substring(0, 999) })
         }
 
         // GREATER / LESS
