@@ -1,3 +1,6 @@
+### v1.1.9
+* add option disableCircularDependencyRemoval to recursive helpers
+
 ### v1.1.5
 * add isset to validator (improves readability)
 
