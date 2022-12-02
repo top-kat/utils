@@ -41,7 +41,7 @@ export type RecursiveConfig = { disableCircularDependencyRemoval?: boolean }
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, config?: RecursiveConfig, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
+export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback })
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -50,12 +50,12 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
         if (result !== false) {
             const addr = addr$ ? addr$ + '.' : ''
             if (Array.isArray(item)) {
-                if (config.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
+                if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(item.map(
                     (e, i) => recursiveGenericFunction(e, callback, config, addr + '[' + i + ']', i, item, techFieldToAvoidCircularDependency)
                 ))
             } else if (isObject(item)) {
-                if (config.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
+                if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(Object.entries(item).map(
                     ([key, val]) => recursiveGenericFunction(val, callback, config, addr + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency)
                 ))
@@ -81,7 +81,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, config?: RecursiveConfig, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
+export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
     err500IfNotSet({ callback })
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -90,10 +90,10 @@ export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callba
         if (result !== false) {
             const addr = addr$ ? addr$ + '.' : ''
             if (Array.isArray(item)) {
-                if (config.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item) // do not up one level
+                if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item) // do not up one level
                 item.forEach((e, i) => recursiveGenericFunctionSync(e, callback, config, addr + '[' + i + ']', i, item, techFieldToAvoidCircularDependency))
             } else if (isObject(item)) {
-                if (config.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
+                if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 Object.entries(item).forEach(([key, val]) => recursiveGenericFunctionSync(val, callback, config, addr + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency))
             }
         }
