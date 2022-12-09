@@ -1,7 +1,7 @@
 //----------------------------------------
 // LOGGER
 //----------------------------------------
-import { configFn } from "./private/config"
+import { configFn } from "./config"
 import { isset } from "./isset"
 import { Color } from "./private/types"
 import { removeCircularJSONstringify } from "./remove-circular-json-stringify"

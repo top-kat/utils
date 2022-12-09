@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
-        "target": "ES2018",
+        "target": "ES5",
         "module": "commonjs",
+        "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": false,
         "declaration": true,
@@ -15,6 +16,7 @@
         ]
     },
     "include": [
-        "./**/*.ts"
+        "./**/*.ts",
+        "index.ts"
     ],
 }

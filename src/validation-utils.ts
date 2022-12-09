@@ -5,7 +5,7 @@ import { dataValidationUtilErrorHandler } from "./private/error-handler"
 import { isset } from "./isset"
 import { isDateIsoOrObjectValid, isDateIntOrStringValid, isTimeStringValid } from "./date-utils"
 import { asArray } from "./array-utils"
-import { configFn } from "./private/config"
+import { configFn } from "./config"
 import { isEmpty } from "./is-empty"
 import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
 

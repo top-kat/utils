@@ -1,7 +1,7 @@
-import { Color } from './types'
-import { isset } from '../isset'
+import { Color } from './private/types'
+import { isset } from './isset'
 
-export type Config = {
+export type TopkatUtilConfig = {
     env: string
     isProd: boolean
     nbOfLogsToKeep: number
@@ -14,16 +14,16 @@ export type Config = {
             shade1: Color,
             shade2: Color,
             bgColor?: Color
-            paddingX: number
-            paddingY: number
+            paddingX?: number
+            paddingY?: number
             fontColor?: Color
-            pageWidth: number
-            debugModeColor: Color,
+            pageWidth?: number
+            debugModeColor?: Color,
         }
     },
 }
 
-let config: Config = {
+let config: TopkatUtilConfig = {
     env: 'development',
     isProd: false,
     nbOfLogsToKeep: 25,
