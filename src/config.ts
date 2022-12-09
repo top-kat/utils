@@ -4,7 +4,7 @@ import { isset } from './isset'
 export type TopkatUtilConfig = {
     env: string
     isProd: boolean
-    nbOfLogsToKeep: number
+    nbOfLogsToKeep?: number
     customTypes: object,
     preprocessLog?: Function,
     terminal: {
