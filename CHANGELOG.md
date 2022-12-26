@@ -1,3 +1,6 @@
+### v1.2.2
+* fix ts problem compiling class with ES6
+
 ### v1.2.1
 * NEW DescriptiveError class for more explicit errors
 * MINOR VERSION TRANSITION => A little change of api with validatorReturnErrArray that returns [msg, extraInfos][] instead of [msg, httpErrorCode, extraInfos][]. Now the ode is in the extra infos
