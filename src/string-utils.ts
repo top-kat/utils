@@ -2,7 +2,7 @@
 // STRING UTILS
 //----------------------------------------
 import { err500IfEmptyOrNotSet } from "./error-utils"
-import { ObjectGeneric } from "./private/types"
+import { ObjectGeneric } from "./types"
 import { isset } from "./isset"
 
 /**Eg: camelCase */

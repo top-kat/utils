@@ -3,9 +3,9 @@
 //----------------------------------------
 import { configFn } from "./config"
 import { isset } from "./isset"
-import { Color } from "./private/types"
+import { Color } from "./types"
 import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
-import { cleanStackTrace } from "./error-utils"
+import { cleanStackTrace } from "./clean-stack-trace"
 
 export const logger = {
     log(str, type = 'log') {

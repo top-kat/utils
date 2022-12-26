@@ -1,4 +1,4 @@
-import { Color } from './private/types'
+import { Color } from './types'
 import { isset } from './isset'
 
 export type TopkatUtilConfig = {

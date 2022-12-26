@@ -1,12 +1,12 @@
 //----------------------------------------
 // VALIDATION UTILS
 //----------------------------------------
-import { dataValidationUtilErrorHandler } from "./private/error-handler"
 import { isset } from "./isset"
 import { isDateIsoOrObjectValid, isDateIntOrStringValid, isTimeStringValid } from "./date-utils"
 import { asArray } from "./array-utils"
 import { configFn } from "./config"
 import { isEmpty } from "./is-empty"
+import { DescriptiveError } from "./error-utils"
 import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
 
 export type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
@@ -22,7 +22,7 @@ export function checkAllObjectValuesAreEmpty(o) { return Object.values(o).every(
 
 /** Throw an error in case data passed is not a valid ctx */
 export function checkCtxIntegrity(ctx) {
-    if (!isset(ctx) || !isset(ctx.user)) throw new dataValidationUtilErrorHandler('ctxNotSet', 500)
+    if (!isset(ctx) || !isset(ctx.user)) throw new DescriptiveError('ctxNotSet', { code: 500 })
 }
 
 /**
@@ -90,7 +90,7 @@ export type ValidatorObject = {
 }
 export function validator(...paramsToValidate: ValidatorObject[]) {
     const errArray = validatorReturnErrArray(...paramsToValidate)
-    if (errArray.length) throw new dataValidationUtilErrorHandler(...errArray)
+    if (errArray.length) throw new DescriptiveError(...errArray)
 }
 
 
@@ -107,13 +107,13 @@ export function isValid(...paramsToValidate) {
  */
 export function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }) }
 
-export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, number?, object?] {
+export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, object?] {
     let paramsFormatted: ValidatorObject[] = []
 
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
     paramsToValidate.forEach(param => {
         if (typeof param !== 'object' || Array.isArray(param))
-            throw new dataValidationUtilErrorHandler(`wrongTypeForDataValidatorArgument`, 500, { origin: 'Generic validator', expectedType: 'object', actualType: Array.isArray(param) ? 'array' : typeof param })
+            throw new DescriptiveError(`wrongTypeForDataValidatorArgument`, { code: 500, origin: 'Generic validator', expectedType: 'object', actualType: Array.isArray(param) ? 'array' : typeof param })
 
         // parse => name: {myVar1: 'blah, myvar2: myvar2}
         if (typeof param.name === 'object' && !Array.isArray(param.name))
@@ -127,12 +127,12 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         let optional = paramObj.optional || false
         let emptyAllowed = optional || paramObj.emptyAllowed || false
         if (paramObj.isset === false) paramObj.mustNotBeSet = true // ALIAS 
-        const errMess = (msg, extraInfos = {}, errCode = 422): [string, number, object] => [msg, errCode, { origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
+        const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
 
         // accept syntax { 'myVar.var2': myVar.var2, ... }
         if (!isset(name)) {
             name = Object.keys(paramObj).find(param => !['in', 'eq', 'lte', 'gte', 'name', 'value', 'type', 'regexp', 'minLength', 'maxLength', 'optional', 'emptyAllowed', 'mustNotBeSet', 'includes', 'length'].includes(param))
-            if (isset(name)) value = paramObj[name] // throw new dataValidationUtilErrorHandler('noNameProvidedForDataValidator', 500, { origin: 'Generic validator', });
+            if (isset(name)) value = paramObj[name]
         }
         // if nameString ends by $ sign it is optional
         if (isset(name) && /.*\$$/.test(name)) {
@@ -183,7 +183,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                     //...Object.keys(configFn().customTypes)
                 ]
 
-                if (!allTypes.includes(type)) throw new dataValidationUtilErrorHandler('typeDoNotExist', 500, { type })
+                if (!allTypes.includes(type)) throw new DescriptiveError('typeDoNotExist', { code: 500, type })
 
                 const basicTypeCheck = {
                     objectId: val => /^[0-9a-fA-F-]{24,}$/.test(val), // "0c65940b-6b0c-4dd8-9c7a-7c5fe1ba907a"

@@ -1,12 +1,12 @@
 //----------------------------------------
 // OBJECT UTILS
 //----------------------------------------
-import { ObjectGeneric } from "./private/types"
+import { ObjectGeneric } from "./types"
 import { err500IfNotSet } from "./error-utils"
 import { recursiveGenericFunctionSync } from "./loop-utils"
 import { isset } from "./isset"
 import { isObject } from "./is-object"
-import { dataValidationUtilErrorHandler } from "./private/error-handler"
+import { DescriptiveError } from "./error-utils"
 
 /**
  * 
@@ -97,7 +97,7 @@ export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
             const nextChunk = chunks[i + 1]
             if (isset(nextChunk) && nextChunk.startsWith('[')) lastItem[chunk] = []
             else lastItem[chunk] = {}
-        } else if (typeof lastItem[chunk] !== 'object') throw new dataValidationUtilErrorHandler(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, 500, { origin: 'Validator', chunks, actualValueOfItem: lastItem[chunk], actualChunk: chunk })
+        } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks, actualValueOfItem: lastItem[chunk], actualChunk: chunk })
         lastItem = lastItem[chunk]
     })
 }
@@ -191,7 +191,7 @@ export function objFilterUndefined(o) {
 
 /** Lock all 1st level props of an object to read only */
 export function readOnly(o) {
-    const throwErr = () => { throw new dataValidationUtilErrorHandler('Cannot modify object that is read only', 500) }
+    const throwErr = () => { throw new DescriptiveError('Cannot modify object that is read only', { code: 500 }) }
     return new Proxy(o, {
         set: throwErr,
         defineProperty: throwErr,
@@ -203,14 +203,14 @@ export function readOnly(o) {
 export function reassignForbidden(o) {
     return new Proxy(o, {
         defineProperty: function (that, key, value) {
-            if (key in that) throw new dataValidationUtilErrorHandler(`Cannot reassign the property ${key.toString()} of this object`, 500)
+            if (key in that) throw new DescriptiveError(`Cannot reassign the property ${key.toString()} of this object`, { code: 500 })
             else {
                 that[key] = value
                 return true
             }
         },
         deleteProperty: function (_, key) {
-            throw new dataValidationUtilErrorHandler(`Cannot delete the property ${key.toString()} of this object`, 500)
+            throw new DescriptiveError(`Cannot delete the property ${key.toString()} of this object`, { code: 500 })
         }
     })
 }

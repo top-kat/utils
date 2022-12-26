@@ -3,7 +3,7 @@
 // TIMEOUT UTILS
 //----------------------------------------
 import { cliProgressBar, C } from "./logger-utils"
-import { dataValidationUtilErrorHandler } from "./private/error-handler"
+import { DescriptiveError } from "./error-utils"
 
 
 export async function timeout(ms, fn = () => { }) { return new Promise(res => setTimeout(res, ms)).then(fn) }
@@ -29,7 +29,7 @@ export async function waitUntilTrue(callback, timeoutSec = 10, errorAfterNSecond
         await timeout(300)
     }
     if (cliOutput) process.stdout.write(`\n`)
-    if (!generalTimeout && errorAfterNSeconds) throw new dataValidationUtilErrorHandler(errMess, 500)
+    if (!generalTimeout && errorAfterNSeconds) throw new DescriptiveError(errMess, { code: 500 })
 }
 
 

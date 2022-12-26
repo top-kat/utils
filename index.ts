@@ -17,7 +17,7 @@ export * from './src/is-empty'
 export * from './src/remove-circular-json-stringify'
 export * from './src/is-object'
 export * from './src/regexp-utils'
-export * from './src/private/error-handler'
+export * from './src/clean-stack-trace'
 export { registerConfig } from './src/config'
 
 import { moyenne } from './src/math-utils'

@@ -3,7 +3,7 @@
 //----------------------------------------
 import { isset } from "./isset"
 import { pad } from "./math-utils"
-import { dataValidationUtilErrorHandler } from "./private/error-handler"
+import { DescriptiveError } from "./error-utils"
 import { err422IfNotSet } from "./error-utils"
 
 const int = parseInt
@@ -154,7 +154,7 @@ export function isTimeStringValid(timeStr, outputAnError$ = false) {
     let m = int(timeArr[1])
     let test1 = h >= 0 && h < 24
     let test2 = m >= 0 && m < 60
-    if (outputAnError$ && !(test1 && test2)) throw new dataValidationUtilErrorHandler('timeStringOutOfRange', 422, { origin: 'Time validator' })
+    if (outputAnError$ && !(test1 && test2)) throw new DescriptiveError('timeStringOutOfRange', { code: 422, origin: 'Time validator' })
     else return test1 && test2
 }
 
@@ -351,7 +351,7 @@ export function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, l
     if (!isset(dateStringOrInt)) return false
     const dateStr = dateStringOrInt.toString()
 
-    if (length && dateStr.length !== length) throw new dataValidationUtilErrorHandler(`wrongLengthForDateInt`, 422, { origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: `${dateStringOrInt} length !== ${length}` })
+    if (length && dateStr.length !== length) throw new DescriptiveError(`wrongLengthForDateInt`, { code: 422, origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: `${dateStringOrInt} length !== ${length}` })
 
     if ((typeof dateStringOrInt === 'object' && isNaN(int(dateStr))) || ![4, 6, 8, 10, 12, 17].includes(dateStr.length)) return false
 
@@ -364,7 +364,7 @@ export function isDateIntOrStringValid(dateStringOrInt, outputAnError = false, l
     const test4 = !isset(h) || (int(h) <= 23 && int(h) >= 0) // H
     const test5 = !isset(m) || (int(m) <= 59 && int(m) >= 0) // M
 
-    if (outputAnError && !(test1 && test2 && test3 && test4 && test5)) throw new dataValidationUtilErrorHandler(`dateStringOrIntFormatInvalid`, 422, { origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: 'Needs YYYYMMDD[HHMM] between 100001010000 and 999912312359', dateArr, isYearValid: test1, isMonthValid: test2, isDayValid: test3, isHourValid: test4, isMinutesValid: test5 })
+    if (outputAnError && !(test1 && test2 && test3 && test4 && test5)) throw new DescriptiveError(`dateStringOrIntFormatInvalid`, { code: 422, origin: 'Date Int validator', dateStringOrInt: dateStringOrInt, extraInfo: 'Needs YYYYMMDD[HHMM] between 100001010000 and 999912312359', dateArr, isYearValid: test1, isMonthValid: test2, isDayValid: test3, isHourValid: test4, isMinutesValid: test5 })
     return true
 }
 
@@ -372,6 +372,6 @@ export function isDateIsoOrObjectValid(dateIsoOrObj, outputAnError = false) {
     let dateObj: Date | number | string = dateIsoOrObj
     if (typeof dateIsoOrObj === 'string') dateObj = new Date(dateIsoOrObj)
     let valid = dateObj instanceof Date
-    if (outputAnError && !valid) throw new dataValidationUtilErrorHandler('dateIsoStringOrObjectIsNotValid', 422, { origin: 'Date Object validator', isoDate: dateIsoOrObj })
+    if (outputAnError && !valid) throw new DescriptiveError('dateIsoStringOrObjectIsNotValid', { code: 422, origin: 'Date Object validator', isoDate: dateIsoOrObj })
     return valid
 }

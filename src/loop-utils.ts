@@ -1,7 +1,7 @@
 //----------------------------------------
 // LOOP UTILS
 //----------------------------------------
-import { ObjectGeneric } from "./private/types"
+import { ObjectGeneric } from "./types"
 import { err500IfNotSet } from "./error-utils"
 import { isObject } from "./is-object"
 

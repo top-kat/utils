@@ -5,7 +5,7 @@ import { C } from "./logger-utils"
 import { ValidatorObject } from "./validation-utils"
 import { isset } from "./isset"
 import { validatorReturnErrArray } from "./validation-utils"
-import { Override } from "./private/types"
+import { Override } from "./types"
 import { isObject } from "./is-object"
 
 export const restTestMini = {
@@ -55,7 +55,7 @@ export function assert(description: string, value: any, validatorObject?: Overri
         else if (isset(validatorObject)) validatorObjReal.eq = validatorObject
 
         const issetCheck = !isset(validatorObjReal) // isEmpty()
-        const [errMsg, , extraInfos] = validatorReturnErrArray(validatorObjReal)
+        const [errMsg, extraInfos] = validatorReturnErrArray(validatorObjReal)
         const msg2 = description + ` ${issetCheck ? 'isset' : `${JSON.stringify(validatorObject)}`}`
         if (isset(errMsg)) {
             const err = msg2 + `\n    ${errMsg}\n    ${JSON.stringify(extraInfos)}`

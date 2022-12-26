@@ -1,11 +1,13 @@
 //----------------------------------------
 // ERROR UTILS
 //----------------------------------------
-import { dataValidationUtilErrorHandler } from "./private/error-handler"
 import { isset } from "./isset"
 import { isEmpty } from "./is-empty"
+import { ObjectGeneric } from "./types"
+import { cleanStackTrace } from "./clean-stack-trace"
+import { C } from "./logger-utils"
 
-export function errIfNotSet(objOfVarNamesWithValues, additionalMessage) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
+export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
 
 export function err500IfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, false, objOfVarNamesWithValues) }
 
@@ -18,54 +20,14 @@ export function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
     for (let prop in objOfVarNamesWithValues) {
         if (!isset(objOfVarNamesWithValues[prop]) || (checkEmpty && isEmpty(objOfVarNamesWithValues[prop]))) missingVars.push(prop)
     }
-    if (missingVars.length) throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, errCode, { origin: 'Validator', varNames: missingVars.join(', ') })
+    if (missingVars.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: errCode, origin: 'Validator', varNames: missingVars.join(', ') })
 }
 
 
 export function err422IfNotSet(o) {
     let m = []
     for (let p in o) if (!isset(o[p])) m.push(p)
-    if (m.length) throw new dataValidationUtilErrorHandler(`requiredVariableEmptyOrNotSet`, 422, { origin: 'Validator', varNames: m.join(', ') })
-}
-
-export function cleanStackTrace(stack) {
-    if (typeof stack !== 'string') return ''
-    stack.replace(/home\/[^/]+\/[^/]+\//g, '')
-    const lines = stack.split('\n')
-    const removeIfContain = [
-        'logger-utils.js',
-        'TCP.onread',
-        'readableAddChunk',
-        'Socket.EventEmitter.emit (domain.js',
-        'Socket.emit (events.js',
-        'Connection.EventEmitter.emit (domain.js',
-        'Connection.emit (events.js',
-        'Socket.Readable.push (_stream_readable',
-        'model.Query',
-        'Object.promiseOrCallback',
-        'Connection.<anonymous>',
-        'process.topLevelDomainCallback',
-        // internal
-        'internal/process',
-        'internal/timers',
-        'internal/modules',
-        'internal/main',
-        'DefaultError.throw',
-        'Object.throw',
-        'mongoose/lib/utils',
-        'at Array.forEach (<anonymous>)',
-    ]
-    const linesClean = lines
-        .map((line, i) => {
-            if (i === 0) return ''
-            else {
-                const [, start, fileName, end] = line.match(/(^.+\/)([^/]+:\d+:\d+)(.{0,3})/) || []
-                return fileName ? `\x1b[2m${start}\x1b[0m${fileName}\x1b[2m${end}\x1b[0m` : `\x1b[2m${line}\x1b[0m`
-            }
-        })
-        .filter(l => l && !removeIfContain.some(text => l.includes(text)))
-        .join('\n')
-    return linesClean
+    if (m.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: 422, origin: 'Validator', varNames: m.join(', ') })
 }
 
 export async function tryCatch(callback: Function, onErr: Function = () => { }) {
@@ -73,5 +35,85 @@ export async function tryCatch(callback: Function, onErr: Function = () => { }) 
         return await callback()
     } catch (err) {
         return await onErr(err)
+    }
+}
+
+
+export type ErrorOptions = {
+    err?: any
+    doNotThrow?: boolean
+    code?: number
+    notifyOnSlackChannel?: boolean
+    extraInfosRenderer?: (extraInfosObj: ObjectGeneric) => void
+    doNotWaitOneFrameForLog?: boolean
+    [k: string]: any
+}
+
+function extraInfosRendererDefault(extraInfos) {
+    C.error(false, '== EXTRA INFOS ==')
+    C.error(false, JSON.stringify(extraInfos, null, 2))
+}
+
+export class DescriptiveError extends Error {
+    errorDescription: { [k: string]: any }
+    code: number
+    msg: string
+    options: ErrorOptions
+    hasBeenLogged: boolean
+
+    constructor(msg: string, options: ErrorOptions = {}) {
+        super(msg)
+        delete options.errMsgId
+        this.msg = msg
+        const { doNotWaitOneFrameForLog = false, ...optionsClean } = options
+        this.options = optionsClean
+        if (optionsClean.err) optionsClean.err.hasBeenLogged = true
+        this.hasBeenLogged = false
+        if (doNotWaitOneFrameForLog) this.log()
+        else setTimeout(() => {
+            if (!this.hasBeenLogged) this.log() // wait one event loop to see if not catched
+        })
+    }
+    log(doNotCountHasLogged = false) {
+        if (!this.hasBeenLogged) {
+            const { err, doNotThrow = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
+            let { code } = this.options
+            const extraInfos = { ...extraInfosRaw, ...(this.options.extraInfos || {}) }
+
+            if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
+            if (!isset(extraInfos.gotValue) && this.options.hasOwnProperty('gotValue')) extraInfos.gotValue = 'undefined'
+
+            if (isset(ressource)) {
+                code = 404
+                if (this.msg === '404') this.msg = `Ressource ${ressource} not found`
+                extraInfos.ressource = ressource
+            }
+
+            C.error(false, this.msg || this.message)
+            if (Object.keys(extraInfos).length > 0) extraInfosRenderer(extraInfos)
+            if (err) {
+                C.error(false, '== ORIGINAL ERROR ==')
+                if (err.log) {
+                    err.hasBeenLogged = false
+                    err.log()
+                } else {
+                    C.error(err)
+                    if (err.extraInfos) C.error(false, err.extraInfos)
+                }
+            } else {
+                C.error(false, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
+            }
+            this.code = code || 500
+            this.errorDescription = {
+                msg: this.msg,
+                code,
+                ressource,
+                ...extraInfos,
+            }
+        }
+        if (!doNotCountHasLogged) this.hasBeenLogged = true
+    }
+    toString() {
+        return this.log(true)
     }
 }
