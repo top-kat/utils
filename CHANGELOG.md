@@ -1,3 +1,7 @@
+### v1.2.1
+* NEW DescriptiveError class for more explicit errors
+* MINOR VERSION TRANSITION => A little change of api with validatorReturnErrArray that returns [msg, extraInfos][] instead of [msg, httpErrorCode, extraInfos][]. Now the ode is in the extra infos
+
 ### v1.1.9
 * add option disableCircularDependencyRemoval to recursive helpers
 
