@@ -19,9 +19,9 @@
     "bump:patch": "npm run build & node node_modules/bump-simple/bump-simple.js --patch"
   },
   "devDependencies": {
-    "@types/node": "^16.11.6",
+    "@types/node": "^18.11.18",
+    "bump-simple": "^1.0.0",
     "eslint": "^8.0.0",
-    "typescript": "^4.4.4",
-    "bump-simple": "^1.0.0"
+    "typescript": "^4.4.4"
   }
 }
