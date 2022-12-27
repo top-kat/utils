@@ -1,3 +1,6 @@
+### v1.2.3
+* default terminal no color to avoid displaying strange characters when outputting logs for front end
+
 ### v1.2.2
 * fix ts problem compiling class with ES6
 
