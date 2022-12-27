@@ -29,7 +29,7 @@ let config: TopkatUtilConfig = {
     nbOfLogsToKeep: 25,
     customTypes: {},
     terminal: {
-        noColor: false,
+        noColor: true,
         theme: {
             primary: [0, 149, 250], // blue theme
             shade1: [0, 90, 250],
