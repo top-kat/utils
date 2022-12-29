@@ -173,12 +173,16 @@ export function filterKeys(obj: object, filter) {
 }
 /**
  * @param {Object} obj the object on which we want to delete a property
- * @param {Array} addr addressArray on which to delete the property
+ * @param {Array} addrArr addressArray on which to delete the property
  */
-export function deleteByAddress(obj: object, addr: string[]) {
+export function deleteByAddress(obj: object, addr: string | string[]) {
     let current = obj
-    for (let i = 0; i < addr.length - 1; i++) current = current[addr[i]]
-    delete current[addr[addr.length - 1]]
+    const addrArr = Array.isArray(addr) ? addr : addr.split('.')
+    for (let i = 0; i < addrArr.length; i++) {
+        const currentAddr = addrArr[i].replace(/(\[|\])/g, '')
+        if (i === addrArr.length - 1) delete current[currentAddr]
+        else current = current[currentAddr]
+    }
 }
 
 
