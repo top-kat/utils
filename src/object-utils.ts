@@ -97,7 +97,7 @@ export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
             const nextChunk = chunks[i + 1]
             if (isset(nextChunk) && nextChunk.startsWith('[')) lastItem[chunk] = []
             else lastItem[chunk] = {}
-        } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks, actualValueOfItem: lastItem[chunk], actualChunk: chunk })
+        } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks, actualValueOfItem: lastItem[chunk], actualChunk: chunk, chunkIndex: i })
         lastItem = lastItem[chunk]
     })
 }
@@ -177,7 +177,7 @@ export function filterKeys(obj: object, filter) {
  */
 export function deleteByAddress(obj: object, addr: string[]) {
     let current = obj
-    for (let i = 0; i < addr.length - 2; i++) current = current[addr[i]]
+    for (let i = 0; i < addr.length - 1; i++) current = current[addr[i]]
     delete current[addr[addr.length - 1]]
 }
 
