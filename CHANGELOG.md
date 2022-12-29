@@ -1,3 +1,6 @@
+### v1.2.5
+* improve deleteByAddress to accept [0] array syntax in addr AND string AND string array as addr argument
+
 ### v1.2.3
 * default terminal no color to avoid displaying strange characters when outputting logs for front end
 
