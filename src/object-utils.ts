@@ -97,7 +97,7 @@ export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
             const nextChunk = chunks[i + 1]
             if (isset(nextChunk) && nextChunk.startsWith('[')) lastItem[chunk] = []
             else lastItem[chunk] = {}
-        } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks, actualValueOfItem: lastItem[chunk], actualChunk: chunk, chunkIndex: i })
+        } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks: chunks.map(c => c.replace(/\[(\d+)/, '[$1]')), actualValueOfItem: lastItem[chunk], actualChunk: chunk, chunkIndex: i })
         lastItem = lastItem[chunk]
     })
 }
