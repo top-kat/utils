@@ -1,3 +1,7 @@
+### v1.2.6
+* mini fix on escapeRegexp option parseStarChar, now replacing
+* will 'match all until'. Before it was just 'match all'
+
 ### v1.2.5
 * improve deleteByAddress to accept [0] array syntax in addr AND string AND string array as addr argument
 
