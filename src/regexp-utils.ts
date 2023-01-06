@@ -3,9 +3,12 @@
 //----------------------------------------
 import { C } from "./logger-utils"
 
+/** ESCAPE REGEXP
+ * * parseStarChar config will replace '*' by '.*?' which is the best for 'match all until'
+ */
 export function escapeRegexp(str: string, config: { parseStarChar?: boolean } = {}): string {
     const { parseStarChar = false } = config
-    if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, '.*')
+    if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, '.*?')
     else return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 
