@@ -65,14 +65,14 @@ export function findByAddress(obj: ObjectGeneric, addr: string): any | undefined
 
 
 /** Will return all objects matching that path. Eg: user.*.myVar */
-export function findByAddressAll(obj, addr, returnAddresses?: true): Array<[string, any]>
-export function findByAddressAll(obj, addr, returnAddresses?: false): Array<any>
+export function findByAddressAll(obj: Record<string, any>, addr: string, returnAddresses?: true): Array<[addr: string, value: any]>
+export function findByAddressAll(obj: Record<string, any>, addr: string, returnAddresses?: false): Array<any>
 export function findByAddressAll(obj, addr, returnAddresses = false) {
     err500IfNotSet({ obj, addr })
     if (addr === '') return obj
     const addrRegexp = new RegExp('^' + addr
         .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
-        .replace(/\./g, '\\.')
+        .replace(/\./g, '\\.') //
         .replace(/\.\*/g, '.[^.]+') // replace * by [^. (all but a point)]
         + '$')
 

@@ -46,6 +46,7 @@ export type ErrorOptions = {
     notifyOnSlackChannel?: boolean
     extraInfosRenderer?: (extraInfosObj: ObjectGeneric) => void
     doNotWaitOneFrameForLog?: boolean
+    noStackTrace?: boolean
     [k: string]: any
 }
 
@@ -76,7 +77,7 @@ export class DescriptiveError extends Error {
     }
     log(doNotCountHasLogged = false) {
         if (!this.hasBeenLogged) {
-            const { err, doNotThrow = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
+            const { err, doNotThrow = false, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
             let { code } = this.options
             const extraInfos = { ...extraInfosRaw, ...(this.options.extraInfos || {}) }
 
@@ -97,11 +98,11 @@ export class DescriptiveError extends Error {
                     err.hasBeenLogged = false
                     err.log()
                 } else {
-                    C.error(err)
-                    if (err.extraInfos) C.error(false, err.extraInfos)
+                    logErr(noStackTrace, err)
+                    if (err.extraInfos) logErr(noStackTrace, err.extraInfos)
                 }
             } else {
-                C.error(false, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
+                logErr(noStackTrace, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
             }
             this.code = code || 500
             this.errorDescription = {
@@ -116,4 +117,9 @@ export class DescriptiveError extends Error {
     toString() {
         return this.log(true)
     }
+}
+
+function logErr(noStackTrace: boolean, ...params: any[]) {
+    if (noStackTrace) C.error(false, ...params)
+    else C.error(...params)
 }
