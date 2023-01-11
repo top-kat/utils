@@ -102,7 +102,7 @@ export class DescriptiveError extends Error {
                     if (err.extraInfos) logErr(noStackTrace, err.extraInfos)
                 }
             } else {
-                logErr(noStackTrace, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
+                if (!noStackTrace) C.error(false, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
             }
             this.code = code || 500
             this.errorDescription = {
