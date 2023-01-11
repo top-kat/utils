@@ -1,3 +1,6 @@
+### v1.2.9
+* Fix error noStackTrace
+
 ### v1.2.7
 * adding option noStackTrace to error
 * improve type of findByAddressAll
