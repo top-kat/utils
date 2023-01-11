@@ -1,3 +1,7 @@
+### v1.2.7
+* adding option noStackTrace to error
+* improve type of findByAddressAll
+
 ### v1.2.6
 * mini fix on escapeRegexp option parseStarChar, now replacing
 * will 'match all until'. Before it was just 'match all'
