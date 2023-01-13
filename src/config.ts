@@ -1,15 +1,16 @@
 import { Color } from './types'
 import { isset } from './isset'
+import { isNodeJs } from './is-nodejs'
 
-export type TopkatUtilConfig = {
+export type TopkatUtilConfig = Partial<{
     env: string
     isProd: boolean
-    nbOfLogsToKeep?: number
+    nbOfLogsToKeep: number
     customTypes: object,
     preprocessLog?: Function,
-    terminal: {
+    terminal: Partial<{
         noColor: boolean
-        theme: {
+        theme: Partial<{
             primary: Color, // blue theme
             shade1: Color,
             shade2: Color,
@@ -19,11 +20,12 @@ export type TopkatUtilConfig = {
             fontColor?: Color
             pageWidth?: number
             debugModeColor?: Color,
-        }
-    },
-}
+        }>
+    }>
+}>
 
 let config: TopkatUtilConfig = {
+    // Also used as default config
     env: 'development',
     isProd: false,
     nbOfLogsToKeep: 25,
@@ -43,7 +45,7 @@ let config: TopkatUtilConfig = {
 }
 
 /** Allow dynamic changing of config */
-export function configFn() { return config }
+export function configFn(): TopkatUtilConfig { return config }
 
 
 /** Register custom config
@@ -65,8 +67,10 @@ export function configFn() { return config }
  * *     }
  * * },
  */
-export function registerConfig(customConfig) {
+export function registerConfig(customConfig: TopkatUtilConfig) {
+    const isNode = isNodeJs()
     if (!isset(customConfig.terminal)) customConfig.terminal = {}
+    if (isNode) config.terminal.noColor = false
     const newconfig = {
         ...config,
         ...customConfig
