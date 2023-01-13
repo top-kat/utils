@@ -2,6 +2,8 @@ import { Color } from './types'
 import { isset } from './isset'
 import { isNodeJs } from './is-nodejs'
 
+const isNode = isNodeJs()
+
 export type TopkatUtilConfig = Partial<{
     env: string
     isProd: boolean
@@ -31,7 +33,7 @@ let config: TopkatUtilConfig = {
     nbOfLogsToKeep: 25,
     customTypes: {},
     terminal: {
-        noColor: true,
+        noColor: !isNode,
         theme: {
             primary: [0, 149, 250], // blue theme
             shade1: [0, 90, 250],
@@ -68,9 +70,7 @@ export function configFn(): TopkatUtilConfig { return config }
  * * },
  */
 export function registerConfig(customConfig: TopkatUtilConfig) {
-    const isNode = isNodeJs()
     if (!isset(customConfig.terminal)) customConfig.terminal = {}
-    if (isNode) config.terminal.noColor = false
     const newconfig = {
         ...config,
         ...customConfig
@@ -85,5 +85,5 @@ export function registerConfig(customConfig: TopkatUtilConfig) {
     }
     config = newconfig
 
-    config.isProd = config.env.includes('prod')
+    config.isProd = config.env.includes('prod') // preprod | production
 }
