@@ -1,3 +1,7 @@
+### v1.2.10
+* NEW isNodeJs fn
+* Default terminal color when on nodejs
+
 ### v1.2.9
 * Fix error noStackTrace
 
