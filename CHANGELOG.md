@@ -1,3 +1,6 @@
+### v1.2.11
+* FIX on terminal noColor detection nodeJs env
+
 ### v1.2.10
 * NEW isNodeJs fn
 * Default terminal color when on nodejs
