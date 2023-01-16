@@ -38,11 +38,15 @@ export function strAsArray(arrOrStr) {
     return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr
 }
 
+type NotType<type, T> = Exclude<T, type>
+
+type AsArrReturnVal<T, X> = T extends undefined ? (X extends undefined ? void : X) : T extends any[] ? T : T[]
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
  */
-export function asArray<T extends any[] | any>(item: T): T extends undefined ? undefined : T extends any[] ? T : T[] {
-    return ((typeof item === 'undefined' ? item : Array.isArray(item) ? item : [item]) as T extends undefined ? undefined : T extends any[] ? T : T[])
+export function asArray<T extends any[] | any, X>(item: T, returnValueIfUndefined?: X): AsArrReturnVal<T, X> {
+    if (typeof item === 'undefined') return returnValueIfUndefined as any
+    else return Array.isArray(item) ? item : [item] as any
 }
 
 /** Array comparison
@@ -113,7 +117,7 @@ export function arrayToObjectSorted(array, getFieldFromItem) {
 /**
  * @param {Function} comparisonFunction default: (itemToPush, itemAlreadyInArray) => itemToPush === itemAlreadyInArray; comparison function to consider the added item duplicate
  */
-export function pushIfNotExist(arrayToPushInto, valueOrArrayOfValuesToBePushed, comparisonFunction = (a, b) => a === b): any[] {
+export function pushIfNotExist(arrayToPushInto: any[], valueOrArrayOfValuesToBePushed: any, comparisonFunction = (a, b) => a === b): any[] {
     const valuesToPush = asArray(valueOrArrayOfValuesToBePushed).filter(a => !arrayToPushInto.some(b => comparisonFunction(a, b)))
     arrayToPushInto.push(...valuesToPush)
     return arrayToPushInto
