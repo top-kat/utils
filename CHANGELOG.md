@@ -1,3 +1,6 @@
+### v1.2.12
+* ADD returnValueIfUndefined for asArray function and improve type
+
 ### v1.2.11
 * FIX on terminal noColor detection nodeJs env
 
