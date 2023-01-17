@@ -5,47 +5,70 @@ import { err500IfEmptyOrNotSet } from "./error-utils"
 import { ObjectGeneric } from "./types"
 import { isset } from "./isset"
 
+const getWordBits = wb => Array.isArray(wb[0]) ? wb[0] : wb
+
 /**Eg: camelCase */
-export function camelCase(...wordBits) {
-    return wordBits.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('')
+export function camelCase(wordBits: string[]): string
+export function camelCase(...wordBits: string[]): string
+export function camelCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('')
 }
 
 /**Eg: snake_case
  * trimmed but not lowerCased
  */
-export function snakeCase(...wordBits) {
-    return wordBits.filter(e => e).map(w => w.trim()).join('_')
+export function snakeCase(wordBits: string[]): string
+export function snakeCase(...wordBits: string[]): string
+export function snakeCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return wordBitsReal.filter(e => e).map(w => w.trim()).join('_')
 }
 /**Eg: kebab-case
  * trimmed AND lowerCased
  * undefined, null... => ''
  */
-export function kebabCase(...wordBits) {
-    return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('-')
+export function kebabCase(wordBits: string[]): string
+export function kebabCase(...wordBits: string[]): string
+export function kebabCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('-')
 }
 /**Eg: PascalCase undefined, null... => '' */
-export function pascalCase(...wordBits) {
-    return wordBits.filter(e => e).map((w, i) => capitalize1st(w)).join('')
+export function pascalCase(wordBits: string[]): string
+export function pascalCase(...wordBits: string[]): string
+export function pascalCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return wordBitsReal.filter(e => e).map((w, i) => capitalize1st(w)).join('')
 }
 
 /**Eg: Titlecase undefined, null... => '' */
-export function titleCase(...wordBits) {
-    return capitalize1st(wordBits.filter(e => e).map(w => w.trim()).join(''))
+export function titleCase(wordBits: string[]): string
+export function titleCase(...wordBits: string[]): string
+export function titleCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return capitalize1st(wordBitsReal.filter(e => e).map(w => w.trim()).join(''))
 }
 
 /**Eg: UPPERCASE undefined, null... => '' */
-export function upperCase(...wordBits) {
-    return wordBits.filter(e => e).map(w => w.trim().toUpperCase()).join('')
+export function upperCase(wordBits: string[]): string
+export function upperCase(...wordBits: string[]): string
+export function upperCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return wordBitsReal.filter(e => e).map(w => w.trim().toUpperCase()).join('')
 }
 
 /**Eg: lowercase undefined, null... => '' */
-export function lowerCase(...wordBits) {
-    return wordBits.filter(e => e).map(w => w.trim().toLowerCase()).join('')
+export function lowerCase(wordBits: string[]): string
+export function lowerCase(...wordBits: string[]): string
+export function lowerCase(...wordBits): string {
+    const wordBitsReal = getWordBits(wordBits)
+    return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('')
 }
 
-export function capitalize1st(str = '') { return str[0].toUpperCase() + str.slice(1) }
+export function capitalize1st(str = ''): string { return str[0].toUpperCase() + str.slice(1) }
 
-export function camelCaseToWords(str) {
+export function camelCaseToWords(str: string): string[] {
     return str ? str.trim().replace(/([A-Z])/g, '-$1').toLowerCase().split('-') : []
 }
 
