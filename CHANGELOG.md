@@ -1,3 +1,7 @@
+### v1.2.13
+* add ability to hide generated api code in errors by setting { code } value to undefined, null or option.doNotDisplayCode to true
+* allow all casing function to receive an array of string as first argument OR rest param as a string array
+
 ### v1.2.12
 * ADD returnValueIfUndefined for asArray function and improve type
 
