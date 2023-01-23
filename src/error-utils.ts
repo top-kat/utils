@@ -43,6 +43,7 @@ export type ErrorOptions = {
     err?: any
     doNotThrow?: boolean
     code?: number
+    doNotDisplayCode?: boolean
     notifyOnSlackChannel?: boolean
     extraInfosRenderer?: (extraInfosObj: ObjectGeneric) => void
     doNotWaitOneFrameForLog?: boolean
@@ -105,6 +106,7 @@ export class DescriptiveError extends Error {
                 if (!noStackTrace) C.error(false, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
             }
             this.code = code || 500
+            if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
             this.errorDescription = {
                 msg: this.msg,
                 code,
