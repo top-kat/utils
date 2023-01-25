@@ -87,9 +87,9 @@ export function findByAddressAll(obj, addr, returnAddresses = false) {
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
  * NOTE: doesn't work with arrays
  */
-export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
+export function objForceWrite<MainObj extends Record<string, any>>(obj: MainObj, addr: string, item): MainObj {
     const chunks = addr.replace(/\.?\[(\d+)\]/g, '.[$1').split('.')
-    let lastItem = obj
+    let lastItem: any = obj
     chunks.forEach((chunkRaw, i) => {
         const chunk = chunkRaw.replace(/^\[/, '')
         if (i === chunks.length - 1) lastItem[chunk] = item
@@ -100,6 +100,7 @@ export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
         } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks: chunks.map(c => c.replace(/\[(\d+)/, '[$1]')), actualValueOfItem: lastItem[chunk], actualChunk: chunk, chunkIndex: i })
         lastItem = lastItem[chunk]
     })
+    return obj
 }
 
 /** Enforce writing subItems, only if obj.addr is empty.
@@ -107,7 +108,7 @@ export function objForceWrite(obj: ObjectGeneric, addr: string, item) {
  * if user.name.blah has a value it will not change it.
  * NOTE: doesn't work with arrays
  */
-export function objForceWriteIfNotSet(obj: ObjectGeneric, addr: string, item) {
+export function objForceWriteIfNotSet<MainObj extends Record<string, any>>(obj: MainObj, addr: string, item): MainObj {
     if (!isset(findByAddress(obj, addr))) return objForceWrite(obj, addr, item)
 }
 
@@ -120,12 +121,12 @@ export function mergeMixins(that, ...mixins) {
     })
 }
 
-export function cloneObject(o) {
+export function cloneObject<MainObj extends Record<string, any>>(o: MainObj): MainObj {
     return JSON.parse(JSON.stringify(o))
 }
 
 /** Deep clone. WILL REMOVE circular references */
-export function deepClone<T>(obj: T, cache = []): T {
+export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cache = []): MainObj {
 
     let copy
     // usefull to not modify 1st level objet by lower levels
@@ -164,7 +165,7 @@ export function deepClone<T>(obj: T, cache = []): T {
  * @param {Object} obj the object on which we want to filter the keys
  * @param {function} filterFunc function that returns true if the key match the wanted criteria
  */
-export function filterKeys(obj: object, filter) {
+export function filterKeys<MainObj extends Record<string, any>>(obj: MainObj, filter): MainObj {
     const clone = cloneObject(obj)
     recursiveGenericFunctionSync(obj, (item, addr, lastElementKey) => {
         if (!filter(lastElementKey)) deleteByAddress(clone, addr.split('.'))
@@ -188,13 +189,13 @@ export function deleteByAddress(obj: object, addr: string | string[]) {
 
 
 /** Remove all key/values pair if value is undefined  */
-export function objFilterUndefined(o) {
+export function objFilterUndefined<MainObj extends Record<string, any>>(o: MainObj): MainObj {
     Object.keys(o).forEach(k => !isset(o[k]) && delete o[k])
     return o
 }
 
 /** Lock all 1st level props of an object to read only */
-export function readOnly(o) {
+export function readOnly<MainObj extends Record<string, any>>(o: MainObj): { readonly [AA in keyof MainObj]: MainObj[AA] } {
     const throwErr = () => { throw new DescriptiveError('Cannot modify object that is read only', { code: 500 }) }
     return new Proxy(o, {
         set: throwErr,
@@ -256,10 +257,10 @@ export function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
  * @param {function} callback (obj[addr]) => processValue. Eg: myObjAddr => myObjAddr.push('bikou')
  * @return obj[addr] eventually processed by the callback
  */
-export function ensureObjectProp(obj: object, addr: string, defaultValue, callback = o => o) {
+export function ensureObjectProp<MainObj extends Record<string, any>, Addr extends string>(obj: MainObj, addr: Addr, defaultValue, callback: (o: any) => any): MainObj[Addr] {
     err500IfNotSet({ obj, addr, defaultValue, callback })
     if (!isset(obj[addr])) obj[addr] = defaultValue
-    callback(obj[addr])
+    if (callback) callback(obj[addr])
     return obj[addr]
 }
 
