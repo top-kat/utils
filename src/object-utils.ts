@@ -52,10 +52,10 @@ export function has(obj: ObjectGeneric, addr: string) {
  * @param addr accept syntax like "obj.subItem.[0].sub2" OR "obj.subItem.0.sub2" OR "obj.subItem[0].sub2"
  * @returns the last item of the chain OR undefined if not found
  */
-export function findByAddress(obj: ObjectGeneric, addr: string): any | undefined {
-    if (addr === '') return obj
+export function findByAddress(obj: ObjectGeneric, addr: string | string[]): any | undefined {
+    if (addr.length === 0) return obj
     if (!isset(obj) || typeof obj !== 'object') return console.warn('Main object in `findByAddress` function is undefined or has the wrong type')
-    const propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.') // replace .[4] AND [4] TO .4
+    const propsArr = Array.isArray(addr) ? addr : addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.') // replace .[4] AND [4] TO .4
     const objRef = propsArr.reduce((objChain, prop) => {
         if (!isset(objChain) || typeof objChain !== 'object' || !isset(objChain[prop])) return
         else return objChain[prop]
