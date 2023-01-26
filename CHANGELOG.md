@@ -1,3 +1,6 @@
+### v1.2.15
+* Find by address now accepts string array for address
+
 ### v1.2.14
 * objForceWrite now return main object
 * improve type on objectutils
