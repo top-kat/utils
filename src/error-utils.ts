@@ -1,11 +1,13 @@
 //----------------------------------------
 // ERROR UTILS
 //----------------------------------------
+import { configFn } from "./config"
 import { isset } from "./isset"
 import { isEmpty } from "./is-empty"
-import { ObjectGeneric } from "./types"
+import { ErrorOptions } from "./types"
 import { cleanStackTrace } from "./clean-stack-trace"
 import { C } from "./logger-utils"
+export { ErrorOptions } from './types'
 
 export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
 
@@ -39,17 +41,7 @@ export async function tryCatch(callback: Function, onErr: Function = () => { }) 
 }
 
 
-export type ErrorOptions = {
-    err?: any
-    doNotThrow?: boolean
-    code?: number
-    doNotDisplayCode?: boolean
-    notifyOnSlackChannel?: boolean
-    extraInfosRenderer?: (extraInfosObj: ObjectGeneric) => void
-    doNotWaitOneFrameForLog?: boolean
-    noStackTrace?: boolean
-    [k: string]: any
-}
+
 
 function extraInfosRendererDefault(extraInfos) {
     C.error(false, '== EXTRA INFOS ==')
@@ -75,6 +67,9 @@ export class DescriptiveError extends Error {
         else setTimeout(() => {
             if (!this.hasBeenLogged) this.log() // wait one event loop to see if not catched
         })
+
+        const { onError = () => { } } = configFn()
+        onError(msg, options)
     }
     log(doNotCountHasLogged = false) {
         if (!this.hasBeenLogged) {

@@ -7,12 +7,15 @@ import { Color } from "./types"
 import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
 import { cleanStackTrace } from "./clean-stack-trace"
 
+type NotInfoLogLevel = 'error' | 'warn'
+type LogLevels = NotInfoLogLevel | 'info'
+
 export const logger = {
-    log(str, type = 'log') {
+    /** log is an OUTDATED alisas of info, appError is for warning */
+    log(str: string, level: LogLevels = 'info') {
         const { preprocessLog } = configFn()
         if (typeof preprocessLog === 'function') str = preprocessLog(str) || str
-        if (isset(console[type])) console[type](str)
-        else if (type === 'appError') console.warn(str)
+        if (isset(console[level])) console[level](str)
         else console.log(str)
 
         logger.raw.push(str + `\n`)
@@ -111,7 +114,7 @@ export const C = {
         if (!isset(str)) return
         const padX = ' '.repeat(paddingX)
         str = padX + (isset(clr) ? this.rgb(...clr) : '') + str.toString().replace(/\n/g, '\n' + padX + (isset(clr) ? this.rgb(...clr) : ''))
-        logger.log(str + this.reset, 'log')
+        logger.log(str + this.reset, 'info')
     },
     info(...str) {
         str.forEach((s, i) => {
@@ -132,7 +135,7 @@ export const C = {
     warning: (...str) => logErrPrivate('warn', [255, 122, 0], ...str),
     customError: (color, ...str) => logErrPrivate('error', color, ...str),
     customWarning: (color, ...str) => logErrPrivate('warn', color, ...str),
-    applicationError: (color, ...str) => logErrPrivate('appError', color, ...str),
+    applicationError: (color, ...str) => logErrPrivate('warn', color, ...str),
     warningLight: (color, ...str) => logErrPrivate('warn', [196, 120, 52], ...str),
     dimStrSplit(...logs) {
         let logsStr = []
@@ -182,14 +185,14 @@ export const C = {
     useTheme() { },
 }
 
-export function logErrPrivate(type, color: Color, ...errors) {
+export function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
     const { isProd } = configFn()
 
     if (errors.length === 1 && typeof errors[0].log === 'function') return errors[0].log()
 
     let stackTrace = (new Error('')).stack || ''
     const displayStack = errors[0] === false ? errors.shift() : true
-    const symbol = type === 'error' ? '✘ ' : '⚠ '
+    const symbol = level === 'error' ? '✘ ' : '⚠ '
     if (errors.length > 1 && !isset(errors[0])) errors.shift()
 
     const getStringFromErr = (err, i) => {
@@ -198,13 +201,13 @@ export function logErrPrivate(type, color: Color, ...errors) {
             if (i === 0) return C.rgb(...color) + symbol + err + C.reset
             else return err.split('\n').map(val => C.dim(val)).join('\n')
         } else if (err instanceof Error) {
-            const { str, stackTrace: stkTrc } = stringifyInstanceOfError(err, type, color)
+            const { str, stackTrace: stkTrc } = stringifyInstanceOfError(err, level, color)
             if (stkTrc) stackTrace = stkTrc
             return str
         } else if (typeof err === 'object') {
             let msg = ''
             msg += removeCircularJSONstringify(err, 2).split('\n').map(val => C.dim(val)).join('\n') + '\n'
-            const { str, stackTrace: stkTrc } = stringifyExtraInfos(err.extraInfo || err, type, color)
+            const { str, stackTrace: stkTrc } = stringifyExtraInfos(err.extraInfo || err, level, color)
             if (stkTrc) stackTrace = stkTrc
             msg += str
             return msg
@@ -222,7 +225,7 @@ export function logErrPrivate(type, color: Color, ...errors) {
         if (displayStack) {
             messages.push(isProd ? stackTrace : cleanStackTrace(stackTrace) + '\n')
         }
-        logger.log(messages.join(''), type)
+        logger.log(messages.join(''), level)
     }
 }
 
