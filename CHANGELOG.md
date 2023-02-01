@@ -1,3 +1,8 @@
+### v1.2.16
+* ADD onError to config for custom error handling
+* improve logging
+* add frontend compatibility
+
 ### v1.2.15
 * Find by address now accepts string array for address
 
