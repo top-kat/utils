@@ -44,8 +44,10 @@ export async function tryCatch(callback: Function, onErr: Function = () => { }) 
 
 
 function extraInfosRendererDefault(extraInfos) {
-    C.error(false, '== EXTRA INFOS ==')
-    C.error(false, JSON.stringify(extraInfos, null, 2))
+    return [
+        '== EXTRA INFOS ==',
+        JSON.stringify(extraInfos, null, 2)
+    ]
 }
 
 export class DescriptiveError extends Error {
@@ -71,52 +73,53 @@ export class DescriptiveError extends Error {
         const { onError = () => { } } = configFn()
         onError(msg, options)
     }
-    log(doNotCountHasLogged = false) {
-        if (!this.hasBeenLogged) {
-            const { err, doNotThrow = false, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
-            let { code } = this.options
-            const extraInfos = { ...extraInfosRaw, ...(this.options.extraInfos || {}) }
+    parseError(forCli = false) {
 
-            if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
-            if (!isset(extraInfos.gotValue) && this.options.hasOwnProperty('gotValue')) extraInfos.gotValue = 'undefined'
+        const errorLogs: string[] = []
 
-            if (isset(ressource)) {
-                code = 404
-                if (this.msg === '404') this.msg = `Ressource ${ressource} not found`
-                extraInfos.ressource = ressource
-            }
+        const { err, doNotThrow = false, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
+        let { code } = this.options
+        const extraInfos = { ...extraInfosRaw, ...(this.options.extraInfos || {}) }
 
-            C.error(false, this.msg || this.message)
-            if (Object.keys(extraInfos).length > 0) extraInfosRenderer(extraInfos)
-            if (err) {
-                C.error(false, '== ORIGINAL ERROR ==')
-                if (err.log) {
-                    err.hasBeenLogged = false
-                    err.log()
-                } else {
-                    logErr(noStackTrace, err)
-                    if (err.extraInfos) logErr(noStackTrace, err.extraInfos)
-                }
+        this.code = code || 500
+        if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
+
+        if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
+        if (!isset(extraInfos.gotValue) && this.options.hasOwnProperty('gotValue')) extraInfos.gotValue = 'undefined'
+
+        if (isset(ressource)) {
+            code = 404
+            if (this.msg === '404') this.msg = `Ressource ${ressource} not found`
+            extraInfos.ressource = ressource
+        }
+
+        errorLogs.push(this.msg || this.message)
+        if (Object.keys(extraInfos).length > 0) extraInfosRenderer(extraInfos)
+        if (err) {
+            errorLogs.push('== ORIGINAL ERROR ==')
+            if (typeof err.parseError === 'function') {
+                err.hasBeenLogged = false
+                const logFromOtherErr = err.parseError(forCli)
+                errorLogs.push(...logFromOtherErr)
             } else {
-                if (!noStackTrace) C.error(false, C.dim(cleanStackTrace(extraInfosRaw.stack || this.stack)))
+                errorLogs.push(err.toString())
+                if (!noStackTrace && err.stack) errorLogs.push(err.stack)
+                if (err.extraInfos) errorLogs.push(err.extraInfos)
             }
-            this.code = code || 500
-            if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
-            this.errorDescription = {
-                msg: this.msg,
-                code,
-                ressource,
-                ...extraInfos,
+        } else {
+            if (!noStackTrace) {
+                const stackTranceClean = cleanStackTrace(extraInfosRaw.stack || this.stack)
+                errorLogs.push(forCli ? C.dim(stackTranceClean) : stackTranceClean)
             }
         }
-        if (!doNotCountHasLogged) this.hasBeenLogged = true
+
+        return errorLogs
+    }
+    log() {
+        if (!this.hasBeenLogged) this.parseError().forEach(errLine => C.error(false, errLine))
+        this.hasBeenLogged = true
     }
     toString() {
-        return this.log(true)
+        return this.parseError().join('\n')
     }
-}
-
-function logErr(noStackTrace: boolean, ...params: any[]) {
-    if (noStackTrace) C.error(false, ...params)
-    else C.error(...params)
 }

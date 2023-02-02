@@ -11,7 +11,7 @@ export type ErrorOptions = {
     code?: number
     doNotDisplayCode?: boolean
     notifyOnSlackChannel?: boolean
-    extraInfosRenderer?: (extraInfosObj: ObjectGeneric) => void
+    extraInfosRenderer?: (extraInfosObj: ObjectGeneric) => string[]
     doNotWaitOneFrameForLog?: boolean
     noStackTrace?: boolean
     [k: string]: any
