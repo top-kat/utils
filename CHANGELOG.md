@@ -1,3 +1,7 @@
+### v1.2.17
+* added a relevant toString method to DescriptiveError class
+* improved error logging
+
 ### v1.2.16
 * ADD onError to config for custom error handling
 * improve logging
