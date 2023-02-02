@@ -41,8 +41,6 @@ export async function tryCatch(callback: Function, onErr: Function = () => { }) 
 }
 
 
-
-
 function extraInfosRendererDefault(extraInfos) {
     return [
         '== EXTRA INFOS ==',
@@ -55,7 +53,8 @@ export class DescriptiveError extends Error {
     code: number
     msg: string
     options: ErrorOptions
-    hasBeenLogged: boolean
+    hasBeenLogged: boolean = false
+    logs: string[] = []
 
     constructor(msg: string, options: ErrorOptions = {}) {
         super(msg)
@@ -72,6 +71,8 @@ export class DescriptiveError extends Error {
 
         const { onError = () => { } } = configFn()
         onError(msg, options)
+
+        this.parseError()
     }
     parseError(forCli = false) {
 
@@ -113,13 +114,23 @@ export class DescriptiveError extends Error {
             }
         }
 
-        return errorLogs
+        // THIS is used to access error as object
+        this.code = code || 500
+        if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
+        this.errorDescription = {
+            msg: this.msg,
+            code,
+            ressource,
+            ...extraInfos,
+        }
+
+        this.logs = errorLogs
     }
     log() {
-        if (!this.hasBeenLogged) this.parseError().forEach(errLine => C.error(false, errLine))
+        if (!this.hasBeenLogged) this.logs.forEach(errLine => C.error(false, errLine))
         this.hasBeenLogged = true
     }
     toString() {
-        return this.parseError().join('\n')
+        return this.logs.join('\n')
     }
 }
