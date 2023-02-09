@@ -80,7 +80,11 @@ export class DescriptiveError extends Error {
 
         const { err, doNotThrow = false, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
         let { code } = this.options
-        const extraInfos = { ...extraInfosRaw, ...(this.options.extraInfos || {}) }
+        const extraInfos = {
+            ...extraInfosRaw,
+            // additionnal extra info passed from parent error
+            ...(this.options.extraInfos || {}),
+        }
 
         this.code = code || 500
         if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
@@ -95,7 +99,11 @@ export class DescriptiveError extends Error {
         }
 
         errorLogs.push(this.msg || this.message)
-        if (Object.keys(extraInfos).length > 0) extraInfosRenderer(extraInfos)
+
+        if (Object.keys(extraInfos).length > 0) {
+            errorLogs.push(...extraInfosRenderer(extraInfos))
+        }
+
         if (err) {
             errorLogs.push('== ORIGINAL ERROR ==')
             if (typeof err.parseError === 'function') {
@@ -104,7 +112,7 @@ export class DescriptiveError extends Error {
                 errorLogs.push(...logFromOtherErr)
             } else {
                 errorLogs.push(err.toString())
-                if (!noStackTrace && err.stack) errorLogs.push(err.stack)
+                if (!noStackTrace && err.stack) errorLogs.push(cleanStackTrace(err.stack))
                 if (err.extraInfos) errorLogs.push(err.extraInfos)
             }
         } else {
@@ -123,6 +131,7 @@ export class DescriptiveError extends Error {
             ressource,
             ...extraInfos,
         }
+        if (err) this.errorDescription.originalError = `${err.code ? err.code + ': ' : ''}${err.message || err.msg || err.toString()}`
 
         this.logs = errorLogs
     }

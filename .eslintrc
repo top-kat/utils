@@ -1,0 +1,47 @@
+{
+    "env": {
+        "es6": true,
+        "node": true,
+        "mocha": true,
+        "browser": true
+    },
+    "extends": [
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
+    },
+    "rules": {
+        "no-inner-declarations": "off",
+        "no-console": "warn",
+        "no-unused-vars": "warn",
+        "no-global-assign": "warn",
+        "require-atomic-updates": "off",
+        "no-prototype-builtins": "off",
+        "no-extra-semi": "error",
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single",
+            {
+                "allowTemplateLiterals": true
+            }
+        ],
+        "semi": [
+            "error",
+            "never"
+        ],
+        "brace-style": [
+            1,
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ]
+    }
+}
