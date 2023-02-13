@@ -34,8 +34,8 @@ export function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyU
 
 
 /** If a string is provided, return it as array else return the value */
-export function strAsArray(arrOrStr) {
-    return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr
+export function strAsArray<T>(arrOrStr: T): T extends string ? string[] : T {
+    return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr as any
 }
 
 type AsArrReturnVal<T, X> = T extends undefined ? (X extends undefined ? void : X) : T extends any[] ? T : T[]
