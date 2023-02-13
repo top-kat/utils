@@ -49,7 +49,6 @@ const topkatUtils = {
     getArrayDiff,
     getNotInArrayA,
     noDuplicateFilter,
-    arrayToObjectSorted,
     pushIfNotExist,
     isNotEmptyArray,
     randomItemInArray,

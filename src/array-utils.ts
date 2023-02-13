@@ -38,8 +38,6 @@ export function strAsArray(arrOrStr) {
     return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr
 }
 
-type NotType<type, T> = Exclude<T, type>
-
 type AsArrReturnVal<T, X> = T extends undefined ? (X extends undefined ? void : X) : T extends any[] ? T : T[]
 /** If not an array provided, return the array with the value
  * /!\ NOTE /!\ In case the value is null or undefined, it will return that value
@@ -49,10 +47,12 @@ export function asArray<T extends any[] | any, X>(item: T, returnValueIfUndefine
     else return Array.isArray(item) ? item : [item] as any
 }
 
-/** Array comparison
- * @return {object} { inCommon, notInB, notInA }
- */
-export function compareArrays(arrayA: any[], arrayB: any[], compare = (a, b) => a === b) {
+/** @return {object} { inCommon, notInB, notInA } */
+export function compareArrays<T1, T2>(arrayA: T1[] = [], arrayB: T2[] = [], compare = (a: T1 | T2, b: T1 | T2) => a === b): {
+    inCommon: ReturnType<typeof getArrayInCommon<T1, T2>>
+    notInB: ReturnType<typeof getArrayInCommon<T1, T2>>
+    notInA: ReturnType<typeof getArrayInCommon<T2, T1>>
+} {
     return {
         inCommon: getArrayInCommon(arrayA, arrayB, compare),
         notInB: getNotInArrayA(arrayB, arrayA, compare),
@@ -60,18 +60,14 @@ export function compareArrays(arrayA: any[], arrayB: any[], compare = (a, b) => 
     }
 }
 
-/**
- * @return [] only elements that are both in arrayA and arrayB
- */
-export function getArrayInCommon(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
+/** @return [] only elements that are both in arrayA and arrayB  */
+export function getArrayInCommon<T1, T2>(arrayA: T1[] = [], arrayB: T2[] = [], compare = (a: T1 | T2, b: T1 | T2) => a === b): T1[] {
     if (!Array.isArray(arrayA) || !Array.isArray(arrayB)) return []
     else return arrayA.filter(a => arrayB.some(b => compare(a, b)))
 }
 
-/**
- * @return [] only elements that are in arrayB and not in arrayA
- */
-export function getNotInArrayA(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
+/** @return [] only elements that are in arrayB and not in arrayA */
+export function getNotInArrayA<T1, T2>(arrayA: T1[] = [], arrayB: T2[] = [], compare = (a: T1 | T2, b: T1 | T2) => a === b): T2[] {
     if (!Array.isArray(arrayA) && Array.isArray(arrayB)) return arrayB
     else if (!Array.isArray(arrayB)) return []
     else return arrayB.filter(b => !arrayA.some(a => compare(a, b)))
@@ -80,7 +76,7 @@ export function getNotInArrayA(arrayA = [], arrayB = [], compare = (a, b) => a =
 /**
  * @return [] only elements that are in neither arrayA and arrayB
  */
-export function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a === b): any[] {
+export function getArrayDiff<T1, T2>(arrayA: T1[] = [], arrayB: T2[] = [], compare = (a: T1 | T2, b: T1 | T2) => a === b): (T1 | T2)[] {
     return [...getNotInArrayA(arrayA, arrayB, compare), ...getNotInArrayA(arrayB, arrayA, compare)]
 }
 
@@ -88,30 +84,13 @@ export function getArrayDiff(arrayA = [], arrayB = [], compare = (a, b) => a ===
  * @param {function} comparisonFn default:(a, b) => a === b. A function that shall return true if two values are considered equal
  * @return {array|function}
  */
-export function noDuplicateFilter(arr, comparisonFn = (a, b) => a === b): any[] {
+export function noDuplicateFilter<T>(arr: T[], comparisonFn = (a: T, b: T) => a === b): T[] {
     return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i)
 }
 
 /** Count number of occurence of item in array */
 export function arrayCount(item: any, arr: any[]): number {
     return arr.reduce((total, item2) => item === item2 ? total + 1 : total, 0)
-}
-
-/**
- * Sort an array in an object of subArrays, no duplicate.
- * @param {Array} array 
- * @param {function} getFieldFromItem (itemOfArray) => field[String|Number]
- * tell me how you want to sort your Array
- */
-export function arrayToObjectSorted(array, getFieldFromItem) {
-    const res = {}
-
-    array.forEach(item => {
-        objForceWriteIfNotSet(res, getFieldFromItem(item), [])
-        res[getFieldFromItem(item)].push(item)
-    })
-
-    return res
 }
 
 /**
