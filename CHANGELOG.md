@@ -1,3 +1,9 @@
+### v1.2.20
+* remove arrayToObjectSorted
+* greatly improve typings on all compareArrays functions
+* improve error display and logging, adding originalError to extraInfos, cleanStackTrace of original error
+* added eslintconfig
+
 ### v1.2.17
 * added a relevant toString method to DescriptiveError class
 * improved error logging
