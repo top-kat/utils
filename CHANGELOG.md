@@ -1,3 +1,6 @@
+### v1.2.21
+* FIX error was not logging in some case with DescriptieError
+
 ### v1.2.20
 * remove arrayToObjectSorted
 * greatly improve typings on all compareArrays functions
