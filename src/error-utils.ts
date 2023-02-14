@@ -63,16 +63,20 @@ export class DescriptiveError extends Error {
         const { doNotWaitOneFrameForLog = false, ...optionsClean } = options
         this.options = optionsClean
         if (optionsClean.err) optionsClean.err.hasBeenLogged = true
+
+        this.parseError()
+
         this.hasBeenLogged = false
         if (doNotWaitOneFrameForLog) this.log()
         else setTimeout(() => {
-            if (!this.hasBeenLogged) this.log() // wait one event loop to see if not catched
+            // wait one event loop because it can be catched in a parent module
+            // and it can be logged manually sometimes
+            if (!this.hasBeenLogged) this.log()
         })
 
         const { onError = () => { } } = configFn()
         onError(msg, options)
 
-        this.parseError()
     }
     parseError(forCli = false) {
 
