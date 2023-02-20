@@ -1,3 +1,6 @@
+### v1.2.22
+* remove usage of array.at(-1) since it's not compatible with react native or older versions of node
+
 ### v1.2.21
 * FIX error was not logging in some case with DescriptieError
 
