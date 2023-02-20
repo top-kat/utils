@@ -8,7 +8,7 @@ import { isObject } from "./is-object"
 export function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
     const results = []
     for (let i = 0; i < nbIterations; i++) {
-        const prevValue = results.at(-1) // [results.length - 1]
+        const prevValue = results[results.length - 1]
         results.push(callback(i, prevValue, results))
     }
     return results
