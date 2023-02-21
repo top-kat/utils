@@ -85,28 +85,40 @@ export function findByAddressAll(obj, addr, returnAddresses = false) {
 }
 
 /** Enforce writing subItems. Eg: user.name.blah will ensure all are set until the writing of the last item
- * NOTE: doesn't work with arrays
+ * NOTE: doesn't work when parent is array
  */
-export function objForceWrite<MainObj extends Record<string, any>>(obj: MainObj, addr: string, item): MainObj {
+export function objForceWrite<MainObj extends Record<string, any>>(obj: MainObj, addr: string, item, options: { doNotWriteFinalValue?: boolean } = {}): MainObj {
+    const { doNotWriteFinalValue = false } = options
+    const writeFinalValue = !doNotWriteFinalValue
+
     const chunks = addr.replace(/\.?\[(\d+)\]/g, '.[$1').split('.')
     let lastItem: any = obj
     chunks.forEach((chunkRaw, i) => {
         const chunk = chunkRaw.replace(/^\[/, '')
-        if (i === chunks.length - 1) lastItem[chunk] = item
-        else if (!isset(lastItem[chunk])) {
+        if (i === chunks.length - 1) {
+            if (writeFinalValue) lastItem[chunk] = item
+        } else if (!isset(lastItem[chunk])) {
             const nextChunk = chunks[i + 1]
             if (isset(nextChunk) && nextChunk.startsWith('[')) lastItem[chunk] = []
             else lastItem[chunk] = {}
-        } else if (typeof lastItem[chunk] !== 'object') throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks: chunks.map(c => c.replace(/\[(\d+)/, '[$1]')), actualValueOfItem: lastItem[chunk], actualChunk: chunk, chunkIndex: i })
+        } else if (typeof lastItem[chunk] !== 'object') {
+            throw new DescriptiveError(`itemNotTypeObjectOrArrayInAddrChainForObjForceWrite`, { code: 500, origin: 'Validator', chunks: chunks.map(c => c.replace(/\[(\d+)/, '[$1]')), actualValueOfItem: lastItem[chunk], actualChunk: chunk, chunkIndex: i })
+        }
         lastItem = lastItem[chunk]
     })
     return obj
 }
 
+export function forcePathInObject<MainObj extends Record<string, any>>(obj: MainObj, addr: string): MainObj {
+    return objForceWrite(obj, addr, undefined, { doNotWriteFinalValue: true })
+}
+
+export const objForceWritePath = forcePathInObject
+
 /** Enforce writing subItems, only if obj.addr is empty.
  * Eg: user.name.blah will ensure all are set until the writing of the last item
  * if user.name.blah has a value it will not change it.
- * NOTE: doesn't work with arrays
+ * NOTE: doesn't work when parent is array
  */
 export function objForceWriteIfNotSet<MainObj extends Record<string, any>>(obj: MainObj, addr: string, item): MainObj {
     if (!isset(findByAddress(obj, addr))) return objForceWrite(obj, addr, item)
