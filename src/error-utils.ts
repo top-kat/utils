@@ -32,7 +32,7 @@ export function err422IfNotSet(o) {
     if (m.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: 422, origin: 'Validator', varNames: m.join(', ') })
 }
 
-export async function tryCatch(callback: Function, onErr: Function = () => { }) {
+export async function tryCatch<T>(callback: () => Promise<T>, onErr: Function = () => { }): Promise<T> {
     try {
         return await callback()
     } catch (err) {
@@ -40,6 +40,7 @@ export async function tryCatch(callback: Function, onErr: Function = () => { }) 
     }
 }
 
+export const failSafe = tryCatch // ALIAS
 
 function extraInfosRendererDefault(extraInfos) {
     return [
