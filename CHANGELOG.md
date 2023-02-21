@@ -1,3 +1,8 @@
+### v1.2.23
+* Added forcePathInObject() to force an existing path in an object, like an empty object or array
+* adding failSafe as an alias of tryCatch for readability
+* improving type for tryCatch()
+
 ### v1.2.22
 * remove usage of array.at(-1) since it's not compatible with react native or older versions of node
 
