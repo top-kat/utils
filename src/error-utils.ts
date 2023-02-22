@@ -32,11 +32,14 @@ export function err422IfNotSet(o) {
     if (m.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: 422, origin: 'Validator', varNames: m.join(', ') })
 }
 
-export async function tryCatch<T>(callback: () => Promise<T>, onErr: Function = () => { }): Promise<T> {
+/** Works natively with sync AND async functions */
+export function tryCatch<T>(callback: () => T, onErr: Function = () => { }): T {
     try {
-        return await callback()
+        const result = callback()
+        if (result instanceof Promise) return result.catch(e => onErr(e)) as T
+        else return result
     } catch (err) {
-        return await onErr(err)
+        return onErr(err)
     }
 }
 
