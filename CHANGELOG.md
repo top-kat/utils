@@ -1,3 +1,6 @@
+### v1.2.24
+* improve tryCatch / failSafe to work with async and sync functions natively
+
 ### v1.2.23
 * Added forcePathInObject() to force an existing path in an object, like an empty object or array
 * adding failSafe as an alias of tryCatch for readability
