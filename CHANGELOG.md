@@ -1,3 +1,6 @@
+### v1.2.26
+* improve int typing accepting both string and number
+
 ### v1.2.25
 * FIX isType not working on emty string
 
