@@ -97,7 +97,7 @@ export function validator(...paramsToValidate: ValidatorObject[]) {
 /** Same as validator but return a boolean
  * See {@link validator}
  */
-export function isValid(...paramsToValidate) {
+export function isValid(...paramsToValidate: ValidatorObject[]) {
     const errArray = validatorReturnErrArray(...paramsToValidate)
     return errArray.length ? false : true
 }
@@ -105,7 +105,7 @@ export function isValid(...paramsToValidate) {
 /** Default types + custom types
  * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
  */
-export function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type }) }
+export function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type, emptyAllowed: true }) }
 
 export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, object?] {
     let paramsFormatted: ValidatorObject[] = []
@@ -125,7 +125,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         let name = paramObj.name
         let value = paramObj.value
         let optional = paramObj.optional || false
-        let emptyAllowed = optional || paramObj.emptyAllowed || false
+        const emptyAllowed = optional || paramObj.emptyAllowed || false
         if (paramObj.isset === false) paramObj.mustNotBeSet = true // ALIAS 
         const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
 
