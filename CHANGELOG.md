@@ -1,3 +1,6 @@
+### v1.2.25
+* FIX isType not working on emty string
+
 ### v1.2.24
 * improve tryCatch / failSafe to work with async and sync functions natively
 
