@@ -28,7 +28,7 @@ import { objFilterUndefinedRecursive } from './src/object-utils'
 import { removeCircularJSONstringify } from './src/remove-circular-json-stringify'
 
 // ALIASES
-export const int = parseInt
+export const int = (n: string | number) => typeof n === 'number' ? n : parseInt(n)
 export const average = moyenne
 export const arrayUniqueValue = noDuplicateFilter
 export const JSONstringyParse = o => JSON.parse(removeCircularJSONstringify(o))
