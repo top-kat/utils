@@ -7,7 +7,7 @@ import { isEmpty } from "./is-empty"
 import { ErrorOptions } from "./types"
 import { cleanStackTrace } from "./clean-stack-trace"
 import { C } from "./logger-utils"
-export { ErrorOptions } from './types'
+export { type ErrorOptions } from './types'
 
 export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
 
