@@ -206,6 +206,10 @@ export function urlPathJoin(...bits: string[]) {
     return bits.join('/').replace(/\/+/g, '/').replace(/(https?:)\/\/?/, '$1//')
 }
 
+/** file path using ONLY SLASH and not antislash on windows. Remove also starting and trailing slashes */
+export function pathJoinSafe(...pathBits: string[]) {
+    return pathBits.join('/').replace(/\/+/g, '/').replace(/(^\/|\/$)/g, '')
+}
 
 
 export type MiniTemplaterOptions = {
