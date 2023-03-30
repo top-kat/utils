@@ -123,6 +123,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
 
     for (const paramObj of paramsFormatted) {
         let name = paramObj.name
+        const hasValue = paramObj.hasOwnProperty('value')
         let value = paramObj.value
         let optional = paramObj.optional || false
         const emptyAllowed = optional || paramObj.emptyAllowed || false
@@ -130,8 +131,8 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
 
         // accept syntax { 'myVar.var2': myVar.var2, ... }
-        if (!isset(name)) {
-            name = Object.keys(paramObj).find(param => !['in', 'eq', 'lte', 'gte', 'name', 'value', 'type', 'regexp', 'minLength', 'maxLength', 'optional', 'emptyAllowed', 'mustNotBeSet', 'includes', 'length'].includes(param))
+        if (!isset(name) && !hasValue) {
+            name = Object.keys(paramObj).find(param => !['name', 'value', 'type', 'eq', 'neq', 'in', 'lt', 'gt', 'lte', 'gte', 'length', 'minLength', 'maxLength', 'emptyAllowed', 'regexp', 'mustNotBeSet', 'isset', 'optional', 'isArray'].includes(param))
             if (isset(name)) value = paramObj[name]
         }
         // if nameString ends by $ sign it is optional
