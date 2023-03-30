@@ -1,3 +1,6 @@
+### v1.2.29
+* FIX validator isset not working on undefined values
+
 ### v1.2.26
 * improve int typing accepting both string and number
 
