@@ -1,3 +1,6 @@
+### v1.2.30
+* FIX type in randomItemInArray
+
 ### v1.2.29
 * FIX validator isset not working on undefined values
 
