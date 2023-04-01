@@ -106,6 +106,6 @@ export function isNotEmptyArray(arr): boolean {
     return Array.isArray(arr) && !!arr.length
 }
 
-export function randomItemInArray<T>(array: T[]): T {
+export function randomItemInArray<T extends Array<any> | (readonly any[])>(array: T): T[number] {
     return array[Math.floor(Math.random() * array.length)]
 }
