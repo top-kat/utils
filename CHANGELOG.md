@@ -1,3 +1,6 @@
+### v1.2.31
+* FIX loading spinner not exported
+
 ### v1.2.30
 * FIX type in randomItemInArray
 
