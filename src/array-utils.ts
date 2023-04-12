@@ -1,9 +1,10 @@
 //----------------------------------------
 // ARRAY UTILS
 //----------------------------------------
-import { ensureObjectProp, objForceWriteIfNotSet } from "./object-utils"
+import { ensureObjectProp } from "./object-utils"
 import { isset } from "./isset"
 
+/** Randomize array in place and return the same array than inputed */
 export function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));

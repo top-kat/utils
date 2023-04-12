@@ -185,7 +185,7 @@ export const C = {
     useTheme() { },
 }
 
-export function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
+function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
     const { isProd } = configFn()
 
     if (errors.length === 1 && typeof errors[0].log === 'function') return errors[0].log()
@@ -229,7 +229,7 @@ export function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
     }
 }
 
-export function stringifyInstanceOfError(err, type = 'error', color: Color = [255, 0, 0], level = 0) { // level = keep track of recursions
+function stringifyInstanceOfError(err, type = 'error', color: Color = [255, 0, 0], level = 0) { // level = keep track of recursions
     if (level > 5) return { str: '' }
     let str = ''
     let stackTrace
@@ -247,7 +247,7 @@ export function stringifyInstanceOfError(err, type = 'error', color: Color = [25
     return { str, stackTrace }
 }
 
-export function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
+function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
     let stackTrace
     const originalError = [C.dim(`ORIGINAL ERROR ${'-'.repeat(39)}\n`)]
     if (extraInfoOriginal instanceof Error) { // case where error is passed directly to extraInfos
@@ -294,8 +294,10 @@ export function cliProgressBar(step, char = '.', msg = `\x1b[2mⓘ Waiting respo
     }
 }
 
+type loadingSpinnerTypes = 'arrow' | 'dots'
+
 /** This allow an intuitive inline loading spinner with a check mark when loading as finished or a red cross for errors  */
-class cliLoadingSpinner {
+export class cliLoadingSpinner {
     /** Please use it like spinner.start('myStuff') then spinner.end()
      * @param {String} type in: ['arrow', 'dots']
      */
@@ -306,7 +308,7 @@ class cliLoadingSpinner {
     progressMessage: string
     interval: any
 
-    constructor(type = 'dots', activeProcess = process) {
+    constructor(type = 'dots' as loadingSpinnerTypes, activeProcess = process) {
         const anims = {
             arrow: {
                 interval: 120,
