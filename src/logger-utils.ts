@@ -19,7 +19,7 @@ export const logger = {
         else console.log(str)
 
         logger.raw.push(str + `\n`)
-        logger.raw = logger.raw.slice(logger.raw.length - configFn().nbOfLogsToKeep, logger.raw.length)
+        logger.raw = logger.raw.slice(logger.raw.length - configFn()?.nbOfLogsToKeep, logger?.raw?.length)
     },
     /**
      * @param {String[]|String} inputLogs
@@ -55,8 +55,8 @@ export const logger = {
         const str = Array.isArray(inputLogs) ? inputLogs.join('\n') : inputLogs
         return str.replace(/\x1b\[.*?m/g, '')
     },
-    raw: [],
-    json: [],
+    raw: [] as string[],
+    json: [] as string[],
 }
 
 /**
@@ -76,27 +76,27 @@ export const C = {
     cyan: str => C.output(36, str),
     blue: str => C.output(34, str),
     primary: str => {
-        const primary: Color = configFn().terminal.theme.primary
+        const primary: Color = configFn()?.terminal?.theme?.primary
         return C.rgb(...primary) + str + C.reset
     },
     reset: '\x1b[0m',
-    output: (code, str = '') => configFn().terminal.noColor ? str : `\x1b[${code}m${str}\x1b[0m`,
+    output: (code, str = '') => configFn()?.terminal?.noColor ? str : `\x1b[${code}m${str}\x1b[0m`,
     // true RGB colors B-*
-    rgb: (r, g = 0, b = 0) => configFn().terminal.noColor || !isset(r, g, b) ? '' : `\x1b[38;2;${r};${g};${b}m`,
-    bg: (r?, g?, b?) => configFn().terminal.noColor || !isset(r, g, b) ? '' : `${'\x1b['}48;2;${r};${g};${b}m`,
+    rgb: (r, g = 0, b = 0) => configFn()?.terminal?.noColor || !isset(r, g, b) ? '' : `\x1b[38;2;${r};${g};${b}m`,
+    bg: (r?, g?, b?) => configFn()?.terminal?.noColor || !isset(r, g, b) ? '' : `${'\x1b['}48;2;${r};${g};${b}m`,
     /** Output a line of title */
-    line(title = '', length = configFn().terminal.theme.pageWidth, clr = configFn().terminal.theme.primary, char = '=', paddingX = configFn().terminal.theme.paddingX) {
-        const padX = ' '.repeat(paddingX)
-        this.log('\u00A0\n' + padX + this.rgb(...clr) + (title + ' ').padEnd(length, char) + this.reset + padX + '\u00A0\n')
+    line(title = '', length = configFn()?.terminal?.theme?.pageWidth, clr = configFn()?.terminal?.theme?.primary, char = '=', paddingX = configFn()?.terminal?.theme?.paddingX) {
+        const padX = ' '.repeat(paddingX || 0)
+        this.log('\u00A0\n' + padX + this.rgb(...clr) + (title + ' ').padEnd(length || 0, char) + this.reset + padX + '\u00A0\n')
     },
     /** Eg: ['cell1', 'cell2', 'cell3'], [25, 15] will start cell2 at 25 and cell 3 at 25 + 15
      * @param {Array} limits default divide the viewport
      */
-    cols(strings, limits = [], clr = configFn().terminal.theme.fontColor, paddingX = configFn().terminal.theme.paddingX) {
+    cols(strings, limits: number[] = [], clr = configFn()?.terminal?.theme?.fontColor, paddingX = configFn()?.terminal?.theme?.paddingX) {
 
         if (!limits.length) {
-            const colWidth = Math.round(configFn().terminal.theme.pageWidth / strings.length)
-            limits = Array(strings.length - 1).fill(2).map((itm, i) => colWidth * i + 1)
+            const colWidth = Math.round(configFn()?.terminal?.theme.pageWidth / strings.length)
+            limits = Array(strings.length - 1).fill(2).map((itm, i) => colWidth * i + 1) as number[]
         }
         const str = strings.reduce((glob, str = '', i) => {
             const realCharLength = str.toString().replace(/\x1b\[.*?m/, '').length
@@ -110,15 +110,15 @@ export const C = {
     log(...stringsCtxMayBeFirstParam) {
         stringsCtxMayBeFirstParam.forEach(str => this.logClr(str, undefined, undefined))
     },
-    logClr(str, clr = configFn().terminal.theme.fontColor, paddingX = configFn().terminal.theme.paddingX) {
+    logClr(str, clr = configFn()?.terminal?.theme?.fontColor, paddingX = configFn()?.terminal?.theme?.paddingX) {
         if (!isset(str)) return
-        const padX = ' '.repeat(paddingX)
-        str = padX + (isset(clr) ? this.rgb(...clr) : '') + str.toString().replace(/\n/g, '\n' + padX + (isset(clr) ? this.rgb(...clr) : ''))
+        const padX = ' '.repeat(paddingX || 0)
+        str = padX + (typeof clr !== 'undefined' ? this.rgb(...clr) : '') + str.toString().replace(/\n/g, '\n' + padX + (typeof clr !== 'undefined' ? this.rgb(...clr) : ''))
         logger.log(str + this.reset, 'info')
     },
     info(...str) {
         str.forEach((s, i) => {
-            if (i === 0) this.logClr('ⓘ  ' + s, configFn().terminal.theme.primary)
+            if (i === 0) this.logClr('ⓘ  ' + s, configFn()?.terminal?.theme?.primary)
             else this.log(this.dimStrSplit(s))
         })
         this.log(' ')
@@ -138,7 +138,7 @@ export const C = {
     applicationError: (color, ...str) => logErrPrivate('warn', color, ...str),
     warningLight: (color, ...str) => logErrPrivate('warn', [196, 120, 52], ...str),
     dimStrSplit(...logs) {
-        let logsStr = []
+        let logsStr: string[] = []
         logs.filter(isset).forEach(log => log.toString().split('\n').forEach(line => line && logsStr.push(this.dim(`    ${line}`))))
         return logsStr.join('\n')
     },
@@ -159,26 +159,26 @@ export const C = {
             }
         })
     },
-    notifications: [],
+    notifications: [] as any[], // fn array
     /** Gratientize lines of text (separated by \n) */
-    gradientize(str = '', rgb1 = configFn().terminal.theme.shade1, rgb2 = configFn().terminal.theme.shade2, bgRgb = configFn().terminal.theme.bgColor, paddingY = configFn().terminal.theme.paddingY, paddingX = configFn().terminal.theme.paddingX) {
+    gradientize(str = '', rgb1 = configFn()?.terminal?.theme?.shade1, rgb2 = configFn()?.terminal?.theme?.shade2, bgRgb = configFn()?.terminal?.theme?.bgColor, paddingY = configFn()?.terminal?.theme?.paddingY, paddingX = configFn()?.terminal?.theme?.paddingX) {
 
         const lines = str.split('\n')
         const largestLine = lines.reduce((sum, line) => sum < line.length ? line.length : sum, 0)
         const rgbParts = rgb1.map((val, i) => (val - rgb2[i]) / (lines.length))
 
         const bg = bgRgb ? this.bg(bgRgb[0], bgRgb[1], bgRgb[2]) : ''
-        const padX = ' '.repeat(paddingX)
+        const padX = ' '.repeat(paddingX || 0)
         const padLine = bg + padX + ' '.padEnd(largestLine, ' ') + padX + '\x1b[0m\n'
 
-        console.log(padLine.repeat(paddingY) +
+        console.log(padLine.repeat(paddingY || 0) +
             lines.reduce((s, line, i) => {
-                return s + bg + padX + this.rgb(...rgb1.map((val, i2) => Math.round(val - i * rgbParts[i2]))) + line.padEnd(largestLine, ' ') + padX + '\x1b[0m\n'
+                return s + bg + padX + this.rgb(...((rgb1 as Color).map((val, i2) => Math.round(val - i * rgbParts[i2]))) as Color) + line.padEnd(largestLine, ' ') + padX + '\x1b[0m\n'
             }, '') +
-            padLine.repeat(paddingY))
+            padLine.repeat(paddingY || 0))
     },
     debugModeLog(title, ...string) {
-        this.logClr('🐞 ' + title, configFn().terminal.theme.debugModeColor, 0)
+        this.logClr('🐞 ' + title, configFn()?.terminal?.theme?.debugModeColor, 0)
         this.log(this.dimStrSplit(...string))
     },
     // DEPRECATED
@@ -286,7 +286,7 @@ function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
  * @param {String} char Default: '.'
  * @param {String} msg String before char. Final output will be `${str}${char.repeat(step)}`
  */
-export function cliProgressBar(step, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
+export function cliProgressBar(step: number, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
     if (isset(process) && isset(process.stdout) && isset(process.stdout.clearLine)) {
         process.stdout.clearLine(0)
         process.stdout.cursorTo(0)
@@ -304,9 +304,9 @@ export class cliLoadingSpinner {
     frameRate: number
     animFrames: string[]
     activeProcess: any
-    frameNb: number
-    progressMessage: string
-    interval: any
+    frameNb: number = 0
+    progressMessage: string = ''
+    interval: any = -1
 
     constructor(type = 'dots' as loadingSpinnerTypes, activeProcess = process) {
         const anims = {
@@ -349,6 +349,6 @@ export class cliLoadingSpinner {
 
 
 export function dim(str = '') {
-    return configFn().terminal.noColor ? str : `\x1b[2m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`
+    return configFn()?.terminal?.noColor ? str : `\x1b[2m${str.toString().split('\n').join('\x1b[0m\n\x1b[2m')}\x1b[0m`
 }
 

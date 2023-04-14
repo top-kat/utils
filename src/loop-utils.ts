@@ -6,7 +6,7 @@ import { err500IfNotSet } from "./error-utils"
 import { isObject } from "./is-object"
 
 export function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
-    const results = []
+    const results: any[] = []
     for (let i = 0; i < nbIterations; i++) {
         const prevValue = results[results.length - 1]
         results.push(callback(i, prevValue, results))
@@ -15,7 +15,7 @@ export function forI<T extends any[] | any>(nbIterations: number, callback: (num
 }
 
 export async function forIasync<T extends any[] | any>(nbIterations: number, callback: (number) => T): Promise<T[]> {
-    const results = []
+    const results: any[] = []
     for (let i = 0; i < nbIterations; i++) {
         results.push(await callback(i))
     }
@@ -41,7 +41,7 @@ export type RecursiveConfig = { disableCircularDependencyRemoval?: boolean }
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
+export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency: any[] = []) {
     err500IfNotSet({ callback })
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
@@ -81,7 +81,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency = []) {
+export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency: any[] = []) {
     err500IfNotSet({ callback })
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {

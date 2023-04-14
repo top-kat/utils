@@ -33,7 +33,7 @@ export async function waitUntilTrue(callback, timeoutSec = 10, errorAfterNSecond
 }
 
 
-const delayedLoopParams = []
+const delayedLoopParams: [any, number, any][] = []
 let isExecuting = false
 
 /** Allow to perform an action in a delayed loop, useful for example to avoid reaching limits on servers. This function can be securely called multiple times.
@@ -46,7 +46,7 @@ export async function executeInDelayedLoop(callback, time = 500, errorCallback =
     if (isExecuting) return
     isExecuting = true
     while (delayedLoopParams.length) {
-        const [callback, time, errorCallback] = delayedLoopParams.shift()
+        const [callback, time, errorCallback] = delayedLoopParams.shift() as any
         try {
             await callback()
             await timeout(time)

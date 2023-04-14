@@ -35,7 +35,7 @@ export const restTestMini = {
     },
     nbSuccess: 0,
     nbError: 0,
-    lastErrors: []
+    lastErrors: [] as any[]
 }
 
 /** if validatorObject param is not set then it will consider checking that the value is set

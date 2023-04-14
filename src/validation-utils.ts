@@ -90,7 +90,7 @@ export type ValidatorObject = {
 }
 export function validator(...paramsToValidate: ValidatorObject[]) {
     const errArray = validatorReturnErrArray(...paramsToValidate)
-    if (errArray.length) throw new DescriptiveError(...errArray)
+    if (errArray.length) throw new DescriptiveError(...(errArray as [string, object]))
 }
 
 
@@ -117,7 +117,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
 
         // parse => name: {myVar1: 'blah, myvar2: myvar2}
         if (typeof param.name === 'object' && !Array.isArray(param.name))
-            Object.keys(param.name).forEach(name => paramsFormatted.push(Object.assign({}, param, { name: name, value: param.name[name] })))
+            Object.keys(param.name).forEach(name => paramsFormatted.push(Object.assign({}, param, { name: name, value: param?.name?.[name] })))
         else paramsFormatted.push(param)
     })
 
@@ -131,28 +131,28 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
 
         // accept syntax { 'myVar.var2': myVar.var2, ... }
-        if (!isset(name) && !hasValue) {
+        if (typeof name !== 'undefined' && !hasValue) {
             name = Object.keys(paramObj).find(param => !['name', 'value', 'type', 'eq', 'neq', 'in', 'lt', 'gt', 'lte', 'gte', 'length', 'minLength', 'maxLength', 'emptyAllowed', 'regexp', 'mustNotBeSet', 'isset', 'optional', 'isArray'].includes(param))
-            if (isset(name)) value = paramObj[name]
+            if (typeof name !== 'undefined') value = paramObj[name]
         }
         // if nameString ends by $ sign it is optional
-        if (isset(name) && /.*\$$/.test(name)) {
+        if (typeof name !== 'undefined' && /.*\$$/.test(name)) {
             name = name.substr(0, name.length - 1)
             optional = true
         }
 
         // DEFINED AND NOT EMPTY
-        if (!isset(value) && optional) continue
-        if (isset(value) && paramObj.mustNotBeSet) return errMess('variableMustNotBeSet')
+        if (typeof value === 'undefined' && optional) continue
+        if (typeof value !== 'undefined' && paramObj.mustNotBeSet) return errMess('variableMustNotBeSet')
         if (paramObj.mustNotBeSet) continue // exit
-        if (!isset(value)) return errMess('requiredVariableEmptyOrNotSet')
+        if (typeof value === 'undefined') return errMess('requiredVariableEmptyOrNotSet')
         if (!emptyAllowed && value === '') return errMess('requiredVariableEmpty')
 
         const isArray = paramObj.isArray
         if (isArray && !Array.isArray(value)) return errMess('wrongTypeForVar', { expectedType: 'array', gotType: typeof value })
 
         // TYPE
-        if (isset(paramObj.type)) {
+        if (typeof paramObj.type !== 'undefined') {
             const types = asArray(paramObj.type) // support for multiple type
             const areSomeTypeValid = types.some(type => {
                 if (type.endsWith('[]')) {
@@ -204,21 +204,21 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                     any: () => true,
                 }
 
-                return isset(basicTypeCheck[type]) && basicTypeCheck[type](value) ||
+                return typeof basicTypeCheck?.[type] !== 'undefined' && basicTypeCheck?.[type](value) ||
                     typeof value === type && type !== 'object' || // for string, number, boolean...
-                    isset(configFn().customTypes[type]) && configFn().customTypes[type].test(value)
+                    typeof configFn()?.customTypes?.[type] !== 'undefined' && configFn()?.customTypes?.[type]?.test(value)
             })
             if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value), gotValue: removeCircularJSONstringify(value).substring(0, 999) })
         }
 
         // GREATER / LESS
-        if (isset(paramObj.gte) && value < paramObj.gte) return errMess(`valueShouldBeSuperiorOrEqualForVar`, { shouldBeSupOrEqTo: paramObj.gte })
-        if (isset(paramObj.lte) && value > paramObj.lte) return errMess(`valueShouldBeInferiorOrEqualForVar`, { shouldBeInfOrEqTo: paramObj.lte })
-        if (isset(paramObj.gt) && value <= paramObj.gt) return errMess(`valueShouldBeSuperiorForVar`, { shouldBeSupOrEqTo: paramObj.gt })
-        if (isset(paramObj.lt) && value >= paramObj.lt) return errMess(`valueShouldBeInferiorForVar`, { shouldBeInfOrEqTo: paramObj.lt })
+        if (typeof paramObj.gte !== 'undefined' && value < paramObj.gte) return errMess(`valueShouldBeSuperiorOrEqualForVar`, { shouldBeSupOrEqTo: paramObj.gte })
+        if (typeof paramObj.lte !== 'undefined' && value > paramObj.lte) return errMess(`valueShouldBeInferiorOrEqualForVar`, { shouldBeInfOrEqTo: paramObj.lte })
+        if (typeof paramObj.gt !== 'undefined' && value <= paramObj.gt) return errMess(`valueShouldBeSuperiorForVar`, { shouldBeSupOrEqTo: paramObj.gt })
+        if (typeof paramObj.lt !== 'undefined' && value >= paramObj.lt) return errMess(`valueShouldBeInferiorForVar`, { shouldBeInfOrEqTo: paramObj.lt })
 
         // IN VALUES
-        if (isset(paramObj.in)) {
+        if (typeof paramObj.in !== 'undefined') {
             const equals = Array.isArray(paramObj.in) ? paramObj.in : [paramObj.in]
             if (!equals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { supportedValues: JSON.stringify(equals) })
         }
@@ -236,19 +236,19 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         }
 
         // INCLUDES
-        if (isset(paramObj.includes) && !value.includes(paramObj.includes))
+        if (typeof paramObj.includes !== 'undefined' && !value.includes(paramObj.includes))
             return errMess(`wrongValueForVar`, { shouldIncludes: paramObj.includes })
 
         // REGEXP
-        if (isset(paramObj.regexp) && !paramObj.regexp.test(value))
+        if (typeof paramObj.regexp !== 'undefined' && !paramObj.regexp.test(value))
             return errMess(`wrongValueForVar`, { shouldMatchRegexp: paramObj.regexp.toString() })
 
         // MIN / MAX LENGTH works for number length. Eg: 20180101.length == 8
-        if (isset(paramObj.minLength) && paramObj.minLength > (typeof value == 'number' ? value + '' : value).length)
+        if (typeof paramObj.minLength !== 'undefined' && paramObj.minLength > (typeof value == 'number' ? value + '' : value).length)
             return errMess(`wrongLengthForVar`, { minLength: paramObj.minLength })
-        if (isset(paramObj.maxLength) && paramObj.maxLength < (typeof value == 'number' ? value + '' : value).length)
+        if (typeof paramObj.maxLength !== 'undefined' && paramObj.maxLength < (typeof value == 'number' ? value + '' : value).length)
             return errMess(`wrongLengthForVar`, { maxLength: paramObj.maxLength })
-        if (isset(paramObj.length) && paramObj.length !== (typeof value == 'number' ? value + '' : value).length)
+        if (typeof paramObj.length !== 'undefined' && paramObj.length !== (typeof value == 'number' ? value + '' : value).length)
             return errMess(`wrongLengthForVar`, { length: paramObj.length })
     }
 

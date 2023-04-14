@@ -5,10 +5,11 @@ import { isType } from "./validation-utils"
 import { isset } from "./isset"
 
 /** @return undefined if cannot find _id */
-export function getId(obj: any = {}): string {
+export function getId(obj: any = {}): string | undefined {
     if (!obj) return // null case
     if (obj._id) return obj._id.toString()
     else if (isType(obj, 'objectId')) return obj.toString()
+    else return
 }
 
 /** Merge filter with correct handling of OR and AND 

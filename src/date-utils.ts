@@ -200,7 +200,7 @@ export function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, ou
 export function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat?: DateObjectFormat, sameDayAllowed?: boolean): Date
 export function nextWeekDay(fromDate, weekDayInt?: 0 | 1 | 2 | 3 | 4 | 5 | 6, outputFormat = 'date', sameDayAllowed = false): any {
     const date = getDateAsObject(fromDate)
-    if (!isset(weekDayInt)) weekDayInt = (date.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6)
+    if (typeof weekDayInt === 'undefined') weekDayInt = (date.getDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6)
     const toAdd = !sameDayAllowed && date.getDay() === weekDayInt ? 7 : 0
     date.setUTCDate(date.getUTCDate() + toAdd + (7 + weekDayInt - date.getUTCDay()) % 7)
     return getDateAs(date, outputFormat as any)

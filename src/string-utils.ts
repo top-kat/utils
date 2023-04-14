@@ -96,8 +96,8 @@ export function getValuesBetweenStrings(str: string, openingOrSeparator, closing
 
     str = str.replace(/<</g, '§§"').replace(/>>/g, '"§§')
 
-    const arrayValues = []
-    const betweenArray = []
+    const arrayValues: string[] = []
+    const betweenArray: string[] = []
     let level = 0
     let ignoreUntil: boolean | string = false
     let actualValue = ''
@@ -170,7 +170,7 @@ export function convertAccentedCharacters(str, config: { removeNumbers?: boolean
 }
 
 
-let generatedTokens = [] // cache to avoid collision
+let generatedTokens: string[] = [] // cache to avoid collision
 let lastTs = new Date().getTime()
 /** minLength 8 if unique 
 * @param {Number} length default: 20
@@ -213,9 +213,9 @@ export function pathJoinSafe(...pathBits: string[]) {
 
 
 export type MiniTemplaterOptions = {
-    valueWhenNotSet?: string
-    regexp?: RegExp
-    valueWhenContentUndefined?: string
+    valueWhenNotSet: string
+    regexp: RegExp
+    valueWhenContentUndefined: string
 }
 /** Replace variables in a string like: `Hello {{userName}}!`
  * @param {String} content 
@@ -224,14 +224,14 @@ export type MiniTemplaterOptions = {
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
-export function miniTemplater(content: string, varz: ObjectGeneric, options: MiniTemplaterOptions = {}): string {
-    options = {
+export function miniTemplater(content: string, varz: ObjectGeneric, options: Partial<MiniTemplaterOptions> = {}): string {
+    const options2:MiniTemplaterOptions = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
         valueWhenContentUndefined: '',
         ...options,
     }
-    return isset(content) ? content.replace(options.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options.valueWhenNotSet) : options.valueWhenContentUndefined
+    return isset(content) ? content.replace(options2.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options2.valueWhenNotSet) : options2.valueWhenContentUndefined
 }
 
 

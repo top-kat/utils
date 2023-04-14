@@ -5,6 +5,7 @@
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "noImplicitAny": false,
+        "strict": true,
         "declaration": true,
         "moduleResolution": "node",
         "sourceMap": true,

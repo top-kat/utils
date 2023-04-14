@@ -17,6 +17,8 @@ export function randomEmoji(msg, length = 20) {
     return o.padEnd(length, ' ') + (msg ? '< ' + msg : '')
 }
 
+type CompObject = { char: string, replacement: string }
+
 /** STRING COMPRESSOR
  * peut facilement être utilisé par uncomp directement (stock les metadonnées sur la comp)
  */
@@ -27,7 +29,7 @@ export function compAuto(str) {
 
 
     const unusedChars = utf8Chars.filter(c => !str.includes(c))
-    const charMap = []
+    const charMap: CompObject[] = []
 
     const mostFreqStr = str2 => {
         const o = {}
@@ -51,7 +53,7 @@ export function compAuto(str) {
         strLengthBefore = str.length
         const toReplace = mostFreqStr(str)
         if (isset(toReplace)) {
-            const char = unusedChars.shift()
+            const char: string = unusedChars.shift() as any
             charMap.push({ char, replacement: toReplace }) // { ù: 'aa' }
             str = str.replace(new RegExp(escapeRegexp(toReplace), 'g'), char)
         }
@@ -67,15 +69,15 @@ export function compAuto(str) {
 }
 
 export function unComp(str) {
-    const charMap = []
+    const charMap: CompObject[] = []
     const map = str.split('§')
     str = map.pop()
     map.forEach(e => {
-        let char = e[0]
+        const char: string = e[0]
         let replacement = e.substring(1, 999)
         if (replacement.includes('Ơ')) {
-            const [char, nb] = replacement.split('Ơ')
-            replacement = char.repeat(nb)
+            const [char, nb] = replacement.split('Ơ') as [string, string]
+            replacement = char.repeat(parseInt(nb))
         }
         charMap.push({ char, replacement })
     })

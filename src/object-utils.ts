@@ -76,7 +76,7 @@ export function findByAddressAll(obj, addr, returnAddresses = false) {
         .replace(/\.\*/g, '.[^.]+') // replace * by [^. (all but a point)]
         + '$')
 
-    const matchingItems = []
+    const matchingItems: any[] = []
 
     recursiveGenericFunctionSync(obj, (item, address) => {
         if (addrRegexp.test(address)) matchingItems.push(returnAddresses ? [address, item] : item)
@@ -122,6 +122,7 @@ export const objForceWritePath = forcePathInObject
  */
 export function objForceWriteIfNotSet<MainObj extends Record<string, any>>(obj: MainObj, addr: string, item): MainObj {
     if (!isset(findByAddress(obj, addr))) return objForceWrite(obj, addr, item)
+    else return obj
 }
 
 /** Merge mixins into class. Use it in the constructor like: mergeMixins(this, {myMixin: true}) */
@@ -140,10 +141,10 @@ export function cloneObject<MainObj extends Record<string, any>>(o: MainObj): Ma
 /** Deep clone. WILL REMOVE circular references */
 export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cache = []): MainObj {
 
-    let copy
+    let copy: any | any[]
     // usefull to not modify 1st level objet by lower levels
     // this is required for the same object to be referenced not in a redundant way
-    const newCache = [...cache]
+    const newCache: any[] = [...cache]
     if (obj instanceof Date) return new Date(obj) as any
 
     // Handle Array
@@ -152,7 +153,7 @@ export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cac
         newCache.push(obj)
         copy = []
         for (var i = 0, len = obj.length; i < len; i++) {
-            copy[i] = deepClone(obj[i], newCache)
+            copy[i] = deepClone(obj[i], newCache as any)
         }
         return copy
     }
@@ -163,7 +164,7 @@ export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cac
         copy = {}
         for (var key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                copy[key] = deepClone(obj[key], newCache)
+                copy[key] = deepClone(obj[key], newCache as any)
             }
         }
         return copy
@@ -336,7 +337,7 @@ export function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, 
 export function flattenObject(data, config: { withoutArraySyntax?: boolean, withArraySyntaxMinified?: boolean } = {}) {
     const { withoutArraySyntax = false, withArraySyntaxMinified = false } = config
     const result = {}
-    const seenObjects = [] // avoidCircular reference to infinite loop
+    const seenObjects: any[] = [] // avoidCircular reference to infinite loop
     const recurse = (cur, prop) => {
         if (Array.isArray(cur)) {
             let l = cur.length

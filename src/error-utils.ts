@@ -18,7 +18,7 @@ export function errIfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNot
 export function err500IfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, true, objOfVarNamesWithValues) }
 
 export function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
-    let missingVars = []
+    let missingVars: string[] = []
     for (let prop in objOfVarNamesWithValues) {
         if (!isset(objOfVarNamesWithValues[prop]) || (checkEmpty && isEmpty(objOfVarNamesWithValues[prop]))) missingVars.push(prop)
     }
@@ -27,7 +27,7 @@ export function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
 
 
 export function err422IfNotSet(o) {
-    let m = []
+    let m: any[] = []
     for (let p in o) if (!isset(o[p])) m.push(p)
     if (m.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: 422, origin: 'Validator', varNames: m.join(', ') })
 }
@@ -53,8 +53,8 @@ function extraInfosRendererDefault(extraInfos) {
 }
 
 export class DescriptiveError extends Error {
-    errorDescription: { [k: string]: any }
-    code: number
+    errorDescription: { [k: string]: any } = {}
+    code?: number
     msg: string
     options: ErrorOptions
     hasBeenLogged: boolean = false
