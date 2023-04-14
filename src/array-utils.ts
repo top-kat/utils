@@ -22,7 +22,7 @@ export function shuffleArray(array) {
  * @param {Boolean} onlyUniqueValues default:false; may be true or a comparision function; (a,b) => return true if they are the same like (a, b) => a.name === b.name
  * @return obj[addr] eventually processed by the callback
  */
-export function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyUniqueValues: Function) {
+export function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyUniqueValues?: Function) {
     return ensureObjectProp(obj, addr, [], objValue => {
         if (isset(onlyUniqueValues)) {
             let duplicateFound = false
