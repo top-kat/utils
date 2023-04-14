@@ -1,3 +1,6 @@
+### v1.2.33
+* FIX typescript errors when on projects with strict mode
+
 ### v1.2.31
 * FIX loading spinner not exported
 
