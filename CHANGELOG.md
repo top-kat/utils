@@ -1,3 +1,6 @@
+### v1.2.34
+* FIX "cannot read propertie undefined..." error when logging an undefined entry
+
 ### v1.2.33
 * FIX typescript errors when on projects with strict mode
 
