@@ -142,6 +142,8 @@ export class DescriptiveError extends Error {
         if (err) this.errorDescription.originalError = `${err.code ? err.code + ': ' : ''}${err.message || err.msg || err.toString()}`
 
         this.logs = errorLogs
+
+        return errorLogs
     }
     log() {
         if (!this.hasBeenLogged) this.logs.forEach(errLine => C.error(false, errLine))
