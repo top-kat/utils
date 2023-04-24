@@ -1,3 +1,6 @@
+### v1.2.35
+* other fix logFromOtherErr is not iterable
+
 ### v1.2.34
 * FIX "cannot read propertie undefined..." error when logging an undefined entry
 
