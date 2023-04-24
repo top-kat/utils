@@ -216,7 +216,7 @@ function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
 
     if (errors.length && errors[0]) {
         const messages = errors.map((e, i) => {
-            if (typeof e.log === 'function') {
+            if (typeof e?.log === 'function') {
                 e.log()
                 return ''
             } else return getStringFromErr(e, i)
