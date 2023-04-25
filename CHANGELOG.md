@@ -1,3 +1,6 @@
+### v1.2.36
+* FIX typeof config partial and required
+
 ### v1.2.35
 * other fix logFromOtherErr is not iterable
 
