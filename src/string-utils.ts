@@ -66,7 +66,7 @@ export function lowerCase(...wordBits): string {
     return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('')
 }
 
-export function capitalize1st(str = ''): string { return str[0].toUpperCase() + str.slice(1) }
+export function capitalize1st(str = ''): string { return str ? str[0].toUpperCase() + str.slice(1) : str }
 
 export function camelCaseToWords(str: string): string[] {
     return str ? str.trim().replace(/([A-Z])/g, '-$1').toLowerCase().split('-') : []
