@@ -154,19 +154,25 @@ export function getValuesBetweenStrings(str: string, openingOrSeparator, closing
  * @param {Object} config { removeSpecialChars: false, removeNumbers: false, removeSpaces: false }
  * @returns String with all accentued char replaced by their non accentued version + config formattting
  */
-export function convertAccentedCharacters(str, config: { removeNumbers?: boolean, removeSpecialChars?: boolean, removeSpaces?: boolean } = {}) {
+export function convertAccentedCharacters(str : string, config: { removeNumbers?: boolean, removeSpecialChars?: boolean, removeSpaces?: boolean } = {}) {
     let output = str
+        .trim()
         .replace(/[àáâãäå]/g, 'a')
+        .replace(/[ÀÁÂÃÄÅ]/g, 'A')
         .replace(/ç/g, 'c')
+        .replace(/Ç/g, 'C')
         .replace(/[èéêë]/g, 'e')
+        .replace(/[ÈÉÊË]/g, 'E')
         .replace(/[ìíîï]/g, 'i')
+        .replace(/[ÌÍÎÏ]/g, 'I')
         .replace(/[ôö]/g, 'o')
+        .replace(/[ÔÖ]/g, 'O')
         .replace(/[ùúû]/g, 'u')
-        .replace(/(^\s*|\s*$)/g, '')
-    if (config.removeNumbers === true) output = output.replace(/\d+/g, '')
-    if (config.removeSpecialChars === true) output = output.replace(/[^A-Za-z0-9 ]/g, '')
-    if (config.removeSpaces === true) output = output.replace(/\s+/g, '')
-    return output
+        .replace(/[ÙÚÛ]/g, 'U')
+    if (config.removeNumbers === true) output = output.replace(/\d+/g, '');
+    if (config.removeSpecialChars === true) output = output.replace(/[^A-Za-z0-9 ]/g, '');
+    if (config.removeSpaces === true) output = output.replace(/\s+/g, '');
+    return output;
 }
 
 
