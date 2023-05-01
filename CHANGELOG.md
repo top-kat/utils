@@ -1,3 +1,6 @@
+### v1.2.38
+* convertAccentedCharacters now taking in account upper case letters
+
 ### v1.2.36
 * FIX typeof config partial and required
 
