@@ -1,3 +1,6 @@
+### v1.2.39
+* FIX capitalize1st error when emptyy string
+
 ### v1.2.38
 * convertAccentedCharacters now taking in account upper case letters
 
