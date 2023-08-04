@@ -48,7 +48,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
         const result = addr$ === '' ? true : await callback(item, addr$, lastElementKey, parent)
 
         if (result !== false) {
-            const addr = addr$ ? addr$ + '.' : ''
+            const addr = addr$ ? addr$  : ''
             if (Array.isArray(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(item.map(
@@ -57,7 +57,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
             } else if (isObject(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(Object.entries(item).map(
-                    ([key, val]) => recursiveGenericFunction(val, callback, config, addr + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency)
+                    ([key, val]) => recursiveGenericFunction(val, callback, config, addr + '.' + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency)
                 ))
             }
         }
@@ -88,13 +88,13 @@ export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callba
         const result = addr$ === '' ? true : callback(item, addr$, lastElementKey, parent)
 
         if (result !== false) {
-            const addr = addr$ ? addr$ + '.' : ''
+            const addr = addr$ ? addr$  : ''
             if (Array.isArray(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item) // do not up one level
                 item.forEach((e, i) => recursiveGenericFunctionSync(e, callback, config, addr + '[' + i + ']', i, item, techFieldToAvoidCircularDependency))
             } else if (isObject(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
-                Object.entries(item).forEach(([key, val]) => recursiveGenericFunctionSync(val, callback, config, addr + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency))
+                Object.entries(item).forEach(([key, val]) => recursiveGenericFunctionSync(val, callback, config, addr + '.' + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency))
             }
         }
     }
