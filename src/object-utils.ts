@@ -282,7 +282,14 @@ export function ensureObjectProp<MainObj extends Record<string, any>, Addr exten
  * @warn /!\ Array will be merged and duplicate values will be deleted /!\
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified*/
-export function mergeDeep(...objects) {
+export function mergeDeep<
+O1 extends Record<string, any>,
+O2 extends Record<string, any> = Record<string, any>,
+O3 extends Record<string, any> = Record<string, any>,
+O4 extends Record<string, any> = Record<string, any>,
+O5 extends Record<string, any> = Record<string, any>,
+O6 extends Record<string, any> = Record<string, any>,
+>(...objects: [O1, O2?, O3?, O4?, O5?, O6?]) : O1 & O2 & O3 & O4 & O5 & O6 {
     return mergeDeepConfigurable(
         (previousVal, currentVal) => [...previousVal, ...currentVal].filter((elm, i, arr) => arr.indexOf(elm) === i),
         (previousVal, currentVal) => mergeDeep(previousVal, currentVal),
@@ -295,7 +302,14 @@ export function mergeDeep(...objects) {
  * @warn /!\ Array will be replaced by the latest object /!\
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified */
-export function mergeDeepOverrideArrays(...objects) {
+export function mergeDeepOverrideArrays<
+O1 extends Record<string, any>,
+O2 extends Record<string, any> = Record<string, any>,
+O3 extends Record<string, any> = Record<string, any>,
+O4 extends Record<string, any> = Record<string, any>,
+O5 extends Record<string, any> = Record<string, any>,
+O6 extends Record<string, any> = Record<string, any>,
+>(...objects: [O1, O2?, O3?, O4?, O5?, O6?]) : O1 & O2 & O3 & O4 & O5 & O6 {
     return mergeDeepConfigurable(
         undefined,
         (previousVal, currentVal) => mergeDeepOverrideArrays(previousVal, currentVal),
@@ -312,9 +326,20 @@ export function mergeDeepOverrideArrays(...objects) {
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified
  */
-export function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, replacerForObjects, replacerDefault = (prev, curr) => curr, ...objects) {
+export function mergeDeepConfigurable<
+    O1 extends Record<string, any>,
+    O2 extends Record<string, any> = Record<string, any>,
+    O3 extends Record<string, any> = Record<string, any>,
+    O4 extends Record<string, any> = Record<string, any>,
+    O5 extends Record<string, any> = Record<string, any>,
+    O6 extends Record<string, any> = Record<string, any>,
+>(
+    replacerForArrays = (prev, curr) => curr, replacerForObjects, 
+    replacerDefault = (prev, curr) => curr, 
+    ...objects: [O1, O2?, O3?, O4?, O5?, O6?]
+): O1 & O2 & O3 & O4 & O5 & O6 {
     return objects.reduce((actuallyMerged, obj) => {
-        Object.keys(obj).forEach(key => {
+        if(obj && typeof obj === 'object') Object.keys(obj).forEach(key => {
             const previousVal = actuallyMerged[key]
             const currentVal = obj[key]
 
@@ -328,13 +353,13 @@ export function mergeDeepConfigurable(replacerForArrays = (prev, curr) => curr, 
         })
 
         return actuallyMerged
-    }, {})
+    }, {}) as any
 }
 
 /** { a: {b:2}} => {'a.b':2} useful for translations
  * NOTE: will remove circular references
  */
-export function flattenObject(data, config: { withoutArraySyntax?: boolean, withArraySyntaxMinified?: boolean } = {}) {
+export function flattenObject(data, config: { withoutArraySyntax?: boolean, withArraySyntaxMinified?: boolean } = {}): Record<string, any> {
     const { withoutArraySyntax = false, withArraySyntaxMinified = false } = config
     const result = {}
     const seenObjects: any[] = [] // avoidCircular reference to infinite loop
@@ -367,7 +392,7 @@ export function flattenObject(data, config: { withoutArraySyntax?: boolean, with
 }
 
 /** {'a.b':2} => { a: {b:2}} */
-export function unflattenObject(data) {
+export function unflattenObject(data: Record<string, any>): Record<string, any> {
     const newO = {}
     for (const [addr, value] of Object.entries(data)) objForceWrite(newO, addr, value)
     return newO
