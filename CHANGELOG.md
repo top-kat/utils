@@ -1,3 +1,6 @@
+### v1.2.41
+* improving types for object helpers
+
 ### v1.2.39
 * FIX capitalize1st error when emptyy string
 
