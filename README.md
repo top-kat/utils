@@ -6,10 +6,11 @@ It's strength is that it has a straight functional naming and is fast and lightw
 
 ``` javascript
 const topkatUtils = {
-    isset, // most useful check undefined or null values but not falsey
+    isset, // check undefined or null values but not falsey
     random, // random number between two values
     cln, // clean string for print. Eg: undefined, null, NaN => '-'
     pad, // simple padStart for numbers
+    isObject, // check is value is a "straight" object (not null, not date, not an array, not undefined...)
     /** return the number or the closest number of the range
      * * nb min max  => returns
      * * 7  5   10   => 7 // in the range
@@ -26,13 +27,14 @@ const topkatUtils = {
     sortUrlsByDeepnessInArrayOrObject,
     // like nodeJs path.join() but for urls
     urlPathJoin,
-    // miniTemplater(`Hello {{template}}`, {template: 'John'}) => `Hello John`
+    // miniTemplater(`Hello {{name}}`, { name: 'John' }) => `Hello John`
     miniTemplater,
-    // is number between
     asArray,
     compareArrays,
+    // is number between
     isBetween,
     simpleObjectMaskOrSelect,
+    // get the environment variables (Eg. NODE_ENV) with parsed values ("true" => true, "4" => 4). On env variables all values are strings
     ENV,
     parseBool,
 
@@ -98,6 +100,7 @@ const topkatUtils = {
     upperCase,
     capitalize1st,
     camelCaseToWords,
+    nbOccurenceInString,
 
     firstMatch,
     allMatches,

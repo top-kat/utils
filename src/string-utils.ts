@@ -5,12 +5,10 @@ import { err500IfEmptyOrNotSet } from "./error-utils"
 import { ObjectGeneric } from "./types"
 import { isset } from "./isset"
 
-const getWordBits = wb => Array.isArray(wb[0]) ? wb[0] : wb
+const getWordBits = (wb: string[] | [string[]]): string[] => Array.isArray(wb[0]) ? wb[0] : wb as any
 
 /**Eg: camelCase */
-export function camelCase(wordBits: string[]): string
-export function camelCase(...wordBits: string[]): string
-export function camelCase(...wordBits): string {
+export function camelCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('')
 }
@@ -18,9 +16,7 @@ export function camelCase(...wordBits): string {
 /**Eg: snake_case
  * trimmed but not lowerCased
  */
-export function snakeCase(wordBits: string[]): string
-export function snakeCase(...wordBits: string[]): string
-export function snakeCase(...wordBits): string {
+export function snakeCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map(w => w.trim()).join('_')
 }
@@ -28,40 +24,30 @@ export function snakeCase(...wordBits): string {
  * trimmed AND lowerCased
  * undefined, null... => ''
  */
-export function kebabCase(wordBits: string[]): string
-export function kebabCase(...wordBits: string[]): string
-export function kebabCase(...wordBits): string {
+export function kebabCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('-')
 }
 /**Eg: PascalCase undefined, null... => '' */
-export function pascalCase(wordBits: string[]): string
-export function pascalCase(...wordBits: string[]): string
-export function pascalCase(...wordBits): string {
+export function pascalCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map((w, i) => capitalize1st(w)).join('')
 }
 
 /**Eg: Titlecase undefined, null... => '' */
-export function titleCase(wordBits: string[]): string
-export function titleCase(...wordBits: string[]): string
-export function titleCase(...wordBits): string {
+export function titleCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return capitalize1st(wordBitsReal.filter(e => e).map(w => w.trim()).join(''))
 }
 
 /**Eg: UPPERCASE undefined, null... => '' */
-export function upperCase(wordBits: string[]): string
-export function upperCase(...wordBits: string[]): string
-export function upperCase(...wordBits): string {
+export function upperCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map(w => w.trim().toUpperCase()).join('')
 }
 
 /**Eg: lowercase undefined, null... => '' */
-export function lowerCase(wordBits: string[]): string
-export function lowerCase(...wordBits: string[]): string
-export function lowerCase(...wordBits): string {
+export function lowerCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('')
 }
@@ -205,16 +191,23 @@ export function generateObjectId() {
 
 
 /** Useful to join differents bits of url with normalizing slashes
- * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2/
+ * * urlPathJoin('https://', 'www.kikou.lol/', '/user', '//2//') => https://www.kikou.lol/user/2
  * * urlPathJoin('http:/', 'kikou.lol') => https://www.kikou.lol
  */
 export function urlPathJoin(...bits: string[]) {
-    return bits.join('/').replace(/\/+/g, '/').replace(/(https?:)\/\/?/, '$1//')
+    return bits
+        .join('/')
+        .replace(/\/+/g, '/') // replace double slash
+        .replace(/(^\/|\/$)/g, '') // remove starting and trailing slash
+        .replace(/(https?:)\/\/?/, '$1//') // make sure there is 2 slashes after http(s)
 }
 
-/** file path using ONLY SLASH and not antislash on windows. Remove also starting and trailing slashes */
+/** @deprecated use urlPathJoin instead // file path using ONLY SLASH and not antislash on windows. Remove also starting and trailing slashes */
 export function pathJoinSafe(...pathBits: string[]) {
-    return pathBits.join('/').replace(/\/+/g, '/').replace(/(^\/|\/$)/g, '')
+    return pathBits
+        .join('/')
+        .replace(/\/+/g, '/') // replace double slash
+        .replace(/(^\/|\/$)/g, '') // remove starting and trailing slash
 }
 
 
@@ -243,3 +236,21 @@ export function miniTemplater(content: string, varz: ObjectGeneric, options: Par
 
 /** Clean output for outside world. All undefined / null / NaN / Infinity values are changed to '-' */
 export function cln(val, replacerInCaseItIsUndefinNaN = '-') { return ['undefined', undefined, 'indéfini', 'NaN', NaN, Infinity, null].includes(val) ? replacerInCaseItIsUndefinNaN : val }
+
+export function nbOccurenceInString(baseString: string, searchedString:string, allowOverlapping: boolean = false) {
+
+    if (searchedString.length === 0) return baseString.length + 1
+
+    let n = 0
+    let pos = 0
+    let step = allowOverlapping ? 1 : searchedString.length
+
+    while (true) {
+        pos = baseString.indexOf(searchedString, pos);
+        if (pos >= 0) {
+            ++n;
+            pos += step;
+        } else break;
+    }
+    return n;
+}

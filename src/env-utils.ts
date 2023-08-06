@@ -16,8 +16,8 @@ export function parseEnv(env) {
     return newEnv
 }
 
-/** READ ONLY, output a parsed version of process.env
- * use it like ENV().myVar
+/** READ ONLY, get the environment variables (Eg. NODE_ENV) with parsed values ("true" => true, "4" => 4, "null" => null). On env variables all values are strings
+ * use it like ENV().NODE_ENV
  */
 export function ENV(): { [key: string]: any } {
     const throwErr = () => { throw new Error('Please use process.env to write to env') }
