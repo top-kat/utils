@@ -1,3 +1,8 @@
+### v1.2.44
+* FIX recursiveGenericFunction and findByAddressAll
+* ADD new option in escapeRegexp
+* alias parseRegexp => escapeRegexp
+
 ### v1.2.43
 * FIX recursiveGenericFunctionSync returning bad address (starting with a point)
 
