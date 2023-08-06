@@ -1,3 +1,6 @@
+### v1.2.43
+* FIX recursiveGenericFunctionSync returning bad address (starting with a point)
+
 ### v1.2.42
 * add nbOccurenceInString and fix some types
 
