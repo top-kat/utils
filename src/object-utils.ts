@@ -10,7 +10,7 @@ import { DescriptiveError } from './error-utils'
 import { escapeRegexp } from './regexp-utils'
 
 /**
- * 
+ *
  * @param {Object} object main object
  * @param {String[]} maskedOrSelectedFields array of fields
  * @param {Boolean} isMask default: true; determine the behavior of the function. If is mask, selected fields will not appear in the resulting object. If it's a select, only selected fields will appear.
@@ -334,12 +334,12 @@ export function mergeDeepConfigurable<
     O5 extends Record<string, any> = Record<string, any>,
     O6 extends Record<string, any> = Record<string, any>,
 >(
-    replacerForArrays = (prev, curr) => curr, replacerForObjects, 
-    replacerDefault = (prev, curr) => curr, 
+    replacerForArrays = (prev, curr) => curr, replacerForObjects,
+    replacerDefault = (prev, curr) => curr,
     ...objects: [O1, O2?, O3?, O4?, O5?, O6?]
 ): O1 & O2 & O3 & O4 & O5 & O6 {
     return objects.reduce((actuallyMerged, obj) => {
-        if(obj && typeof obj === 'object') Object.keys(obj).forEach(key => {
+        if (obj && typeof obj === 'object') Object.keys(obj).forEach(key => {
             const previousVal = actuallyMerged[key]
             const currentVal = obj[key]
 
