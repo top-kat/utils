@@ -1,3 +1,6 @@
+### v1.2.42
+* add nbOccurenceInString and fix some types
+
 ### v1.2.41
 * improving types for object helpers
 
