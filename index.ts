@@ -26,8 +26,9 @@ import { shuffleArray, noDuplicateFilter } from './src/array-utils'
 import { issetOr, validator } from './src/validation-utils'
 import { objFilterUndefinedRecursive } from './src/object-utils'
 import { removeCircularJSONstringify } from './src/remove-circular-json-stringify'
+import { escapeRegexp } from './src/regexp-utils'
 
-// ALIASES
+// ALIASES mainly used for readability
 export const int = (n: string | number) => typeof n === 'number' ? n : parseInt(n)
 export const average = moyenne
 export const arrayUniqueValue = noDuplicateFilter
@@ -36,5 +37,6 @@ export const removeUndefinedKeys = objFilterUndefinedRecursive
 export const randomizeArray = shuffleArray
 export const dashCase = kebabCase
 export const underscoreCase = snakeCase
-export const required = validator // alias for readability
+export const required = validator
 export const orIsset = issetOr
+export const parseRegexp = escapeRegexp

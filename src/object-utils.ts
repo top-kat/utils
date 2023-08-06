@@ -1,12 +1,13 @@
 //----------------------------------------
 // OBJECT UTILS
 //----------------------------------------
-import { ObjectGeneric } from "./types"
-import { err500IfNotSet } from "./error-utils"
-import { recursiveGenericFunctionSync } from "./loop-utils"
-import { isset } from "./isset"
-import { isObject } from "./is-object"
-import { DescriptiveError } from "./error-utils"
+import { ObjectGeneric } from './types'
+import { err500IfNotSet } from './error-utils'
+import { recursiveGenericFunctionSync } from './loop-utils'
+import { isset } from './isset'
+import { isObject } from './is-object'
+import { DescriptiveError } from './error-utils'
+import { escapeRegexp } from './regexp-utils'
 
 /**
  * 
@@ -39,7 +40,7 @@ export function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelected
  */
 export function has(obj: ObjectGeneric, addr: string) {
     if (!isset(obj) || typeof obj !== 'object') return
-    let propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.') // replace a[3] => a.3;
+    const propsArr = addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.') // replace a[3] => a.3;
     let objChain = obj
     return propsArr.every(prop => {
         objChain = objChain[prop]
@@ -70,11 +71,10 @@ export function findByAddressAll(obj: Record<string, any>, addr: string, returnA
 export function findByAddressAll(obj, addr, returnAddresses = false) {
     err500IfNotSet({ obj, addr })
     if (addr === '') return obj
-    const addrRegexp = new RegExp('^' + addr
-        .replace(/\.?\[(\d+)\]/g, '.$1') // replace .[4] AND [4] TO .4
-        .replace(/\./g, '\\.') //
-        .replace(/\.\*/g, '.[^.]+') // replace * by [^. (all but a point)]
-        + '$')
+    const addrRegexp = new RegExp('^' + escapeRegexp(
+        addr.replace(/\.?\[(\d+)\]/g, '.$1'), // replace .[4] AND [4] TO .4
+        { parseStarChar: true, wildcardNotMatchingChars: '.[' }) + '$'
+    )
 
     const matchingItems: any[] = []
 
@@ -152,7 +152,7 @@ export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cac
         if (newCache.includes(obj)) return [] as any
         newCache.push(obj)
         copy = []
-        for (var i = 0, len = obj.length; i < len; i++) {
+        for (let i = 0, len = obj.length; i < len; i++) {
             copy[i] = deepClone(obj[i], newCache as any)
         }
         return copy
@@ -162,7 +162,7 @@ export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cac
         if (newCache.includes(obj)) return {} as any
         newCache.push(obj)
         copy = {}
-        for (var key in obj) {
+        for (const key in obj) {
             if (Object.prototype.hasOwnProperty.call(obj, key)) {
                 copy[key] = deepClone(obj[key], newCache as any)
             }
@@ -283,12 +283,12 @@ export function ensureObjectProp<MainObj extends Record<string, any>, Addr exten
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified*/
 export function mergeDeep<
-O1 extends Record<string, any>,
-O2 extends Record<string, any> = Record<string, any>,
-O3 extends Record<string, any> = Record<string, any>,
-O4 extends Record<string, any> = Record<string, any>,
-O5 extends Record<string, any> = Record<string, any>,
-O6 extends Record<string, any> = Record<string, any>,
+    O1 extends Record<string, any>,
+    O2 extends Record<string, any> = Record<string, any>,
+    O3 extends Record<string, any> = Record<string, any>,
+    O4 extends Record<string, any> = Record<string, any>,
+    O5 extends Record<string, any> = Record<string, any>,
+    O6 extends Record<string, any> = Record<string, any>,
 >(...objects: [O1, O2?, O3?, O4?, O5?, O6?]) : O1 & O2 & O3 & O4 & O5 & O6 {
     return mergeDeepConfigurable(
         (previousVal, currentVal) => [...previousVal, ...currentVal].filter((elm, i, arr) => arr.indexOf(elm) === i),
@@ -303,12 +303,12 @@ O6 extends Record<string, any> = Record<string, any>,
  * @return {Object} new object result from merge
  * NOTE: objects in params will NOT be modified */
 export function mergeDeepOverrideArrays<
-O1 extends Record<string, any>,
-O2 extends Record<string, any> = Record<string, any>,
-O3 extends Record<string, any> = Record<string, any>,
-O4 extends Record<string, any> = Record<string, any>,
-O5 extends Record<string, any> = Record<string, any>,
-O6 extends Record<string, any> = Record<string, any>,
+    O1 extends Record<string, any>,
+    O2 extends Record<string, any> = Record<string, any>,
+    O3 extends Record<string, any> = Record<string, any>,
+    O4 extends Record<string, any> = Record<string, any>,
+    O5 extends Record<string, any> = Record<string, any>,
+    O6 extends Record<string, any> = Record<string, any>,
 >(...objects: [O1, O2?, O3?, O4?, O5?, O6?]) : O1 & O2 & O3 & O4 & O5 & O6 {
     return mergeDeepConfigurable(
         undefined,
@@ -365,7 +365,7 @@ export function flattenObject(data, config: { withoutArraySyntax?: boolean, with
     const seenObjects: any[] = [] // avoidCircular reference to infinite loop
     const recurse = (cur, prop) => {
         if (Array.isArray(cur)) {
-            let l = cur.length
+            const l = cur.length
             let i = 0
             if (withoutArraySyntax) recurse(cur[0], prop)
             else {

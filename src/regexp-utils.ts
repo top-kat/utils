@@ -1,14 +1,15 @@
 //----------------------------------------
 // REGEXP UTILS
 //----------------------------------------
-import { C } from "./logger-utils"
+import { C } from './logger-utils'
 
 /** ESCAPE REGEXP
- * * parseStarChar config will replace '*' by '.*?' which is the best for 'match all until'
+ * * parseStarChar => config will replace '*' by '.*?' which is the best for 'match all until'
+ * * wildcardNotMatchingChars => list of characters not to match, eg: '.[' will match all except '.' and '[' /!\ will be outputted as a regexp [^.[] so don't forget to ESCAPE characters like ']' => '\]'
  */
-export function escapeRegexp(str: string, config: { parseStarChar?: boolean } = {}): string {
-    const { parseStarChar = false } = config
-    if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, '.*?')
+export function escapeRegexp(str: string, config: { parseStarChar?: boolean, wildcardNotMatchingChars?: string } = {}): string {
+    const { parseStarChar = false, wildcardNotMatchingChars } = config
+    if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, wildcardNotMatchingChars ? `[^${wildcardNotMatchingChars}]` : '.*?')
     else return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 

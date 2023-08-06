@@ -56,7 +56,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
             } else if (isObject(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(Object.entries(item).map(
-                    ([key, val]) => recursiveGenericFunction(val, callback, config, addr$ ? addr$ + '.' : '' + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency)
+                    ([key, val]) => recursiveGenericFunction(val, callback, config, (addr$ ? addr$ + '.' : '') + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency)
                 ))
             }
         }
@@ -92,7 +92,7 @@ export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callba
                 item.forEach((e, i) => recursiveGenericFunctionSync(e, callback, config, addr$ + '[' + i + ']', i, item, techFieldToAvoidCircularDependency))
             } else if (isObject(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
-                Object.entries(item).forEach(([key, val]) => recursiveGenericFunctionSync(val, callback, config, addr$ ? addr$ + '.' : '' + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency))
+                Object.entries(item).forEach(([key, val]) => recursiveGenericFunctionSync(val, callback, config, (addr$ ? addr$ + '.' : '') + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency))
             }
         }
     }
