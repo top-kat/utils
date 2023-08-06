@@ -64,13 +64,15 @@ export function findByAddress(obj: ObjectGeneric, addr: string | string[]): any 
     return objRef
 }
 
-
+type FindByAddressReturnFull = Array<[addr: string, value: any, lastElmKey: string, parent: any[] | Record<string, any>]>
 /** Will return all objects matching that path. Eg: user.*.myVar */
-export function findByAddressAll(obj: Record<string, any>, addr: string, returnAddresses?: true): Array<[addr: string, value: any]>
-export function findByAddressAll(obj: Record<string, any>, addr: string, returnAddresses?: false): Array<any>
-export function findByAddressAll(obj, addr, returnAddresses = false) {
+export function findByAddressAll<ReturnAddresses extends boolean = false>(
+    obj: Record<string, any>,
+    addr: string,
+    returnAddresses: ReturnAddresses = false as ReturnAddresses
+): ReturnAddresses extends true ? FindByAddressReturnFull : Array<any> {
     err500IfNotSet({ obj, addr })
-    if (addr === '') return obj
+    if (addr === '') return returnAddresses ? [addr, obj, undefined, undefined] as any : obj
     const addrRegexp = new RegExp('^' + escapeRegexp(
         addr.replace(/\.?\[(\d+)\]/g, '.$1'), // replace .[4] AND [4] TO .4
         { parseStarChar: true, wildcardNotMatchingChars: '.[' }) + '$'
@@ -78,8 +80,8 @@ export function findByAddressAll(obj, addr, returnAddresses = false) {
 
     const matchingItems: any[] = []
 
-    recursiveGenericFunctionSync(obj, (item, address) => {
-        if (addrRegexp.test(address)) matchingItems.push(returnAddresses ? [address, item] : item)
+    recursiveGenericFunctionSync(obj, (item, address, lastElmKey, parent) => {
+        if (addrRegexp.test(address)) matchingItems.push(returnAddresses ? [address, item, lastElmKey, parent] : item)
     })
     return matchingItems
 }
