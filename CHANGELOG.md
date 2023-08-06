@@ -1,3 +1,6 @@
+### v1.2.45
+* Add parent and lastElement key to informations returned by findByAddressAll
+
 ### v1.2.44
 * FIX recursiveGenericFunction and findByAddressAll
 * ADD new option in escapeRegexp
