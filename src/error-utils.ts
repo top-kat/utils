@@ -1,12 +1,12 @@
 //----------------------------------------
 // ERROR UTILS
 //----------------------------------------
-import { configFn } from "./config"
-import { isset } from "./isset"
-import { isEmpty } from "./is-empty"
-import { ErrorOptions } from "./types"
-import { cleanStackTrace } from "./clean-stack-trace"
-import { C } from "./logger-utils"
+import { configFn } from './config'
+import { isset } from './isset'
+import { isEmpty } from './is-empty'
+import { ErrorOptions } from './types'
+import { cleanStackTrace } from './clean-stack-trace'
+import { C } from './logger-utils'
 export { type ErrorOptions } from './types'
 
 export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
@@ -18,8 +18,8 @@ export function errIfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNot
 export function err500IfEmptyOrNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(500, true, objOfVarNamesWithValues) }
 
 export function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
-    let missingVars: string[] = []
-    for (let prop in objOfVarNamesWithValues) {
+    const missingVars: string[] = []
+    for (const prop in objOfVarNamesWithValues) {
         if (!isset(objOfVarNamesWithValues[prop]) || (checkEmpty && isEmpty(objOfVarNamesWithValues[prop]))) missingVars.push(prop)
     }
     if (missingVars.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: errCode, origin: 'Validator', varNames: missingVars.join(', ') })
@@ -27,13 +27,13 @@ export function errXXXIfNotSet(errCode, checkEmpty, objOfVarNamesWithValues) {
 
 
 export function err422IfNotSet(o) {
-    let m: any[] = []
-    for (let p in o) if (!isset(o[p])) m.push(p)
+    const m: any[] = []
+    for (const p in o) if (!isset(o[p])) m.push(p)
     if (m.length) throw new DescriptiveError(`requiredVariableEmptyOrNotSet`, { code: 422, origin: 'Validator', varNames: m.join(', ') })
 }
 
 /** Works natively with sync AND async functions */
-export function tryCatch<T>(callback: () => T, onErr: Function = () => { }): T {
+export function tryCatch<T>(callback: () => T, onErr: Function = () => { /** */ }): T {
     try {
         const result = callback()
         if (result instanceof Promise) return result.catch(e => onErr(e)) as T
@@ -57,7 +57,7 @@ export class DescriptiveError extends Error {
     code?: number
     msg: string
     options: ErrorOptions
-    hasBeenLogged: boolean = false
+    hasBeenLogged = false
     logs: string[] = []
 
     constructor(msg: string, options: ErrorOptions = {}) {
@@ -78,7 +78,7 @@ export class DescriptiveError extends Error {
             if (!this.hasBeenLogged) this.log()
         })
 
-        const { onError = () => { } } = configFn()
+        const { onError = () => { /** */ } } = configFn()
         onError(msg, options)
 
     }
@@ -86,7 +86,7 @@ export class DescriptiveError extends Error {
 
         const errorLogs: string[] = []
 
-        const { err, doNotThrow = false, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, notifyOnSlackChannel = false, originalMessage, ...extraInfosRaw } = this.options
+        const { err, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, ...extraInfosRaw } = this.options
         let { code } = this.options
         const extraInfos = {
             ...extraInfosRaw,
