@@ -146,7 +146,7 @@ export class DescriptiveError extends Error {
         return errorLogs
     }
     log() {
-        if (!this.hasBeenLogged) this.logs.forEach(errLine => C.error(false, errLine))
+        if (!this.hasBeenLogged) C.error(false, this.logs.join('\n'))
         this.hasBeenLogged = true
     }
     toString() {
