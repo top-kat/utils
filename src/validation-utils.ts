@@ -1,13 +1,13 @@
 //----------------------------------------
 // VALIDATION UTILS
 //----------------------------------------
-import { isset } from "./isset"
-import { isDateIsoOrObjectValid, isDateIntOrStringValid, isTimeStringValid } from "./date-utils"
-import { asArray } from "./array-utils"
-import { configFn } from "./config"
-import { isEmpty } from "./is-empty"
-import { DescriptiveError } from "./error-utils"
-import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
+import { isset } from './isset'
+import { isDateIsoOrObjectValid, isDateIntOrStringValid, isTimeStringValid } from './date-utils'
+import { asArray } from './array-utils'
+import { configFn } from './config'
+import { isEmpty } from './is-empty'
+import { DescriptiveError } from './error-utils'
+import { removeCircularJSONstringify } from './remove-circular-json-stringify'
 
 export type BaseTypes = 'objectId' | 'dateInt6' | 'dateInt' | 'dateInt8' | 'dateInt12' | 'time' | 'humanReadableTimestamp' | 'date' | 'dateObject' | 'array' | 'object' | 'buffer' | 'string' | 'function' | 'boolean' | 'number' | 'bigint' | 'year' | 'email' | 'any'
 
@@ -86,6 +86,7 @@ export type ValidatorObject = {
     isset?: boolean
     optional?: boolean
     isArray?: boolean
+    includes?: any
     [k: string]: any
 }
 export function validator(...paramsToValidate: ValidatorObject[]) {
@@ -108,7 +109,7 @@ export function isValid(...paramsToValidate: ValidatorObject[]) {
 export function isType(value, type: BaseTypes) { return isValid({ name: 'Is type check', value, type, emptyAllowed: true }) }
 
 export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]): [string?, object?] {
-    let paramsFormatted: ValidatorObject[] = []
+    const paramsFormatted: ValidatorObject[] = []
 
     // support for multiple names with multiple values for one rule. Eg: {name: [{startDate:'20180101'}, {endDate:'20180101'}], type: 'dateInt8'}
     paramsToValidate.forEach(param => {
@@ -127,7 +128,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         let value = paramObj.value
         let optional = paramObj.optional || false
         const emptyAllowed = optional || paramObj.emptyAllowed || false
-        if (paramObj.isset === false) paramObj.mustNotBeSet = true // ALIAS 
+        if (paramObj.isset === false) paramObj.mustNotBeSet = true // ALIAS
         const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
 
         // accept syntax { 'myVar.var2': myVar.var2, ... }
