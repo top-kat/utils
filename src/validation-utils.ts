@@ -188,7 +188,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                 if (!allTypes.includes(type)) throw new DescriptiveError('typeDoNotExist', { code: 500, type })
 
                 const basicTypeCheck = {
-                    objectId: val => typeof val === 'string', // match any string because objectIds can be any strings (like 'taptow' for example)
+                    objectId: val => /^[0-9a-fA-F-]{24,}$/.test(val), // "0c65940b-6b0c-4dd8-9c7a-7c5fe1ba907a"
                     dateInt6: val => isDateIntOrStringValid(parseInt(val + '01'), true, 8),
                     dateInt: val => isDateIntOrStringValid(val, true, 8),
                     dateInt8: val => isDateIntOrStringValid(val, true, 8),

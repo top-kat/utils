@@ -1,13 +1,14 @@
 //----------------------------------------
 // MONGO UTILS
 //----------------------------------------
+import { isType } from './validation-utils'
 import { isset } from './isset'
 
 /** @return undefined if cannot find _id */
 export function getId(obj: any): string | undefined {
     if (!obj) return // null case
-    else if (typeof obj === 'object' && obj?._id) return obj._id.toString()
-    else if (typeof obj === 'string') return obj
+    if (obj._id) return obj._id.toString()
+    else if (isType(obj, 'objectId')) return obj.toString()
     else return
 }
 
