@@ -1,20 +1,19 @@
 //----------------------------------------
 // MONGO UTILS
 //----------------------------------------
-import { isType } from "./validation-utils"
-import { isset } from "./isset"
+import { isset } from './isset'
 
 /** @return undefined if cannot find _id */
-export function getId(obj: any = {}): string | undefined {
+export function getId(obj: any): string | undefined {
     if (!obj) return // null case
-    if (obj._id) return obj._id.toString()
-    else if (isType(obj, 'objectId')) return obj.toString()
+    else if (typeof obj === 'object' && obj?._id) return obj._id.toString()
+    else if (typeof obj === 'string') return obj
     else return
 }
 
-/** Merge filter with correct handling of OR and AND 
- * @param {Object} filterA 
- * @param {Object} filterB 
+/** Merge filter with correct handling of OR and AND
+ * @param {Object} filterA
+ * @param {Object} filterB
  * @param {Boolean} assignToFilterA defualt false: if true, it will modify filterA, else it will return merged filters as a new object
  */
 export function mongoFilterMerger(filterA, filterB, assignToFilterA = false) {
