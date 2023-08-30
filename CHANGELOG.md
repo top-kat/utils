@@ -1,3 +1,6 @@
+### v1.2.48
+* FIX getId so that it can accept any strings
+
 ### v1.2.45
 * Add parent and lastElement key to informations returned by findByAddressAll
 
