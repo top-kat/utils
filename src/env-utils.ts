@@ -4,7 +4,7 @@
 
 /** Parse one dimention object undefined, true, false, null represented as string will be converted to primitives */
 export function parseEnv(env) {
-    const newEnv = {}
+    const newEnv = {} as Record<string, undefined | null | number | boolean | string>
     for (const k in env) {
         const val = env[k]
         if (val === 'undefined') newEnv[k] = undefined
