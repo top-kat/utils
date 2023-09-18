@@ -1,3 +1,7 @@
+### v1.2.49
+* FIX type in parseEnv
+* revert changes because mongoId is not just any strings
+
 ### v1.2.48
 * FIX getId so that it can accept any strings
 
