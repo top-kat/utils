@@ -1,9 +1,9 @@
 //----------------------------------------
 // STRING UTILS
 //----------------------------------------
-import { err500IfEmptyOrNotSet } from "./error-utils"
-import { ObjectGeneric } from "./types"
-import { isset } from "./isset"
+import { err500IfEmptyOrNotSet } from './error-utils'
+import { ObjectGeneric } from './types'
+import { isset } from './isset'
 
 const getWordBits = (wb: string[] | [string[]]): string[] => Array.isArray(wb[0]) ? wb[0] : wb as any
 
@@ -155,32 +155,35 @@ export function convertAccentedCharacters(str : string, config: { removeNumbers?
         .replace(/[ÔÖ]/g, 'O')
         .replace(/[ùúû]/g, 'u')
         .replace(/[ÙÚÛ]/g, 'U')
-    if (config.removeNumbers === true) output = output.replace(/\d+/g, '');
-    if (config.removeSpecialChars === true) output = output.replace(/[^A-Za-z0-9 ]/g, '');
-    if (config.removeSpaces === true) output = output.replace(/\s+/g, '');
-    return output;
+    if (config.removeNumbers === true) output = output.replace(/\d+/g, '')
+    if (config.removeSpecialChars === true) output = output.replace(/[^A-Za-z0-9 ]/g, '')
+    if (config.removeSpaces === true) output = output.replace(/\s+/g, '')
+    return output
 }
 
 
 let generatedTokens: string[] = [] // cache to avoid collision
-let lastTs = new Date().getTime()
-/** minLength 8 if unique 
+let lastTs = Date.now()
+/** minLength 8 if unique
 * @param {Number} length default: 20
 * @param {Boolean} unique default: true. Generate a real unique token base on the date. min length will be min 8 in this case
 * @param {string} mode one of ['alphanumeric', 'hexadecimal']
 * NOTE: to generate a mongoDB Random Id, use the params: 24, true, 'hexadecimal'
 */
 export function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
-    let charConvNumeric = mode === 'alphanumeric' ? 36 : 16
+    const charConvNumeric = mode === 'alphanumeric' ? 36 : 16
     if (unique && length < 8) length = 8
     let token
     let tokenTs
     do {
-        tokenTs = (new Date()).getTime()
+        tokenTs = Date.now()
         token = unique ? tokenTs.toString(charConvNumeric) : ''
         while (token.length < length) token += Math.random().toString(charConvNumeric).substr(2, 1) // char alphaNumeric aléatoire
     } while (generatedTokens.includes(token))
-    if (lastTs < tokenTs) generatedTokens = [] // reset generated token on new timestamp because cannot collide
+    if (lastTs < tokenTs) {
+        generatedTokens = [] // reset generated token on new timestamp because cannot collide
+        lastTs = Date.now()
+    }
     generatedTokens.push(token)
     return token
 }
@@ -217,9 +220,9 @@ export type MiniTemplaterOptions = {
     valueWhenContentUndefined: string
 }
 /** Replace variables in a string like: `Hello {{userName}}!`
- * @param {String} content 
+ * @param {String} content
  * @param {Object} varz object with key => value === toReplace => replacer
- * @param {Object} options 
+ * @param {Object} options
  * * valueWhenNotSet => replacer for undefined values. Default: ''
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
@@ -243,14 +246,15 @@ export function nbOccurenceInString(baseString: string, searchedString:string, a
 
     let n = 0
     let pos = 0
-    let step = allowOverlapping ? 1 : searchedString.length
+    const step = allowOverlapping ? 1 : searchedString.length
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
-        pos = baseString.indexOf(searchedString, pos);
+        pos = baseString.indexOf(searchedString, pos)
         if (pos >= 0) {
-            ++n;
-            pos += step;
-        } else break;
+            ++n
+            pos += step
+        } else break
     }
-    return n;
+    return n
 }
