@@ -10,7 +10,7 @@ const getWordBits = (wb: string[] | [string[]]): string[] => Array.isArray(wb[0]
 /**Eg: camelCase */
 export function camelCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
-    return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w, true)).join('')
+    return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w.toLowerCase() : capitalize1st(w, true)).join('')
 }
 
 /**Eg: snake_case
