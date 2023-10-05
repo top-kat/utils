@@ -10,7 +10,7 @@ const getWordBits = (wb: string[] | [string[]]): string[] => Array.isArray(wb[0]
 /**Eg: camelCase */
 export function camelCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
-    return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w)).join('')
+    return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w : capitalize1st(w, true)).join('')
 }
 
 /**Eg: snake_case
@@ -31,13 +31,13 @@ export function kebabCase(...wordBits: string[] | [string[]]): string {
 /**Eg: PascalCase undefined, null... => '' */
 export function pascalCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
-    return wordBitsReal.filter(e => e).map((w, i) => capitalize1st(w)).join('')
+    return wordBitsReal.filter(e => e).map(w => capitalize1st(w, true)).join('')
 }
 
 /**Eg: Titlecase undefined, null... => '' */
 export function titleCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
-    return capitalize1st(wordBitsReal.filter(e => e).map(w => w.trim()).join(''))
+    return capitalize1st(wordBitsReal.filter(e => e).map(w => w.trim()).join(''), true)
 }
 
 /**Eg: UPPERCASE undefined, null... => '' */
@@ -52,7 +52,7 @@ export function lowerCase(...wordBits: string[] | [string[]]): string {
     return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('')
 }
 
-export function capitalize1st(str = ''): string { return str ? str[0].toUpperCase() + str.slice(1) : str }
+export function capitalize1st(str = '', lowercaseTheRest = false): string { return str ? str[0].toUpperCase() + (lowercaseTheRest ? str.toLowerCase() : str).slice(1) : str }
 
 export function camelCaseToWords(str: string): string[] {
     return str ? str.trim().replace(/([A-Z])/g, '-$1').toLowerCase().split('-') : []
