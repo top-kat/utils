@@ -39,11 +39,13 @@ export async function execWaitForOutput(
                 C.error(`Exec timeout for ${command}`)
                 reject(`Exec timeout for ${command}`)
             }, nbSecondsBeforeKillingProcess * 1000)
+
+            const process2 = exec(command, execOptions)
             const resolve = () => {
+                process2?.kill('SIGINT')
                 clearTimeout(to)
                 res(outputStream)
             }
-            const process2 = exec(command, execOptions)
             const stdCallback = data => {
                 if (logOutputStream) C.log(data)
                 streamConsoleOutput(data)
