@@ -18,6 +18,7 @@
     },
     "include": [
         "./**/*.ts",
-        "index.ts"
+        "index.ts",
+        "backend.ts"
     ],
 }
