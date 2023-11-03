@@ -410,7 +410,7 @@ export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntrie
 type ObjEntries<T, K extends keyof T = keyof T> = (K extends unknown ? [K, T[K]] : never)[]
 
 /** Mean to fix typing because type for Object.keys is not accurate */
-export function objKeys<Obj extends Record<string, any>>(obj: Obj): keyof Obj[] {
+export function objKeys<Obj extends Record<string, any>>(obj: Obj): (keyof Obj)[] {
     return Object.keys(obj) as any
 }
 
