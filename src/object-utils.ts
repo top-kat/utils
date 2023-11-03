@@ -404,9 +404,7 @@ export function unflattenObject(data: Record<string, any>): Record<string, any> 
 
 /** Mean to fix typing because it's wront on Object.entries */
 export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntries<Obj> {
-    return Object.entries(obj)
+    return Object.entries(obj) as any
 }
 
-type ObjEntries<T> = {
-    [K in keyof T]: [K, T[K]];
-}[keyof T][]
+type ObjEntries<T, K extends keyof T = keyof T> = (K extends unknown ? [K, T[K]] : never)[]
