@@ -55,6 +55,7 @@ export function has(obj: ObjectGeneric, addr: string) {
  */
 export function findByAddress(obj: ObjectGeneric, addr: string | string[]): any | undefined {
     if (addr.length === 0) return obj
+    // eslint-disable-next-line no-console
     if (!isset(obj) || typeof obj !== 'object') return console.warn('Main object in `findByAddress` function is undefined or has the wrong type')
     const propsArr = Array.isArray(addr) ? addr : addr.replace(/\.?\[(\d+)\]/g, '.$1').split('.') // replace .[4] AND [4] TO .4
     const objRef = propsArr.reduce((objChain, prop) => {
@@ -385,6 +386,7 @@ export function flattenObject(data, config: { withoutArraySyntax?: boolean, with
 
                 if (isEmpty && prop) result[prop] = {}
             } catch (error) {
+                // eslint-disable-next-line no-console
                 console.warn('Circular reference in flattenObject, impossible to parse')
             }
         } else result[prop] = cur
@@ -399,3 +401,12 @@ export function unflattenObject(data: Record<string, any>): Record<string, any> 
     for (const [addr, value] of Object.entries(data)) objForceWrite(newO, addr, value)
     return newO
 }
+
+/** Mean to fix typing because it's wront on Object.entries */
+export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntries<Obj> {
+    return Object.entries(obj)
+}
+
+type ObjEntries<T> = {
+    [K in keyof T]: [K, T[K]];
+}[keyof T][]
