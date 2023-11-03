@@ -414,3 +414,7 @@ type ObjEntries<T, K extends keyof T = keyof T> = (K extends unknown ? [K, T[K]]
 export function objKeys<Obj extends Record<string, any>>(obj: Obj): keyof Obj {
     return Object.keys(obj) as any
 }
+
+
+export const keys = objKeys
+export const entries = objEntries
