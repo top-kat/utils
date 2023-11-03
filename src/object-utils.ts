@@ -403,7 +403,7 @@ export function unflattenObject(data: Record<string, any>): Record<string, any> 
 }
 
 /** Mean to fix typing because it's wront on Object.entries */
-export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntries<Obj>[] {
+export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntries<Obj> {
     return Object.entries(obj)
 }
 
