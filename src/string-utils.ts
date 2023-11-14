@@ -140,7 +140,7 @@ export function getValuesBetweenStrings(str: string, openingOrSeparator, closing
  * @param {Object} config { removeSpecialChars: false, removeNumbers: false, removeSpaces: false }
  * @returns String with all accentued char replaced by their non accentued version + config formattting
  */
-export function convertAccentedCharacters(str : string, config: { removeNumbers?: boolean, removeSpecialChars?: boolean, removeSpaces?: boolean } = {}) {
+export function convertAccentedCharacters(str: string, config: { removeNumbers?: boolean, removeSpecialChars?: boolean, removeSpaces?: boolean } = {}) {
     let output = str
         .trim()
         .replace(/[àáâãäå]/g, 'a')
@@ -173,8 +173,8 @@ let lastTs = Date.now()
 export function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
     const charConvNumeric = mode === 'alphanumeric' ? 36 : 16
     if (unique && length < 8) length = 8
-    let token
-    let tokenTs
+    let token: string
+    let tokenTs: number
     do {
         tokenTs = Date.now()
         token = unique ? tokenTs.toString(charConvNumeric) : ''
@@ -227,7 +227,7 @@ export type MiniTemplaterOptions = {
  * * regexp          => must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g
  */
 export function miniTemplater(content: string, varz: ObjectGeneric, options: Partial<MiniTemplaterOptions> = {}): string {
-    const options2:MiniTemplaterOptions = {
+    const options2: MiniTemplaterOptions = {
         valueWhenNotSet: '',
         regexp: /{{\s*([^}]*)\s*}}/g,
         valueWhenContentUndefined: '',
@@ -240,7 +240,7 @@ export function miniTemplater(content: string, varz: ObjectGeneric, options: Par
 /** Clean output for outside world. All undefined / null / NaN / Infinity values are changed to '-' */
 export function cln(val, replacerInCaseItIsUndefinNaN = '-') { return ['undefined', undefined, 'indéfini', 'NaN', NaN, Infinity, null].includes(val) ? replacerInCaseItIsUndefinNaN : val }
 
-export function nbOccurenceInString(baseString: string, searchedString:string, allowOverlapping: boolean = false) {
+export function nbOccurenceInString(baseString: string, searchedString: string, allowOverlapping: boolean = false) {
 
     if (searchedString.length === 0) return baseString.length + 1
 
