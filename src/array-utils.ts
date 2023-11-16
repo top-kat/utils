@@ -1,8 +1,8 @@
 //----------------------------------------
 // ARRAY UTILS
 //----------------------------------------
-import { ensureObjectProp } from "./object-utils"
-import { isset } from "./isset"
+import { ensureObjectProp } from './object-utils'
+import { isset } from './isset'
 
 /** Randomize array in place and return the same array than inputed */
 export function shuffleArray(array) {
@@ -81,12 +81,12 @@ export function getArrayDiff<T1, T2>(arrayA: T1[] = [], arrayB: T2[] = [], compa
     return [...getNotInArrayA(arrayA, arrayB, compare), ...getNotInArrayA(arrayB, arrayA, compare)]
 }
 
-/** filter duplicate values in an array 
+/** filter duplicate values in an array
  * @param {function} comparisonFn default:(a, b) => a === b. A function that shall return true if two values are considered equal
  * @return {array|function}
  */
-export function noDuplicateFilter<T>(arr: T[], comparisonFn = (a: T, b: T) => a === b): T[] {
-    return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i)
+export function noDuplicateFilter<T extends any[]>(arr: T, comparisonFn = (a: T, b: T) => a === b): T {
+    return arr.filter((a, i, arr) => arr.findIndex(b => comparisonFn(a, b)) === i) as T
 }
 
 /** Count number of occurence of item in array */
