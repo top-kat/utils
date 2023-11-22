@@ -1,5 +1,6 @@
 import { Color, ErrorOptions } from './types'
 import { isNodeJs } from './is-nodejs'
+import { mergeDeep } from './object-utils'
 
 const isNode = isNodeJs()
 
@@ -15,11 +16,11 @@ type TerminalTheme = {
     debugModeColor?: Color,
 }
 
-type TerminalConfig = { 
+type TerminalConfig = {
     noColor: boolean
     theme: TerminalTheme
 }
-type TerminalConfigRequired = { 
+type TerminalConfigRequired = {
     noColor: boolean
     theme: Required<TerminalTheme>
 }
@@ -57,7 +58,7 @@ let config = {
 /** Allow dynamic changing of config */
 export function configFn(): Required<TopkatUtilConfig & { terminal: TerminalConfigRequired }> { return config as any }
 
-export function registerConfig(customConfig: Partial<TopkatUtilConfig>) {
+export function registerConfig(customConfig: RecursivePartial<TopkatUtilConfig>) {
     if ('terminal' in customConfig === false) customConfig.terminal = {} as TopkatUtilConfig['terminal']
     const newconfig = {
         ...config,
@@ -71,7 +72,15 @@ export function registerConfig(customConfig: Partial<TopkatUtilConfig>) {
         ...config?.terminal?.theme,
         ...(customConfig?.terminal?.theme || {})
     }
-    config = newconfig as any
+    config = mergeDeep(config, customConfig)
 
-    config.isProd = config?.env?.includes('prod') // preprod | production
+    config.isProd = config?.env ? config.env.includes('prod') : true // preprod | production
+}
+
+
+type RecursivePartial<T> = {
+    [P in keyof T]?:
+    T[P] extends (infer U)[] ? RecursivePartial<U>[] :
+    T[P] extends object ? RecursivePartial<T[P]> :
+    T[P]
 }
