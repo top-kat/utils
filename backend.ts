@@ -4,27 +4,24 @@ import { C } from './src/logger-utils'
 import { exec } from 'child_process'
 
 
-/**
- * @param {String} command cli command to execute
- * @param {Obect} config
- * * logOutputStream
- * * stringOrRegexpToSearchForConsideringDone => when the output contain this string or matches this regexp, process is considered done. Else it will wait for exit
- * * timeout => timeout before killing process in seconds
- * * execOptions => see nodeJs exec command
- * * keyCodeToSend => { a: 1000, b: 2000 } keyCode: afterNMs; Eg: key a will be triggered after N milliseconds
- * * errorHandle (log: log the error as an error) (throw: throw the error)
- * * streamConsoleOutput: output => { } callback for streaming output
- */
+/** Execute a custom command into a child terminal and wait for process completion */
 export async function execWaitForOutput(
     command: string,
     config = {} as Partial<{
+        /** Whenever to log output to the console, choose false to execute the process silently. Default: true */
         logOutputStream: boolean
+        /** when the output contain this string or matches this regexp, process is considered done. Else it will wait for exit */
         stringOrRegexpToSearchForConsideringDone: string
+        /** timeout before killing process in seconds. Put -1 or 0 de disable. Default: 20 */
         nbSecondsBeforeKillingProcess: number
+        /** { a: 1000, b: 2000 } { keyCode: sendAfterXms }; Eg: the key "keyCode" will be sent to terminal after "sendAfterXms" milliseconds */
         keyCodeToSend: { [keyCode: string]: number },
+        /** log: log the error as an error | throw: throw the error. Default: "throw" */
         errorHandle: 'log' | 'error'
+        /** this callback will be called every time the terminal outputs something with the first param being the outputted string */
         streamConsoleOutput: (outputStr: string) => any,
-        execOptions: {cwd?: string, [seeNodeJsDocOnExec: string]: any}
+        /** see nodeJs exec() command options */
+        execOptions: { cwd?: string, [seeNodeJsDocOnExec: string]: any }
     }>
 ): Promise<string | undefined> {
 
@@ -35,10 +32,10 @@ export async function execWaitForOutput(
 
     try {
         return await new Promise((res, reject) => {
-            const to = setTimeout(() => {
+            const to = nbSecondsBeforeKillingProcess > 0 ? setTimeout(() => {
                 C.error(`Exec timeout for ${command}`)
                 reject(`Exec timeout for ${command}`)
-            }, nbSecondsBeforeKillingProcess * 1000)
+            }, nbSecondsBeforeKillingProcess * 1000) : undefined
 
             const process2 = exec(command, execOptions)
             const resolve = () => {
