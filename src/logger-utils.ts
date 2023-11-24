@@ -289,7 +289,7 @@ function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
  * @param {String} msg String before char. Final output will be `${str}${char.repeat(step)}`
  */
 export function cliProgressBar(step: number, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
-    if (isset(process) && isset(process.stdout) && isset(process.stdout.clearLine)) {
+    if (typeof process?.stdout?.clearLine === 'function') {
         process.stdout.clearLine(0)
         process.stdout.cursorTo(0)
         process.stdout.write(`${msg}${char.repeat(step)}\x1b[0m`) // \x1b[0m == reset color
@@ -329,19 +329,20 @@ export class cliLoadingSpinner {
         this.frameNb = 0
         this.progressMessage = msg
         this.interval = setInterval(() => {
-            this.activeProcess.stdout.clearLine()
-            this.activeProcess.stdout.cursorTo(0)
+            this.activeProcess?.stdout?.clearLine()
+            this.activeProcess?.stdout?.cursorTo(0)
             const symbol = this.animFrames[this.frameNb++ % this.animFrames.length]
             this.activeProcess.stdout.write(C.primary(symbol) + ' ' + this.progressMessage)
         }, this.frameRate)
     }
     end(error = false) {
         clearInterval(this.interval)
-        this.activeProcess.stdout.clearLine()
-        this.activeProcess.stdout.cursorTo(0)
-        this.activeProcess.stdout.write(
+        this.activeProcess?.stdout?.clearLine()
+        this.activeProcess?.stdout?.cursorTo(0)
+        C.log(
             error ? C.red('✘ ' + this.progressMessage + '\n\n')
-                : '\x1b[32m✓ ' + this.progressMessage + '\n\n')
+                : '\x1b[32m✓ ' + this.progressMessage + '\n\n'
+        )
         this.progressMessage = ''
     }
     error() {
