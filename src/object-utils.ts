@@ -112,6 +112,9 @@ export function objForceWrite<MainObj extends Record<string, any>>(obj: MainObj,
     return obj
 }
 
+
+
+
 export function forcePathInObject<MainObj extends Record<string, any>>(obj: MainObj, addr: string): MainObj {
     return objForceWrite(obj, addr, undefined, { doNotWriteFinalValue: true })
 }
@@ -292,7 +295,7 @@ export function mergeDeep<
     O4 extends Record<string, any> = Record<string, any>,
     O5 extends Record<string, any> = Record<string, any>,
     O6 extends Record<string, any> = Record<string, any>,
->(...objects: [O1, O2?, O3?, O4?, O5?, O6?]) : O1 & O2 & O3 & O4 & O5 & O6 {
+>(...objects: [O1, O2?, O3?, O4?, O5?, O6?]): O1 & O2 & O3 & O4 & O5 & O6 {
     return mergeDeepConfigurable(
         (previousVal, currentVal) => [...previousVal, ...currentVal].filter((elm, i, arr) => arr.indexOf(elm) === i),
         (previousVal, currentVal) => mergeDeep(previousVal, currentVal),
@@ -312,7 +315,7 @@ export function mergeDeepOverrideArrays<
     O4 extends Record<string, any> = Record<string, any>,
     O5 extends Record<string, any> = Record<string, any>,
     O6 extends Record<string, any> = Record<string, any>,
->(...objects: [O1, O2?, O3?, O4?, O5?, O6?]) : O1 & O2 & O3 & O4 & O5 & O6 {
+>(...objects: [O1, O2?, O3?, O4?, O5?, O6?]): O1 & O2 & O3 & O4 & O5 & O6 {
     return mergeDeepConfigurable(
         undefined,
         (previousVal, currentVal) => mergeDeepOverrideArrays(previousVal, currentVal),

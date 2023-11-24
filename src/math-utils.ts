@@ -1,7 +1,7 @@
 //----------------------------------------
 // MATH UTILS
 //----------------------------------------
-import { isset } from "./isset"
+import { isset } from './isset'
 
 /** Round with custom number of decimals (default:0) */
 export function round(number: number | string, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals) }
@@ -19,7 +19,7 @@ export function sumArray(array: number[]) {
     return array.filter(item => typeof item === 'number').reduce((sum, val) => isset(val) ? val + sum : sum, 0)
 }
 
-/** Moyenne / average between array of values 
+/** Moyenne / average between array of values
  * @param {Number} round number of decimals to keep. Default:2
 */
 export function moyenne(array: number[], nbOfDecimals = 2) {
@@ -28,6 +28,7 @@ export function moyenne(array: number[], nbOfDecimals = 2) {
 
 /** length default 2, shortcut for 1 to 01 */
 export function pad(numberOrStr: number | string, length = 2) { return ('' + numberOrStr).padStart(length, '0') }
+
 
 /** return the number or the closest number of the range
  * * nb min max  => returns

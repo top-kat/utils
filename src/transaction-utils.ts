@@ -1,18 +1,18 @@
 //----------------------------------------
 // TRANSACTION
 //----------------------------------------
-import { isset } from "./isset"
-import { C } from "./logger-utils"
-import { timeout } from "./timer-utils"
+import { isset } from './isset'
+import { C } from './logger-utils'
+import { timeout } from './timer-utils'
 
 const transactionRunning = { __default: false }
 const queue = { __default: [] }
 
-/** Allow to perform async functions in a defined order  
- * This adds the callback to a queue and is resolved when ALL previous callbacks with same name are executed  
+/** Allow to perform async functions in a defined order
+ * This adds the callback to a queue and is resolved when ALL previous callbacks with same name are executed
  * Use it like: await transaction('nameOfTheFlow', async () => { ...myFunction })
  * @param {String|Function} name name for the actions that should never happen concurrently
- * @param {Function} asyncCallback 
+ * @param {Function} asyncCallback
  * @param {Number} timeout default: 120000 (120s) will throw an error if transaction time is higher that this amount of ms
  * @returns {Promise}
  */
@@ -42,17 +42,15 @@ export async function transaction(name, asyncCallback, timeout = 120000, doNotTh
     })
 }
 
-export async function removeItemFromQueue(name) {//               meoww!
-    if (transactionRunning[name] === true) return //       v 
-    transactionRunning[name] = true //               A  A       /\
-    while (queue[name].length) await queue[name].shift()() //   II
-    transactionRunning[name] = false //              \==/_______II
-} //                                                    l  v_v_v _I
-//                                                       11    11
+export async function removeItemFromQueue(name) {//        meoww!
+    if (transactionRunning[name] === true) return //       v
+    transactionRunning[name] = true //                A  A       /\
+    while (queue[name].length) await queue[name].shift()() //    ||
+    transactionRunning[name] = false //               \==/_______||
+} //                                                     l  ____ *|
+//                                                        11    11
 
-/** Wait for a transaction to complete without creating a new transaction
- * 
- */
+/** Wait for a transaction to complete without creating a new transaction */
 export async function waitForTransaction(transactionName, forceReleaseInSeconds = 30) {
     let brk = false
     setTimeout(() => brk = true, forceReleaseInSeconds * 1000)

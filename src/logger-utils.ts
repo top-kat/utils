@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
+/* eslint-disable no-control-regex */
 //----------------------------------------
 // LOGGER
 //----------------------------------------
-import { configFn } from "./config"
-import { isset } from "./isset"
-import { Color } from "./types"
-import { removeCircularJSONstringify } from "./remove-circular-json-stringify"
-import { cleanStackTrace } from "./clean-stack-trace"
+import { configFn } from './config'
+import { isset } from './isset'
+import { Color } from './types'
+import { removeCircularJSONstringify } from './remove-circular-json-stringify'
+import { cleanStackTrace } from './clean-stack-trace'
 
 type NotInfoLogLevel = 'error' | 'warn'
 type LogLevels = NotInfoLogLevel | 'info'
@@ -138,7 +140,7 @@ export const C = {
     applicationError: (color, ...str) => logErrPrivate('warn', color, ...str),
     warningLight: (color, ...str) => logErrPrivate('warn', [196, 120, 52], ...str),
     dimStrSplit(...logs) {
-        let logsStr: string[] = []
+        const logsStr: string[] = []
         logs.filter(isset).forEach(log => log.toString().split('\n').forEach(line => line && logsStr.push(this.dim(`    ${line}`))))
         return logsStr.join('\n')
     },
@@ -182,7 +184,7 @@ export const C = {
         this.log(this.dimStrSplit(...string))
     },
     // DEPRECATED
-    useTheme() { },
+    useTheme() { /* */ },
 }
 
 function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {

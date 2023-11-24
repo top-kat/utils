@@ -33,7 +33,6 @@ export function ensureIsArrayAndPush(obj: object, addr: string, valToPush, onlyU
     })
 }
 
-
 /** If a string is provided, return it as array else return the value */
 export function strAsArray<T>(arrOrStr: T): T extends string ? string[] : T {
     return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr as any

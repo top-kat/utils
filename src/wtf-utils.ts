@@ -2,9 +2,9 @@
 // WTF UTILS
 //----------------------------------------
 
-import { escapeRegexp } from "./regexp-utils"
-import { C } from "./logger-utils"
-import { isset } from "./isset"
+import { escapeRegexp } from './regexp-utils'
+import { C } from './logger-utils'
+import { isset } from './isset'
 
 export function chineseProverb() {
     // no spoil man

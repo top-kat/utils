@@ -1,12 +1,12 @@
 //----------------------------------------
 // TESTS UTILS
 //----------------------------------------
-import { C } from "./logger-utils"
-import { ValidatorObject } from "./validation-utils"
-import { isset } from "./isset"
-import { validatorReturnErrArray } from "./validation-utils"
-import { Override } from "./types"
-import { isObject } from "./is-object"
+import { C } from './logger-utils'
+import { ValidatorObject } from './validation-utils'
+import { isset } from './isset'
+import { validatorReturnErrArray } from './validation-utils'
+import { Override } from './types'
+import { isObject } from './is-object'
 
 export const restTestMini = {
     throwOnErr: false,
@@ -39,10 +39,10 @@ export const restTestMini = {
 }
 
 /** if validatorObject param is not set then it will consider checking that the value is set
- * 
- * @param description 
- * @param value 
- * @param validatorObject 
+ *
+ * @param description
+ * @param value
+ * @param validatorObject
  */
 export function assert(description: string, value: any, validatorObject?: Override<ValidatorObject, { value?: never, name?: never }> | number | boolean | string) {
     try {

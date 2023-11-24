@@ -23,7 +23,6 @@ export async function forIasync<T extends any[] | any>(nbIterations: number, cal
 }
 
 
-
 export type RecursiveCallback = (item: any, addr: string, lastElementKey: string | number, parent: ObjectGeneric | any[]) => false | any
 export type RecursiveConfig = { disableCircularDependencyRemoval?: boolean }
 /**
