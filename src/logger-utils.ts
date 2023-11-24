@@ -329,16 +329,16 @@ export class cliLoadingSpinner {
         this.frameNb = 0
         this.progressMessage = msg
         this.interval = setInterval(() => {
-            this.activeProcess?.stdout?.clearLine()
-            this.activeProcess?.stdout?.cursorTo(0)
+            this.activeProcess?.stdout?.clearLine?.()
+            this.activeProcess?.stdout?.cursorTo?.(0)
             const symbol = this.animFrames[this.frameNb++ % this.animFrames.length]
             this.activeProcess.stdout.write(C.primary(symbol) + ' ' + this.progressMessage)
         }, this.frameRate)
     }
     end(error = false) {
         clearInterval(this.interval)
-        this.activeProcess?.stdout?.clearLine()
-        this.activeProcess?.stdout?.cursorTo(0)
+        this.activeProcess?.stdout?.clearLine?.()
+        this.activeProcess?.stdout?.cursorTo?.(0)
         C.log(
             error ? C.red('✘ ' + this.progressMessage + '\n\n')
                 : '\x1b[32m✓ ' + this.progressMessage + '\n\n'
