@@ -5,7 +5,7 @@ import { ensureObjectProp } from './object-utils'
 import { isset } from './isset'
 
 /** Randomize array in place and return the same array than inputed */
-export function shuffleArray(array) {
+export function shuffleArray<EntryArray extends any[]>(array: EntryArray): EntryArray {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]]

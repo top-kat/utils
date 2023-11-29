@@ -276,7 +276,12 @@ export function sortObjKeyAccordingToValue(unorderedObj, ascending = true) {
  * @param {function} callback (obj[addr]) => processValue. Eg: myObjAddr => myObjAddr.push('bikou')
  * @return obj[addr] eventually processed by the callback
  */
-export function ensureObjectProp<MainObj extends Record<string, any>, Addr extends string>(obj: MainObj, addr: Addr, defaultValue, callback: (o: any) => any): MainObj[Addr] {
+export function ensureObjectProp<MainObj extends Record<string, any>, Addr extends string>(
+    obj: MainObj,
+    addr: Addr,
+    defaultValue,
+    callback: (o: any) => any
+): MainObj[Addr] {
     err500IfNotSet({ obj, addr, defaultValue, callback })
     if (!isset(obj[addr])) obj[addr] = defaultValue
     if (callback) callback(obj[addr])
