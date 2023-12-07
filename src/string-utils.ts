@@ -40,18 +40,6 @@ export function titleCase(...wordBits: string[] | [string[]]): string {
     return capitalize1st(wordBitsReal.filter(e => e).map(w => w.trim()).join(''), true)
 }
 
-/**Eg: UPPERCASE undefined, null... => '' */
-export function upperCase(...wordBits: string[] | [string[]]): string {
-    const wordBitsReal = getWordBits(wordBits)
-    return wordBitsReal.filter(e => e).map(w => w.trim().toUpperCase()).join('')
-}
-
-/**Eg: lowercase undefined, null... => '' */
-export function lowerCase(...wordBits: string[] | [string[]]): string {
-    const wordBitsReal = getWordBits(wordBits)
-    return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('')
-}
-
 export function capitalize1st(str = '', lowercaseTheRest = false): string { return str ? str[0].toUpperCase() + (lowercaseTheRest ? str.toLowerCase() : str).slice(1) : str }
 
 export function camelCaseToWords(str: string): string[] {
@@ -257,4 +245,14 @@ export function nbOccurenceInString(baseString: string, searchedString: string, 
         } else break
     }
     return n
+}
+
+/** typed lower case. Eg: if you pass 'A' | 'B', the resulting type will be 'a' | 'b' */
+export function lowerCase<T extends string>(string: T) {
+    return string?.toLocaleLowerCase() as Lowercase<T>
+}
+
+/** typed upper case. Eg: if you pass 'a' | 'b', the resulting type will be 'A' | 'B' */
+export function upperCase<T extends string>(string: T) {
+    return string?.toLocaleUpperCase() as Uppercase<T>
 }
