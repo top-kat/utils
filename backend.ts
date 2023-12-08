@@ -1,7 +1,7 @@
 
 
 import { C } from './src/logger-utils'
-import { exec } from 'child_process'
+import { exec, ChildProcess } from 'child_process'
 
 
 /** Execute a custom command into a child terminal and wait for process completion */
@@ -22,13 +22,15 @@ export async function execWaitForOutput(
         streamConsoleOutput: (outputStr: string) => any,
         /** see nodeJs exec() command options */
         execOptions: { cwd?: string, [seeNodeJsDocOnExec: string]: any }
+
+        onStartProcess(process: ChildProcess): any
     }>
 ): Promise<string | undefined> {
 
     let outputStream = ''
     let execOptions
 
-    const { nbSecondsBeforeKillingProcess = 20, streamConsoleOutput = () => true, errorHandle = 'throw', logOutputStream = true, stringOrRegexpToSearchForConsideringDone, keyCodeToSend = {} } = config
+    const { nbSecondsBeforeKillingProcess = 20, streamConsoleOutput = () => true, errorHandle = 'throw', logOutputStream = true, stringOrRegexpToSearchForConsideringDone, keyCodeToSend = {}, onStartProcess } = config
 
     try {
         return await new Promise((res, reject) => {
@@ -38,6 +40,7 @@ export async function execWaitForOutput(
             }, nbSecondsBeforeKillingProcess * 1000) : undefined
 
             const process2 = exec(command, execOptions)
+            if (onStartProcess) onStartProcess(process2)
             const resolve = () => {
                 process2?.kill('SIGINT')
                 clearTimeout(to)
