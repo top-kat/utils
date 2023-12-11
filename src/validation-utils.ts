@@ -103,6 +103,14 @@ export function isValid(...paramsToValidate: ValidatorObject[]) {
     return errArray.length ? false : true
 }
 
+function parseValueForDisplay(value?) {
+    try {
+        return value === undefined ? 'undefined' : value?.data?.data ? { ...value, data: 'Buffer' } : removeCircularJSONstringify(value).substring(0, 999)
+    } catch (_) {
+        return value
+    }
+}
+
 /** Default types + custom types
  * 'objectId','dateInt6','dateInt','dateInt8','dateInt12','time','humanReadableTimestamp','date','array','object','buffer','string','function','boolean','number','bigint',
  */
@@ -129,7 +137,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         let optional = paramObj.optional || false
         const emptyAllowed = optional || paramObj.emptyAllowed || false
         if (paramObj.isset === false) paramObj.mustNotBeSet = true // ALIAS
-        const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, gotValue: isset(value) && isset(value.data) && isset(value.data.data) ? { ...value, data: 'Buffer' } : value, ...extraInfos }]
+        const errMess = (msg, extraInfos = {}, errCode = 422): [string, object] => [msg, { code: errCode, origin: 'Generic validator', varName: name, varType: typeof value, gotValue: parseValueForDisplay(value), ...extraInfos }]
 
         // accept syntax { 'myVar.var2': myVar.var2, ... }
         if (typeof name !== 'undefined' && !hasValue) {
@@ -209,7 +217,7 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
                     typeof value === type && type !== 'object' || // for string, number, boolean...
                     typeof configFn()?.customTypes?.[type] !== 'undefined' && configFn()?.customTypes?.[type]?.test(value)
             })
-            if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value), gotValue: removeCircularJSONstringify(value).substring(0, 999) })
+            if (!areSomeTypeValid) return errMess(`wrongTypeForVar`, { expectedTypes: types.join(', '), gotType: Object.prototype.toString.call(value), gotValue: parseValueForDisplay(value) })
         }
 
         // GREATER / LESS
