@@ -53,10 +53,13 @@ function extraInfosRendererDefault(extraInfos) {
 }
 
 export class DescriptiveError extends Error {
+    /** Full error infos, extra infos + message and code...etc as object */
     errorDescription: { [k: string]: any } = {}
+    /** Http code. Eg: 404, 403... */
     code?: number
     msg: string
     options: ErrorOptions
+    /** Logging of the error is async, unless disabled, so that it wait one frame to allow to log it manually */
     hasBeenLogged = false
     logs: string[] = []
 
@@ -82,6 +85,7 @@ export class DescriptiveError extends Error {
         onError(msg, options)
 
     }
+    /** Compute extraInfos and parse options */
     parseError(forCli = false) {
 
         const errorLogs: string[] = []
