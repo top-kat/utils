@@ -141,6 +141,7 @@ export class DescriptiveError extends Error {
             msg: this.msg,
             code,
             ressource,
+            originalError: err,
             ...extraInfos,
         }
         if (err) this.errorDescription.originalError = `${err.code ? err.code + ': ' : ''}${err.message || err.msg || err.toString()}`
