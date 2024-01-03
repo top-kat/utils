@@ -8,6 +8,7 @@ import { ErrorOptions } from './types'
 import { cleanStackTrace } from './clean-stack-trace'
 import { C } from './logger-utils'
 export { type ErrorOptions } from './types'
+import { removeCircularJSONstringify } from './remove-circular-json-stringify'
 
 export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
 
@@ -48,9 +49,11 @@ export const failSafe = tryCatch // ALIAS
 function extraInfosRendererDefault(extraInfos) {
     return [
         '== EXTRA INFOS ==',
-        JSON.stringify(extraInfos, null, 2)
+        removeCircularJSONstringify(extraInfos, 2)
     ]
 }
+
+
 
 export class DescriptiveError extends Error {
     /** Full error infos, extra infos + message and code...etc as object */
@@ -81,8 +84,8 @@ export class DescriptiveError extends Error {
             if (!this.hasBeenLogged) this.log()
         })
 
-        const { onError = () => { /** */ } } = configFn()
-        onError(msg, options)
+        const { onError } = configFn()
+        if (typeof onError === 'function') onError(msg, options)
 
     }
     /** Compute extraInfos and parse options */
