@@ -57,10 +57,18 @@ function extraInfosRendererDefault(extraInfos) {
 
 export class DescriptiveError extends Error {
     /** Full error infos, extra infos + message and code...etc as object */
-    errorDescription: { [k: string]: any } = {}
+    errorDescription: {
+        code: number
+        msg: string
+        message: string
+        originalError?: string
+        [k: string]: any
+    } = {} as any
     /** Http code. Eg: 404, 403... */
     code?: number
     msg: string
+    /** Alias since .msg is not always obvious to find */
+    message: string
     options: ErrorOptions
     /** Logging of the error is async, unless disabled, so that it wait one frame to allow to log it manually */
     hasBeenLogged = false
@@ -70,6 +78,7 @@ export class DescriptiveError extends Error {
         super(msg)
         delete options.errMsgId
         this.msg = msg
+        this.message = msg
         const { doNotWaitOneFrameForLog = false, ...optionsClean } = options
         this.options = optionsClean
         if (optionsClean.err) optionsClean.err.hasBeenLogged = true
@@ -142,12 +151,15 @@ export class DescriptiveError extends Error {
         if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
         this.errorDescription = {
             msg: this.msg,
+            message: this.msg,
             code,
             ressource,
             originalError: err,
             ...extraInfos,
         }
-        if (err) this.errorDescription.originalError = `${err.code ? err.code + ': ' : ''}${err.message || err.msg || err.toString()}`
+
+        this.errorDescription.originalError ??= ''
+        if (err) this.errorDescription.originalError += `${err.code ? err.code + ': ' : ''}${err.message || err.msg || err.toString()}`
 
         this.logs = errorLogs
 
