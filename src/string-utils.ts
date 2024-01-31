@@ -160,7 +160,7 @@ let lastTs = Date.now()
 */
 export function generateToken(length = 20, unique = true, mode: 'alphanumeric' | 'hexadecimal' = 'alphanumeric') {
     const charConvNumeric = mode === 'alphanumeric' ? 36 : 16
-    if (unique && length < 8) length = 8
+    if (unique && length < 8) throw new Error('generateToken can not be used with less than 8 characters when unique is set to true')
     let token: string
     let tokenTs: number
     do {
