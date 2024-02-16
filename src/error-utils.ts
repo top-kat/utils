@@ -83,7 +83,7 @@ export class DescriptiveError extends Error {
         this.options = optionsClean
         if (optionsClean.err) optionsClean.err.hasBeenLogged = true
 
-        this.parseError()
+        this.parseError() // make sure to parse it before any log or reuse
 
         this.hasBeenLogged = false
         if (doNotWaitOneFrameForLog) this.log()
@@ -166,6 +166,7 @@ export class DescriptiveError extends Error {
         return errorLogs
     }
     log() {
+        this.parseError() // re parse it in case it has been updated from the outside (eg: adding extraInfos)
         if (!this.hasBeenLogged) C.error(false, this.logs.join('\n'))
         this.hasBeenLogged = true
     }
