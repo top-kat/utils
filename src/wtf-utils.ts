@@ -61,7 +61,7 @@ export function compAuto(str) {
 
     for (const { char, replacement } of charMap) {
         // rrrr => rƠ4
-        const reg = replacement.length > 3 && replacement.split('').every((char2, i, a) => char2 == a[0]) ? `${replacement[0]}Ơ${replacement.length}` : replacement
+        const reg = replacement.length > 3 && replacement.split('').every((char2, _, a) => char2 == a[0]) ? `${replacement[0]}Ơ${replacement.length}` : replacement
         str = `${char}${reg}§` + str
     }
     C.info(`COMP percentage: ${Math.round((str.length / oldStrLength) * 100)}% of its original size`)

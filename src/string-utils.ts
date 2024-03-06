@@ -221,7 +221,7 @@ export function miniTemplater(content: string, varz: ObjectGeneric, options: Par
         valueWhenContentUndefined: '',
         ...options,
     }
-    return isset(content) ? content.replace(options2.regexp, (m, $1) => isset(varz[$1]) ? varz[$1] : options2.valueWhenNotSet) : options2.valueWhenContentUndefined
+    return isset(content) ? content.replace(options2.regexp, (_, $1) => isset(varz[$1]) ? varz[$1] : options2.valueWhenNotSet) : options2.valueWhenContentUndefined
 }
 
 

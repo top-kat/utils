@@ -186,7 +186,7 @@ export function deepClone<MainObj extends Record<string, any>>(obj: MainObj, cac
  */
 export function filterKeys<MainObj extends Record<string, any>>(obj: MainObj, filter): MainObj {
     const clone = cloneObject(obj)
-    recursiveGenericFunctionSync(obj, (item, addr, lastElementKey) => {
+    recursiveGenericFunctionSync(obj, (_, addr, lastElementKey) => {
         if (!filter(lastElementKey)) deleteByAddress(clone, addr.split('.'))
     })
     return clone
@@ -345,8 +345,8 @@ export function mergeDeepConfigurable<
     O5 extends Record<string, any> = Record<string, any>,
     O6 extends Record<string, any> = Record<string, any>,
 >(
-    replacerForArrays = (prev, curr) => curr, replacerForObjects,
-    replacerDefault = (prev, curr) => curr,
+    replacerForArrays = (_, curr) => curr, replacerForObjects,
+    replacerDefault = (_, curr) => curr,
     ...objects: [O1, O2?, O3?, O4?, O5?, O6?]
 ): O1 & O2 & O3 & O4 & O5 & O6 {
     return objects.reduce((actuallyMerged, obj) => {

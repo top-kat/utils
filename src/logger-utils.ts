@@ -98,7 +98,7 @@ export const C = {
 
         if (!limits.length) {
             const colWidth = Math.round(configFn()?.terminal?.theme.pageWidth / strings.length)
-            limits = Array(strings.length - 1).fill(2).map((itm, i) => colWidth * i + 1) as number[]
+            limits = Array(strings.length - 1).fill(2).map((_, i) => colWidth * i + 1) as number[]
         }
         const str = strings.reduce((glob, str = '', i) => {
             const realCharLength = str.toString().replace(/\x1b\[.*?m/, '').length
@@ -138,7 +138,7 @@ export const C = {
     customError: (color, ...str) => logErrPrivate('error', color, ...str),
     customWarning: (color, ...str) => logErrPrivate('warn', color, ...str),
     applicationError: (color, ...str) => logErrPrivate('warn', color, ...str),
-    warningLight: (color, ...str) => logErrPrivate('warn', [196, 120, 52], ...str),
+    warningLight: (_, ...str) => logErrPrivate('warn', [196, 120, 52], ...str),
     dimStrSplit(...logs) {
         const logsStr: string[] = []
         logs.filter(isset).forEach(log => log.toString().split('\n').forEach(line => line && logsStr.push(this.dim(`    ${line}`))))
