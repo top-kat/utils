@@ -410,12 +410,15 @@ export function unflattenObject(data: Record<string, any>): Record<string, any> 
     return newO
 }
 
-/** Mean to fix typing because type for Object.entries is not accurate. Ref: https://stackoverflow.com/questions/66565322/get-type-keys-in-typescript*/
+/** Mean to fix typing because type for Object.entries is not accurate. Ref: https://stackoverflow.com/questions/66565322/get-type-keys-in-typescript
+ * /!\ THIS WILL REMOVE SYMBOL AND NUMBER FROM KEY TYPES as this is 99% of the time unwanted for generic objects
+*/
 export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntries<Obj> {
     return Object.entries(obj) as any
 }
 
-type ObjEntries<T, K extends keyof T = keyof T> = (K extends unknown ? [K, T[K]] : never)[]
+/** Will remove Symbol and Number from keys types */
+type ObjEntries<T, K extends keyof T = keyof T> = (K extends string ? [K, T[K]] : never)[]
 
 /** Mean to fix typing because type for Object.keys is not accurate */
 export function objKeys<Obj extends Record<string, any>>(obj: Obj): (keyof Obj)[] {
