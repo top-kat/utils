@@ -426,7 +426,7 @@ export function objKeys<Obj extends Record<string, any>>(obj: Obj): (keyof Obj)[
 }
 
 /** Will merge all arrays of an object into a single array */
-export function mergeObjectArrays<T extends Record<string, any[]>>(obj: T): (T[keyof T][number])[] {
+export function mergeObjectArrays<T extends Record<string, any[]>>(obj: T) {
     return Object.values(obj).flat() as (T[keyof T][number])[]
 }
 
