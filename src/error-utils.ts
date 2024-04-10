@@ -112,7 +112,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         }
 
         this.code = code || 500
-        this.originalError = err
+
         if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
 
         if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
@@ -131,6 +131,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         }
 
         if (err) {
+            this.originalError = err
             errorLogs.push('== ORIGINAL ERROR ==')
             if (typeof err.parseError === 'function') {
                 err.hasBeenLogged = false
