@@ -55,7 +55,7 @@ function extraInfosRendererDefault(extraInfos) {
 
 
 
-export class DescriptiveError extends Error {
+export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     /** Full error infos, extra infos + message and code...etc as object */
     errorDescription: {
         code: number
@@ -64,6 +64,7 @@ export class DescriptiveError extends Error {
         originalError?: string
         [k: string]: any
     } = {} as any
+    originalError: ExpectedOriginalError = {} as any
     /** Http code. Eg: 404, 403... */
     code?: number
     msg: string
@@ -111,6 +112,7 @@ export class DescriptiveError extends Error {
         }
 
         this.code = code || 500
+        this.originalError = err,
         if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
 
         if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
