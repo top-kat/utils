@@ -16,15 +16,13 @@ export function random(nb1: number, nb2: number, nbOfDecimals = 0) { return roun
 
 /** Random multiple of a number between two values */
 export function randomMultipleOf(multiple: number, nb1: number, nb2: number) {
+
     if (multiple === 0) multiple = 1
 
     let randomNumber = Math.random() * (nb2 - nb1) + nb1
     randomNumber = Math.round(randomNumber / multiple) * multiple
 
-    if (randomNumber < nb1) return nb1
-    if (randomNumber > nb2) return nb2
-
-    return randomNumber
+    return randomNumber < 1 ? randomNumber = multiple : randomNumber
 }
 
 /** Sum all values of an array, all values MUST be numbers */
