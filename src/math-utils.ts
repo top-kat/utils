@@ -14,6 +14,19 @@ export function isBetween(number: number, min: number, max: number, inclusive = 
 /** Random number between two values with 0 decimals by default */
 export function random(nb1: number, nb2: number, nbOfDecimals = 0) { return round(Math.random() * (nb2 - nb1) + nb1, nbOfDecimals) }
 
+/** Random multiple of a number between two values */
+export function randomMultipleOf(multiple: number, nb1: number, nb2: number) {
+    if (multiple === 0) multiple = 1
+
+    let randomNumber = Math.random() * (nb2 - nb1) + nb1
+    randomNumber = Math.round(randomNumber / multiple) * multiple
+
+    if (randomNumber < nb1) return nb1
+    if (randomNumber > nb2) return nb2
+
+    return randomNumber
+}
+
 /** Sum all values of an array, all values MUST be numbers */
 export function sumArray(array: number[]) {
     return array.filter(item => typeof item === 'number').reduce((sum, val) => isset(val) ? val + sum : sum, 0)
