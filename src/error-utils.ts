@@ -132,6 +132,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         if (err) {
             this.originalError = err
+            if ('hasBeenLogged' in err) err.hasBeenLogged = true // this will be logged in the child error so we dont want it to be logged twice
             errorLogs.push('== ORIGINAL ERROR ==')
             if (typeof err.parseError === 'function') {
                 err.hasBeenLogged = false
