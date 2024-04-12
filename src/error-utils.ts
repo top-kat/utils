@@ -73,6 +73,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     options: ErrorOptions
     /** Logging of the error is async, unless disabled, so that it wait one frame to allow to log it manually */
     hasBeenLogged = false
+    doNotLog = false // just an alias for the above, actually using this one can be more readable in some situations
     logs: string[] = []
 
     constructor(msg: string, options: ErrorOptions = {}) {
@@ -170,7 +171,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     }
     log() {
         this.parseError() // re parse it in case it has been updated from the outside (eg: adding extraInfos)
-        if (!this.hasBeenLogged) C.error(false, this.logs.join('\n'))
+        if (this.hasBeenLogged === false && this.doNotLog === false) C.error(false, this.logs.join('\n'))
         this.hasBeenLogged = true
     }
     toString() {
