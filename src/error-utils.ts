@@ -132,10 +132,14 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         }
 
         if (err) {
+            // actually, passing by there mean THE ERROR HAS BEEN CATCHED
             this.originalError = err
             errorLogs.push('== ORIGINAL ERROR ==')
             if (typeof err.parseError === 'function') {
+                // The catched error is a DescriptiveError so from
+                // there we prevent further logs/ outpus from error
                 err.hasBeenLogged = true // this will be logged in the child error so we dont want it to be logged twice
+                err.doNotLog = true
                 const logFromOtherErr = err.parseError(forCli)
                 errorLogs.push(...logFromOtherErr)
             } else {
