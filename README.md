@@ -1,8 +1,14 @@
-# TOPKAT-UTILS
 
-Here are my utils for nodeJs / ReactJs. 
+```
+|\_____/| ▀▀▀█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ |\_____/|
+|  |||  |    █  █▀▀█ █▀▀█ █  █ ▄▀▀▄ ▀▀█▀▀    █  █ ▀▀█▀▀ █ █   █▀▀▀ |  |||  |
+\◥■■◾■■◤/    █  █  █ █▀▀▀ █▀▀▄ █▀▀█   █      █  █   █   █ █   ▀▀▀█ \◥■■◾■■◤/
+ \__^__/     ▀  ▀▀▀▀ ▀    ▀  ▀ ▀  ▀   ▀      ▀▀▀▀   ▀   ▀ ▀▀▀ ▀▀▀▀  \__^__/
+```
 
-It's strength is that it has a straight functional naming and is fast and lightweight. It includes a logger with color handling, data validation utils, date utils, mongoDb utils. Check the list above for the function list:
+`« Got a task that’s a bore ? Look at topkat’s store »`
+
+⚡️ Fast and typed utils ⚡️
 
 ``` javascript
 const topkatUtils = {
