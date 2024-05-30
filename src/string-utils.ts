@@ -256,3 +256,24 @@ export function lowerCase<T extends string>(string: T) {
 export function upperCase<T extends string>(string: T) {
     return string?.toLocaleUpperCase() as Uppercase<T>
 }
+
+/** Parse strings like 'true', 'false', '123', 'null' to their real type equivalent. Actual string is returned if nothing matches.
+  * * /!\ for typing please profide a type parameter like `parseStringVariable<boolean>('true')` */
+export function parseStringVariable<T = any>(val: any): T {
+    if (val === 'undefined') return undefined as any
+    else if (val === 'true') return true as any
+    else if (val === 'false') return false as any
+    else if (val === 'null') return null as any
+    else if (/^[0-9]+$/.test(val)) return Number(val) as any
+    else return val as any
+}
+
+/** return val === 'true' || val === true */
+export function parseStringAsBoolean(val: string | boolean | undefined) {
+    return val === 'true' || val === true
+}
+
+/** return Number(val) */
+export function parseStringAsNumber(val: string | number) {
+    return Number(val)
+}
