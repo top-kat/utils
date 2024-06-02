@@ -19,7 +19,7 @@ export function simpleObjectMaskOrSelect<Obj extends ObjectGeneric>(
     maskedOrSelectedFields: (keyof Obj)[],
     mode: 'mask' | 'select' = 'mask',
     deleteKeysInsteadOfReturningAnewObject = false
-) {
+): Obj {
     const allKeys = Object.keys(object)
     const keysToMask = allKeys.filter(keyName => {
         if (mode === 'mask') return maskedOrSelectedFields.includes(keyName)
@@ -32,7 +32,7 @@ export function simpleObjectMaskOrSelect<Obj extends ObjectGeneric>(
         return allKeys.reduce((newObject, key) => {
             if (!keysToMask.includes(key)) newObject[key] = object[key]
             return newObject
-        }, {})
+        }, {}) as Obj
     }
 }
 
