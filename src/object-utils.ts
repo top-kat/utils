@@ -9,17 +9,20 @@ import { isObject } from './is-object'
 import { DescriptiveError } from './error-utils'
 import { escapeRegexp } from './regexp-utils'
 
-/**
- *
- * @param {Object} object main object
- * @param {String[]} maskedOrSelectedFields array of fields
- * @param {Boolean} isMask default: true; determine the behavior of the function. If is mask, selected fields will not appear in the resulting object. If it's a select, only selected fields will appear.
- * @param {Boolean} deleteKeysInsteadOfReturningAnewObject default:false; modify the existing object instead of creating a new instance
+
+/** Return an object:
+* * with only selected fields
+* * OR without masked fields
  */
-export function simpleObjectMaskOrSelect(object: ObjectGeneric, maskedOrSelectedFields: string[], isMask = true, deleteKeysInsteadOfReturningAnewObject = false) {
+export function simpleObjectMaskOrSelect<Obj extends ObjectGeneric>(
+    object: Obj,
+    maskedOrSelectedFields: (keyof Obj)[],
+    mode: 'mask' | 'select' = 'mask',
+    deleteKeysInsteadOfReturningAnewObject = false
+) {
     const allKeys = Object.keys(object)
     const keysToMask = allKeys.filter(keyName => {
-        if (isMask) return maskedOrSelectedFields.includes(keyName)
+        if (mode === 'mask') return maskedOrSelectedFields.includes(keyName)
         else return !maskedOrSelectedFields.includes(keyName)
     })
     if (deleteKeysInsteadOfReturningAnewObject) {
