@@ -105,7 +105,9 @@ export function isValid(...paramsToValidate: ValidatorObject[]) {
 
 function parseValueForDisplay(value?) {
     try {
-        return value === undefined ? 'undefined' : value?.data?.data ? { ...value, data: 'Buffer' } : removeCircularJSONstringify(value).substring(0, 999)
+        if (value === undefined) return 'undefined'
+        else if (value?.data?.data) return { ...value, data: 'Buffer' }
+        else return removeCircularJSONstringify(value).substring(0, 999)
     } catch (_) {
         return value
     }
@@ -229,19 +231,19 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         // IN VALUES
         if (typeof paramObj.in !== 'undefined') {
             const equals = Array.isArray(paramObj.in) ? paramObj.in : [paramObj.in]
-            if (!equals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { supportedValues: JSON.stringify(equals) })
+            if (!equals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { supportedValues: parseValueForDisplay(equals) })
         }
 
         // EQUAL (exact copy of .in)
         if (paramObj.hasOwnProperty('eq')) {
             const equals = Array.isArray(paramObj.eq) ? paramObj.eq : [paramObj.eq]
-            if (!equals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { supportedValues: equals.join(', '), })
+            if (!equals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { supportedValues: parseValueForDisplay(equals), })
         }
 
         // NOT EQUAL
         if (paramObj.hasOwnProperty('neq')) {
             const notEquals = Array.isArray(paramObj.neq) ? paramObj.neq : [paramObj.neq]
-            if (notEquals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { NOTsupportedValues: notEquals.join(', ') })
+            if (notEquals.some(equalVal => equalVal === value)) return errMess(`wrongValueForVar`, { NOTsupportedValues: parseValueForDisplay(notEquals) })
         }
 
         // INCLUDES
