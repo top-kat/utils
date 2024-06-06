@@ -14,7 +14,8 @@ const getCharIndex = (char: string) => {
 
 /** simple and quick encoding, this is meant to obfuscate JWT encoding so we can
 not decode it with something like https://jwt.io/
-TODO put it in validationUtils
+* * ⚠️🚸 special characters are actually not supported
+* * string will be obfuscated so the characters are not in order
  */
 function simpleEncryption(strR: string, secret: string, decode = false): string {
 
@@ -32,9 +33,23 @@ function simpleEncryption(strR: string, secret: string, decode = false): string 
 }
 
 export function simpleEncryptionEncode(str: string, secret: string) {
-    return simpleEncryption(str, secret, false)
+    const strFromStart = [] as string[]
+    const strFromEnd = [] as string[]
+    str.split('').forEach((char, i) => {
+        if (i % 2) strFromStart.push(char)
+        else strFromEnd.push(char)
+    })
+    return simpleEncryption(strFromStart.join('') + strFromEnd.reverse().join(''), secret, false)
 }
 
 export function simpleEncryptionDecode(str: string, secret: string) {
-    return simpleEncryption(str, secret, true)
+    const decoded = simpleEncryption(str, secret, true)
+    const newStr = [] as string[]
+    const decodedArr = decoded.split('')
+    let i = 0
+    while (decodedArr.length) {
+        if (i++ % 2) newStr.push(decodedArr.shift() as string)
+        else newStr.push(decodedArr.pop() as string)
+    }
+    return newStr.join('')
 }
