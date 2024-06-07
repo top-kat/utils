@@ -81,9 +81,9 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         delete options.errMsgId
         this.msg = msg
         this.message = msg
-        const { doNotWaitOneFrameForLog = false, ...optionsClean } = options
+        const { doNotWaitOneFrameForLog = options.code === 500, ...optionsClean } = options
         this.options = optionsClean
-        if (optionsClean.err) optionsClean.err.hasBeenLogged = true
+        if (optionsClean.err && typeof optionsClean.err !== 'string') optionsClean.err.hasBeenLogged = true
 
         this.parseError() // make sure to parse it before any log or reuse
 
