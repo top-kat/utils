@@ -65,7 +65,6 @@ export function checkCtxIntegrity(ctx) {
         { name: [{'blahVar': blahVarValue, 'myOtherVar': myOtherVarValue}], type: 'string'} // multiple names for same check
     )
 ----------------------------------------*/
-
 export type ValidatorObject = {
     name?: string
     value?: any
@@ -153,8 +152,8 @@ export function validatorReturnErrArray(...paramsToValidate: ValidatorObject[]):
         }
 
         // DEFINED AND NOT EMPTY
-        if (typeof value === 'undefined' && optional) continue
-        if (typeof value !== 'undefined' && paramObj.mustNotBeSet) return errMess('variableMustNotBeSet')
+        if ((typeof value === 'undefined') && optional) continue
+        if (typeof value !== 'undefined' && value !== null && paramObj.mustNotBeSet) return errMess('variableMustNotBeSet')
         if (paramObj.mustNotBeSet) continue // exit
         if (typeof value === 'undefined') return errMess('requiredVariableEmptyOrNotSet')
         if (!emptyAllowed && value === '') return errMess('requiredVariableEmpty')
