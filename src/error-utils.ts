@@ -9,6 +9,7 @@ import { cleanStackTrace } from './clean-stack-trace'
 import { C } from './logger-utils'
 export { type ErrorOptions } from './types'
 import { removeCircularJSONstringify } from './remove-circular-json-stringify'
+import { generateToken } from './string-utils'
 
 export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
 
@@ -58,13 +59,20 @@ function extraInfosRendererDefault(extraInfos) {
 export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     /** Full error infos, extra infos + message and code...etc as object */
     errorDescription: {
+        /** used to uniquely identify the error */
+        id: string
+        /** Http error code if any */
         code: number
         msg: string
         message: string
+        /** The parent error if any */
         originalError?: string
         [k: string]: any
     } = {} as any
+    /** The parent error if any */
     originalError: ExpectedOriginalError = {} as any
+    /** used to uniquely identify the error */
+    id: string = generateToken(24, true)
     /** Http code. Eg: 404, 403... */
     code?: number
     msg: string
@@ -107,6 +115,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         const { err, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, ...extraInfosRaw } = this.options
         let { code } = this.options
         const extraInfos = {
+            id: this.id,
             ...extraInfosRaw,
             // additionnal extra info passed from parent error
             ...(this.options.extraInfos || {}),
@@ -158,6 +167,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         this.code = code || 500
         if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
         this.errorDescription = {
+            id: this.id,
             msg: this.msg,
             message: this.msg,
             code,
