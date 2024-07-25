@@ -1,6 +1,6 @@
 {
   "name": "topkat-utils",
-  "version": "1.2.97",
+  "version": "1.2.98",
   "type": "commonjs",
   "types": "index.ts",
   "main": "dist",
