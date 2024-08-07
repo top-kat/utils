@@ -81,6 +81,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     options: ErrorOptions
     /** Logging of the error is async, unless disabled, so that it wait one frame to allow to log it manually */
     hasBeenLogged = false
+    isAxiosError = false
     doNotLog = false // just an alias for the above, actually using this one can be more readable in some situations
     logs: string[] = []
 
@@ -89,6 +90,9 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         delete options.errMsgId
         this.msg = msg
         this.message = msg
+
+        this.isAxiosError = (options?.err?.stack || options.stack)?.startsWith('Axios') || false
+
         const { doNotWaitOneFrameForLog = options.code === 500, ...optionsClean } = options
         this.options = optionsClean
         if (optionsClean.err && typeof optionsClean.err !== 'string') optionsClean.err.hasBeenLogged = true
@@ -96,6 +100,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         this.parseError() // make sure to parse it before any log or reuse
 
         this.hasBeenLogged = false
+
         if (doNotWaitOneFrameForLog) this.log()
         else setTimeout(() => {
             // wait one event loop because it can be catched in a parent module
@@ -127,6 +132,13 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
         if (!isset(extraInfos.gotValue) && this.options.hasOwnProperty('gotValue')) extraInfos.gotValue = 'undefined'
+
+        this.isAxiosError = (extraInfos?.err?.stack || extraInfos.stack || this.stack)?.startsWith('Axios') || false
+
+        if (this.isAxiosError) {
+            // trying to extract response
+            extraInfos.responseData = extraInfos.err?.response.data || extraInfos.response.data
+        }
 
         if (isset(ressource)) {
             code = 404
