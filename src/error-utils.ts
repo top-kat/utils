@@ -133,11 +133,11 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         if (!isset(extraInfos.value) && this.options.hasOwnProperty('value')) extraInfos.value = 'undefined'
         if (!isset(extraInfos.gotValue) && this.options.hasOwnProperty('gotValue')) extraInfos.gotValue = 'undefined'
 
-        this.isAxiosError = (extraInfos?.err?.stack || extraInfos.stack || this.stack)?.startsWith('Axios') || false
+        this.isAxiosError = this.isAxiosError || (extraInfos?.err?.stack || extraInfos.stack || this.stack)?.startsWith('Axios') || false
 
         if (this.isAxiosError) {
             // trying to extract response
-            extraInfos.responseData = extraInfos.err?.response.data || extraInfos.response.data
+            extraInfos.responseData = err?.response?.data || extraInfos.response?.data
         }
 
         if (isset(ressource)) {
