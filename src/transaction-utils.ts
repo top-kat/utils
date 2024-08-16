@@ -28,11 +28,12 @@ export async function transaction(name, asyncCallback, timeout = 120000, doNotTh
         if (doNotThrow) reject = C.error
         queue[name].push(async () => {
             try {
-                setTimeout(() => {
-                    C.warning('Transaction Timout') // in case not catched
+                const to = setTimeout(() => {
+                    C.warning('Transaction Timeout') // in case not catched
                     reject(new Error('transactionTimeout'))
                 }, timeout)
                 const res = await asyncCallback()
+                clearTimeout(to)
                 resolve(res)
             } catch (err) {
                 reject(err)

@@ -14,16 +14,22 @@
   },
   "scripts": {
     "build": "tsc",
-    "bump:major": "npm run build & node node_modules/bump-simple/bump-simple.js --major",
-    "bump:minor": "npm run build & node node_modules/bump-simple/bump-simple.js --minor",
-    "bump:patch": "npm run build & node node_modules/bump-simple/bump-simple.js --patch"
+    "bump:major": "yarn test:ci && npm run build & node node_modules/bump-simple/bump-simple.js --major",
+    "bump:minor": "yarn test:ci && npm run build & node node_modules/bump-simple/bump-simple.js --minor",
+    "bump:patch": "yarn test:ci && npm run build & node node_modules/bump-simple/bump-simple.js --patch",
+    "test": "jest --watchAll",
+    "test:ci": "jest --ci --runInBand --maxConcurrency=1 --silent"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
     "bump-simple": "^1.0.0",
     "eslint": "^8.0.0",
-    "typescript": "^4.9.5",
-    "@typescript-eslint/eslint-plugin": "latest",
-    "@typescript-eslint/parser": "latest"
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
   }
 }
