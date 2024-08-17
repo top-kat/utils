@@ -10,7 +10,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/top-kat/utils"
+    "url": "git+https://github.com/top-kat/utils.git"
   },
   "scripts": {
     "build": "tsc",
