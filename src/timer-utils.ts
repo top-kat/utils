@@ -56,3 +56,14 @@ export async function executeInDelayedLoop(callback, time = 500, errorCallback =
     }
     isExecuting = false
 }
+
+/** Will first wait before calling callback every seconds configured in retrySeconds array */
+export async function retryWithDelay(
+    callback: Function,
+    retrySeconds: number[]
+) {
+    for (const n of retrySeconds) {
+        await timeout(n * 1000)
+        await callback()
+    }
+}
