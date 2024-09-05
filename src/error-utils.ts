@@ -164,9 +164,9 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
                 const logFromOtherErr = err.parseError(forCli)
                 errorLogs.push(...logFromOtherErr)
             } else {
-                errorLogs.push(err.toString())
+                errorLogs.push(removeCircularJSONstringify(err))
                 if (!noStackTrace && err.stack) errorLogs.push(cleanStackTrace(err.stack))
-                if (err.extraInfos) errorLogs.push(err.extraInfos)
+                if (err.extraInfos) errorLogs.push(removeCircularJSONstringify(err.extraInfos))
             }
         } else {
             if (!noStackTrace) {
