@@ -24,7 +24,10 @@ export async function forIasync<T extends any[] | any>(nbIterations: number, cal
 
 
 export type RecursiveCallback = (item: any, addr: string, lastElementKey: string | number, parent: ObjectGeneric | any[]) => false | any
-export type RecursiveConfig = { disableCircularDependencyRemoval?: boolean }
+export type RecursiveConfig = {
+    disableCircularDependencyRemoval?: boolean
+    isObjectTestFunction?: (item: any) => boolean
+}
 /**
  * @param {any} item the first array or object or whatever you want to recursively browse
  * @param {function} callback the callback you want to apply on items including the main one
@@ -43,6 +46,8 @@ export type RecursiveConfig = { disableCircularDependencyRemoval?: boolean }
 export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency: any[] = []) {
     err500IfNotSet({ callback })
 
+    if (!config.isObjectTestFunction) config.isObjectTestFunction = isObject
+
     if (!techFieldToAvoidCircularDependency.includes(item)) {
         const result = addr$ === '' ? true : await callback(item, addr$, lastElementKey, parent)
 
@@ -52,7 +57,7 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
                 await Promise.all(item.map(
                     (e, i) => recursiveGenericFunction(e, callback, config, addr$ + '[' + i + ']', i, item, techFieldToAvoidCircularDependency)
                 ))
-            } else if (isObject(item)) {
+            } else if (config.isObjectTestFunction(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 await Promise.all(Object.entries(item).map(
                     ([key, val]) => recursiveGenericFunction(val, callback, config, (addr$ ? addr$ + '.' : '') + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency)
@@ -81,6 +86,8 @@ export async function recursiveGenericFunction(item: ObjectGeneric | any[], call
  */
 export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency: any[] = []) {
     err500IfNotSet({ callback })
+
+    if (!config.isObjectTestFunction) config.isObjectTestFunction = isObject
 
     if (!techFieldToAvoidCircularDependency.includes(item)) {
         const result = addr$ === '' ? true : callback(item, addr$, lastElementKey, parent)
