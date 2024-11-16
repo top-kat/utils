@@ -96,7 +96,7 @@ export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callba
             if (Array.isArray(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item) // do not up one level
                 item.forEach((e, i) => recursiveGenericFunctionSync(e, callback, config, addr$ + '[' + i + ']', i, item, techFieldToAvoidCircularDependency))
-            } else if (isObject(item)) {
+            } else if (config.isObjectTestFunction(item)) {
                 if (config?.disableCircularDependencyRemoval !== true) techFieldToAvoidCircularDependency.push(item)
                 Object.entries(item).forEach(([key, val]) => recursiveGenericFunctionSync(val, callback, config, (addr$ ? addr$ + '.' : '') + key.replace(/\./g, '%'), key, item, techFieldToAvoidCircularDependency))
             }
