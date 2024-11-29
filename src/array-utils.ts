@@ -35,7 +35,7 @@ export function ensureIsArrayAndPush(obj: object, addr: string, valToPush: any, 
 
 /** If a string is provided, return it as array else return the value */
 export function strAsArray<T>(arrOrStr: T): T extends string ? string[] : T {
-    return typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr as any
+    return (typeof arrOrStr === 'string' ? [arrOrStr] : arrOrStr) as any
 }
 
 type AsArrReturnVal<T, X> = T extends undefined ? (X extends undefined ? void : X) : T extends any[] ? T : T[]
@@ -44,7 +44,7 @@ type AsArrReturnVal<T, X> = T extends undefined ? (X extends undefined ? void : 
  */
 export function asArray<T extends any[] | any, X>(item: T, returnValueIfUndefined?: X): AsArrReturnVal<T, X> {
     if (typeof item === 'undefined') return returnValueIfUndefined as any
-    else return Array.isArray(item) ? item : [item] as any
+    else return (Array.isArray(item) ? item : [item]) as any
 }
 
 /** @return {object} { inCommon, notInB, notInA } */
@@ -96,8 +96,8 @@ export function arrayCount(item: any, arr: any[] | readonly any[]): number {
 /**
  * @param {Function} comparisonFunction default: (itemToPush, itemAlreadyInArray) => itemToPush === itemAlreadyInArray; comparison function to consider the added item duplicate
  */
-export function pushIfNotExist(arrayToPushInto: any[], valueOrArrayOfValuesToBePushed: any, comparisonFunction = (a, b) => a === b): any[] {
-    const valuesToPush = asArray(valueOrArrayOfValuesToBePushed).filter(a => !arrayToPushInto.some(b => comparisonFunction(a, b)))
+export function pushIfNotExist<T>(arrayToPushInto: T[], valueOrArrayOfValuesToBePushed: T | T[], comparisonFunction = (a: T, b: T) => a === b): T[] {
+    const valuesToPush = (asArray(valueOrArrayOfValuesToBePushed) as T[]).filter(a => !arrayToPushInto.some(b => comparisonFunction(a, b)))
     arrayToPushInto.push(...valuesToPush)
     return arrayToPushInto
 }
