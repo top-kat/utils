@@ -423,8 +423,11 @@ export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntrie
 /** Will remove Symbol and Number from keys types */
 type ObjEntries<T, K extends keyof T = keyof T> = (K extends string ? [K, T[K]] : never)[]
 
+/** Will remove Symbol and Number from keys types */
+type StringKeys<T> = keyof T extends infer K ? K extends string ? K : never : never
+
 /** Mean to fix typing because type for Object.keys is not accurate */
-export function objKeys<Obj extends Record<string, any>>(obj: Obj): (keyof Obj)[] {
+export function objKeys<Obj extends Record<string, any>>(obj: Obj): StringKeys<Obj>[] {
     return Object.keys(obj) as any
 }
 
