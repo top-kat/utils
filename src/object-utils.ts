@@ -76,7 +76,7 @@ export function findByAddressAll<ReturnAddresses extends boolean = false>(
     returnAddresses: ReturnAddresses = false as ReturnAddresses
 ): ReturnAddresses extends true ? FindByAddressReturnFull : Array<any> {
     err500IfNotSet({ obj, addr })
-    if (addr === '') return returnAddresses ? [addr, obj, undefined, undefined] as any : obj
+    if (addr === '') return (returnAddresses ? [addr, obj, undefined, undefined] : obj) as any
     const addrRegexp = new RegExp('^' + escapeRegexp(
         addr.replace(/\.?\[(\d+)\]/g, '.$1'), // replace .[4] AND [4] TO .4
         { parseStarChar: true, wildcardNotMatchingChars: '.[' }) + '$'
