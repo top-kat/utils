@@ -10,6 +10,7 @@ import { C } from './logger-utils'
 export { type ErrorOptions } from './types'
 import { removeCircularJSONstringify } from './remove-circular-json-stringify'
 import { generateToken } from './string-utils'
+import { isObject } from './is-object'
 
 export function errIfNotSet(objOfVarNamesWithValues) { return errXXXIfNotSet(422, false, objOfVarNamesWithValues) }
 
@@ -117,7 +118,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         const errorLogs: string[] = []
 
-        const { err, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, ...extraInfosRaw } = this.options
+        const { err, noStackTrace = false, ressource, extraInfosRenderer = extraInfosRendererDefault, maskForFront, ...extraInfosRaw } = this.options
         let { code } = this.options
         const extraInfos = {
             id: this.id,
@@ -148,8 +149,9 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         errorLogs.push(this.msg || this.message)
 
-        if (Object.keys(extraInfos).length > 0) {
-            errorLogs.push(...extraInfosRenderer(extraInfos))
+        const extraInfosForLogs = { ...extraInfos, ...(isObject(maskForFront) ? maskForFront : { maskForFront }) }
+        if (Object.keys(extraInfosForLogs).length > 0) {
+            errorLogs.push(...extraInfosRenderer(extraInfosForLogs))
         }
 
         if (err) {
@@ -185,6 +187,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
             code,
             ressource,
             originalError: err,
+            maskForFront,
             ...extraInfos,
         }
 
