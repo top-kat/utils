@@ -4,7 +4,6 @@
   "type": "commonjs",
   "types": "index.ts",
   "main": "dist",
-  "private": false,
   "description": "FAST AND FUNCTIONAL UTILS",
   "author": "topkat",
   "license": "ISC",
