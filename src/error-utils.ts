@@ -67,7 +67,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         msg: string
         message: string
         /** The parent error if any */
-        originalError?: string
+        originalError?: Error | Record<string, any> | DescriptiveError
         [k: string]: any
     } = {} as any
     /** The parent error if any */
@@ -143,7 +143,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         if (this.isAxiosError) {
             // trying to extract response
-            extraInfos.responseData = err?.response?.data || extraInfos.response?.data
+            extraInfos.responseData = err && 'response' in err ? err.response.data : extraInfos.response?.data
         }
 
         if (isset(ressource)) {
