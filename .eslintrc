@@ -16,7 +16,7 @@
         "allowImportExportEverywhere": true
     },
     "rules": {
-        "@typescript-eslint/indenindentt": [
+        "indent": [
             "warn",
             4
         ],
