@@ -109,3 +109,8 @@ export function isNotEmptyArray(arr): boolean {
 export function randomItemInArray<T extends Array<any> | (readonly any[])>(array: T): T[number] {
     return array[Math.floor(Math.random() * array.length)]
 }
+
+/** This has been made because in typescript the FUCKING TYPE OF THE ITEM must be typê of InputArray[number] which is shit since you want to know if the item is included and it may be of any type. In bonus, if type is included in the array, the type will be true */
+export function includes<A extends any[] | readonly any[], B>(array: A, item: B): B extends A[number] ? true : boolean {
+    return array?.includes(item as any) as any
+}
