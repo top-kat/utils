@@ -152,7 +152,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
             extraInfos.ressource = ressource
         }
 
-        errorLogs.push(this.msg || this.message)
+        errorLogs.push(computeErrorMessage(this))
 
         const extraInfosForLogs = { ...extraInfos, ...(isObject(maskForFront) ? maskForFront : { maskForFront }) }
         if (Object.keys(extraInfosForLogs).length > 0) {
@@ -163,6 +163,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
             // actually, passing by there mean THE ERROR HAS BEEN CATCHED
             this.originalError = err
             errorLogs.push('== ORIGINAL ERROR ==')
+            errorLogs.push(computeErrorMessage(err))
             if (typeof err.parseError === 'function') {
                 // The catched error is a DescriptiveError so from
                 // there we prevent further logs/ outpus from error
@@ -196,9 +197,6 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
             ...extraInfos,
         }
 
-        this.errorDescription.originalError ??= ''
-        if (err) this.errorDescription.originalError += `${err.code ? err.code + ': ' : ''}${err.message || err.msg || err.toString()}`
-
         this.logs = errorLogs
 
         return errorLogs
@@ -211,4 +209,8 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     toString() {
         return this.logs.join('\n')
     }
+}
+
+function computeErrorMessage(err) {
+    return (err.code ? err.code + ' ' : '') + (err.msg || err.message)
 }
