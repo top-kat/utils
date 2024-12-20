@@ -96,7 +96,12 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         const { doNotWaitOneFrameForLog = options.code === 500, ...optionsClean } = options
         this.options = optionsClean
-        if (optionsClean.err && typeof optionsClean.err !== 'string') optionsClean.err.hasBeenLogged = true
+        if (optionsClean.err) {
+            // ORIGINAL ERROR
+            if (typeof optionsClean.err !== 'string') optionsClean.err.hasBeenLogged = true
+            // get props from prototype to be in actual error object for further manipulation
+            optionsClean.err = { message: optionsClean.err.message, stack: optionsClean.err.stack, ...optionsClean.err }
+        }
 
         this.parseError() // make sure to parse it before any log or reuse
 
@@ -166,7 +171,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
                 const logFromOtherErr = err.parseError(forCli)
                 errorLogs.push(...logFromOtherErr)
             } else {
-                errorLogs.push(removeCircularJSONstringify(err))
+                errorLogs.push(removeCircularJSONstringify({ ...err, hasBeenLogged: undefined }))
                 if (!noStackTrace && err.stack) errorLogs.push(cleanStackTrace(err.stack))
                 if (err.extraInfos) errorLogs.push(removeCircularJSONstringify(err.extraInfos))
             }

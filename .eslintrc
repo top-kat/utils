@@ -16,11 +16,11 @@
         "allowImportExportEverywhere": true
     },
     "rules": {
-        "indent": "off",
-        "@typescript-eslint/indent": [
+        "@typescript-eslint/indenindentt": [
             "warn",
             4
         ],
+        "@typescript-eslint/no-unsafe-function-type": 0,
         "no-inner-declarations": "off",
         "no-console": "warn",
         "no-unused-vars": 0,
