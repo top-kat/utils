@@ -59,7 +59,15 @@ let config = {
 export function configFn(): Required<TopkatUtilConfig & { terminal: TerminalConfigRequired }> { return config as any }
 
 export function registerConfig(customConfig: RecursivePartial<TopkatUtilConfig>) {
+
     if ('terminal' in customConfig === false) customConfig.terminal = {} as TopkatUtilConfig['terminal']
+
+    if (customConfig.terminal?.theme?.primary) {
+        const primary = customConfig.terminal.theme.primary
+        customConfig.terminal.theme.shade1 ??= [primary[0] / 2.2, primary[1] / 2.2, primary[2] / 2.2]
+        customConfig.terminal.theme.shade1 ??= primary
+    }
+
     const newconfig = {
         ...config,
         ...customConfig
