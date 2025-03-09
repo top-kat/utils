@@ -6,8 +6,8 @@ const isNode = isNodeJs()
 
 type TerminalTheme = {
     primary: Color, // blue theme
-    shade1: Color,
-    shade2: Color,
+    shade1?: Color,
+    shade2?: Color,
     bgColor?: Color
     paddingX?: number
     paddingY?: number
@@ -63,9 +63,9 @@ export function registerConfig(customConfig: RecursivePartial<TopkatUtilConfig>)
     if ('terminal' in customConfig === false) customConfig.terminal = {} as TopkatUtilConfig['terminal']
 
     if (customConfig.terminal?.theme?.primary) {
-        const primary = customConfig.terminal.theme.primary
+        const primary = customConfig.terminal.theme.primary as Color
         customConfig.terminal.theme.shade1 ??= [primary[0] / 2.2, primary[1] / 2.2, primary[2] / 2.2]
-        customConfig.terminal.theme.shade1 ??= primary
+        customConfig.terminal.theme.shade2 ??= primary
     }
 
     const newconfig = {
