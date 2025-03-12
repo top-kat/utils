@@ -4,6 +4,7 @@
 //----------------------------------------
 import { cliProgressBar, C } from './logger-utils'
 import { DescriptiveError } from './error-utils'
+import { round2 } from './math-utils'
 
 
 export async function timeout(ms, fn = () => { /* */ }) { return new Promise(res => setTimeout(res, ms)).then(fn) }
@@ -65,5 +66,24 @@ export async function retryWithDelay(
     for (const n of retrySeconds) {
         await timeout(n * 1000)
         await callback()
+    }
+}
+
+/** Use this timer to measure code performances.
+  * @example ```
+const time = perfTimer()
+
+for(let i = 0; i < 9999;i++) longProcess()
+
+console.log('Process took ' + time.end())
+  ```
+ */
+export function perfTimer(unit: 'ms' | 'seconds') {
+    return {
+        start: Date.now(),
+        end() {
+            const msSinceStart = Date.now() - this.start
+            return unit === 'ms' ? msSinceStart + ' ' + unit : round2(msSinceStart / 1000) + ' ' + unit
+        }
     }
 }
