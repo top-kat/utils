@@ -78,7 +78,7 @@ for(let i = 0; i < 9999;i++) longProcess()
 console.log('Process took ' + time.end())
   ```
  */
-export function perfTimer(unit: 'ms' | 'seconds') {
+export function perfTimer(unit: 'ms' | 'seconds' = 'seconds') {
     return {
         start: Date.now(),
         end() {
