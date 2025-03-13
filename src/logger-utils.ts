@@ -17,6 +17,11 @@ export const logger = {
     log(str: string, level: LogLevels = 'info') {
         const { preprocessLog } = configFn()
         if (typeof preprocessLog === 'function') str = preprocessLog(str) || str
+
+        const paddingX = configFn()?.terminal?.theme?.paddingX
+        const padX = ' '.repeat(paddingX || 0)
+        str = padX + str.replace(/\n/g, '\n' + padX)
+
         if (isset(console[level])) console[level](str)
         else console.log(str)
 
