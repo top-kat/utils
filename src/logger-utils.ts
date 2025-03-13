@@ -183,8 +183,14 @@ export const C = {
         this.logClr('🐞 ' + title, configFn()?.terminal?.theme?.debugModeColor, 0)
         this.log(this.dimStrSplit(...string))
     },
-    // DEPRECATED
-    useTheme() { /* */ },
+    /** allow to clear the last lines written to console */
+    clearLastLines(n: number = 2) {
+        for (let i = 0; i < n; i++) {
+            process?.stdout?.moveCursor?.(0, -1) // Move up one line
+            process?.stdout?.clearLine?.(0)
+        }
+        process?.stdout?.cursorTo?.(0) // Move cursor to beginning of the current line
+    }
 }
 
 function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
