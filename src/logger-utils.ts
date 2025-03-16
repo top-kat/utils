@@ -301,7 +301,6 @@ function stringifyExtraInfos(extraInfoOriginal, type, color, level = 0) {
  */
 export function cliProgressBar(step: number, char = '.', msg = `\x1b[2mⓘ Waiting response`) {
     if (typeof process?.stdout?.clearLine === 'function') {
-        process.stdout.clearLine(0)
         process.stdout.cursorTo(0)
         process.stdout.write(`${msg}${char.repeat(step)}\x1b[0m`) // \x1b[0m == reset color
     }
@@ -340,15 +339,13 @@ export class cliLoadingSpinner {
         this.frameNb = 0
         this.progressMessage = msg
         this.interval = setInterval(() => {
-            this.activeProcess?.stdout?.clearLine?.()
-            this.activeProcess?.stdout?.cursorTo?.(0)
+            this.activeProcess?.stdout?.cursorTo?.(0) // Move cursor to beginning of the current line
             const symbol = this.animFrames[this.frameNb++ % this.animFrames.length]
             this.activeProcess.stdout.write(C.primary(symbol) + ' ' + this.progressMessage)
         }, this.frameRate)
     }
     end(error = false) {
         clearInterval(this.interval)
-        this.activeProcess?.stdout?.clearLine?.()
         this.activeProcess?.stdout?.cursorTo?.(0)
         C.log(
             error ? C.red('✘ ' + this.progressMessage + '\n\n')
