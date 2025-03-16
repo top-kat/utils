@@ -4,9 +4,18 @@
 import { isset } from './isset'
 
 /** Round with custom number of decimals (default:0) */
-export function round(number: number | string, decimals = 0) { return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals) }
+export function round(number: number | string, decimals = 0) {
+    return Math.round((typeof number === 'number' ? number : parseFloat(number)) * Math.pow(10, decimals)) / Math.pow(10, decimals)
+}
+
 /** Round with custom number of decimals (default:2) */
-export function round2(number: number | string, decimals = 2) { return round(number, decimals) }
+export function round2<T extends 'number' | 'string' = 'string'>(
+    number: number | string,
+    decimals = 2,
+    format: T = 'string' as T
+) {
+    return (format === 'string' ? Number(number).toFixed(decimals) : round(number, decimals)) as T extends 'number' ? number : string
+}
 
 /** Is number between two numbers (including those numbers) */
 export function isBetween(number: number, min: number, max: number, inclusive = true) { return inclusive ? number <= max && number >= min : number < max && number > min }
