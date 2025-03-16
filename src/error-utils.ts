@@ -51,7 +51,7 @@ export const failSafe = tryCatch // ALIAS
 function extraInfosRendererDefault(extraInfos) {
     return [
         '== EXTRA INFOS ==',
-        removeCircularJSONstringify(extraInfos, 2)
+        removeCircularJSONstringify({ ...extraInfos, msg: undefined, message: undefined }, 2)
     ]
 }
 
