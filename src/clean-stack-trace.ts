@@ -25,6 +25,7 @@ export function cleanStackTrace(stack) {
         'Object.throw',
         'mongoose/lib/utils',
         'at Array.forEach (<anonymous>)',
+        '/core.error.'
     ]
     const linesClean = lines
         .map((line, i) => {
