@@ -3,13 +3,24 @@
 //----------------------------------------
 import { C } from './logger-utils'
 
-/** ESCAPE REGEXP
- * * parseStarChar => config will replace '*' by '.*?' which is the best for 'match all until'
- * * wildcardNotMatchingChars => list of characters not to match, eg: '.[' will match all except '.' and '[' /!\ will be outputted as a regexp [^.[] so don't forget to ESCAPE characters like ']' => '\]'
+/**
+ * Will escape all special character in a string to output a valid regexp string to put in RegExp(myString)
+ * * Eg: from `'path.*.addr(*)'` will output `'aa\..*?\.addr\(.*?\)'` so regexp match `'path.random.addr(randomItem)'`
+ * * Options:
+ *   * parseWildcard => config will replace '*' by '.*?' which is the best for 'match all until'
+ *   * wildcardNotMatchingChars => if provided, will replace '*' by `[^${wildcardNotMatchingChars}]` instead of '.*?'. This allows wildcard not to match certains characters
  */
-export function escapeRegexp(str: string, config: { parseStarChar?: boolean, wildcardNotMatchingChars?: string } = {}): string {
-    const { parseStarChar = false, wildcardNotMatchingChars } = config
-    if (parseStarChar) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, wildcardNotMatchingChars ? `[^${wildcardNotMatchingChars}]` : '.*?')
+export function escapeRegexp(
+    str: string,
+    config: {
+        /** will replace '*' by '.*?' which is the best for 'match all until' */
+        parseWildcard?: boolean,
+        /** if provided, will replace '*' by `[^${wildcardNotMatchingChars}]` instead of '.*?'. This allows wildcard not to match certains characters */
+        wildcardNotMatchingChars?: string
+    } = {}
+): string {
+    const { parseWildcard = false, wildcardNotMatchingChars } = config
+    if (parseWildcard) return str.replace(/[-[\]{}()+?.,\\^$|#\s]/g, '\\$&').replace(/\*/g, wildcardNotMatchingChars ? `[^${wildcardNotMatchingChars}]` : '.*?')
     else return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
 }
 

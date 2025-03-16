@@ -7,11 +7,18 @@ import { isset } from './isset'
 
 const getWordBits = (wb: string[] | [string[]]): string[] => Array.isArray(wb[0]) ? wb[0] : wb as any
 
-/**Eg: camelCase */
+/**Eg: camelCase('hello', 'world') => 'helloWorld' */
 export function camelCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map((w, i) => i === 0 ? w.toLowerCase() : capitalize1st(w, true)).join('')
 }
+
+/** Replace 'hello-world', 'hello World', 'hello_World', 'helloWorld' => 'helloWorld' */
+export function camelCaseify(word: string) {
+    const wordBitsReal = word.replace(/([A-Z])/g, ' $1').split(/[- _]/g)
+    return camelCase(wordBitsReal)
+}
+
 
 /**Eg: snake_case
  * trimmed but not lowerCased
@@ -22,19 +29,23 @@ export function snakeCase(...wordBits: string[] | [string[]]): string {
 }
 /**Eg: kebab-case
  * trimmed AND lowerCased
- * undefined, null... => ''
+ * undefined, null are removed
  */
 export function kebabCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map(w => w.trim().toLowerCase()).join('-')
 }
-/**Eg: PascalCase undefined, null... => '' */
+/**Eg: PascalCase
+ * undefined, null are removed
+ */
 export function pascalCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return wordBitsReal.filter(e => e).map(w => capitalize1st(w, true)).join('')
 }
 
-/**Eg: Titlecase undefined, null... => '' */
+/**Eg: Titlecase
+ * undefined, null are removed
+ */
 export function titleCase(...wordBits: string[] | [string[]]): string {
     const wordBitsReal = getWordBits(wordBits)
     return capitalize1st(wordBitsReal.filter(e => e).map(w => w.trim()).join(''), true)
@@ -94,7 +105,7 @@ export function getValuesBetweenStrings(str: string, openingOrSeparator, closing
         // handle unwanted nested structure like characters in a strings that may be a unmatched closing / opening character
         // Eg: {'azer}aze'}
         if (ignoreUntil && char === ignoreUntil && precedingChar !== '\\') ignoreUntil = false
-        else if (ignoreUntil && char !== ignoreUntil) true
+        else if (ignoreUntil && char !== ignoreUntil) ignoreUntil = true
         else if (ignoreBetweenOpen.includes(char)) {
             const indexChar = ignoreBetweenOpen.findIndex(char2 => char2 === char)
             ignoreUntil = ignoreBetweenClose[indexChar]
@@ -203,8 +214,11 @@ export function pathJoinSafe(...pathBits: string[]) {
 
 
 export type MiniTemplaterOptions = {
+    /** replacer for undefined values */
     valueWhenNotSet: string
+    /** override default regexp that match content between `{{ }}`. It must be 'g' and first capturing group matching the value to replace. Default: /{{\s*([^}]*)\s*}}/g*/
     regexp: RegExp
+    /** replacer for undefined values */
     valueWhenContentUndefined: string
 }
 /** Replace variables in a string like: `Hello {{userName}}!`

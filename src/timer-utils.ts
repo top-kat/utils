@@ -70,7 +70,7 @@ export async function retryWithDelay(
 }
 
 /** Use this timer to measure code performances.
-  * @example ```
+  * @example ```typescript
 const time = perfTimer()
 
 for(let i = 0; i < 9999;i++) longProcess()

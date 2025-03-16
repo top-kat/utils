@@ -5,7 +5,37 @@ import { ObjectGeneric } from './types'
 import { err500IfNotSet } from './error-utils'
 import { isObject } from './is-object'
 
-export function forI<T extends any[] | any>(nbIterations: number, callback: (number: number, previousValue, arrayOfPreviousValues: any[]) => T): T[] {
+/**
+ * Iterates over a specified number of times, passing each iteration's result to the next callback
+ * @returns Array containing results from all iterations
+ *
+ * @example
+ * ```typescript
+ * // Generate Fibonacci sequence
+ * forI(8, (i, prev, results) => {
+ *   if (i <= 1) return 1
+ *   return results[i-1] + results[i-2]
+ * })
+ * ```
+ * // Returns: [1, 1, 2, 3, 5, 8, 13, 21]
+ */
+export function forI<T extends any[] | any>(
+    /** Number of times to iterate */
+    nbIterations: number,
+    /** Function called for each iteration with:
+     *   - number: Current iteration index (0-based)
+     *   - previousValue: Result from previous iteration
+     *   - arrayOfPreviousValues: Array of all previous results
+     */
+    callback: (
+        /** Current iteration index (0-based) */
+        number: number,
+        /** Result from previous iteration */
+        previousValue,
+        /** Array of all previous results */
+        arrayOfPreviousValues: any[]
+    ) => T
+): T[] {
     const results: any[] = []
     for (let i = 0; i < nbIterations; i++) {
         const prevValue = results[results.length - 1]
@@ -14,6 +44,20 @@ export function forI<T extends any[] | any>(nbIterations: number, callback: (num
     return results
 }
 
+/**
+ * Iterates over a specified number of times, passing each iteration's result to the next callback
+ * @returns Array containing results from all iterations
+ *
+ * @example
+ * ```typescript
+ * // Generate Fibonacci sequence ASYNC
+ * await forI(8, async (i, prev, results) => {
+ *   if (i <= 1) return 1
+ *   return new Promise(resolve => setTimeout(() => resolve(results[i-1] + results[i-2]), 100))
+ * })
+ * ```
+ * // Returns: [1, 1, 2, 3, 5, 8, 13, 21]
+ */
 export async function forIasync<T extends any[] | any>(nbIterations: number, callback: (number) => T): Promise<T[]> {
     const results: any[] = []
     for (let i = 0; i < nbIterations; i++) {
@@ -43,7 +87,20 @@ export type RecursiveConfig = {
  * NOTE: will remove circular references
  * /!\ check return values
  */
-export async function recursiveGenericFunction(item: ObjectGeneric | any[], callback: RecursiveCallback, config: RecursiveConfig = {}, addr$ = '', lastElementKey: string | number = '', parent?, techFieldToAvoidCircularDependency: any[] = []) {
+export async function recursiveGenericFunction(
+    /** The object or array you want to recursively browse */
+    item: ObjectGeneric | any[],
+    /** The callback you want to apply on items including the main one */
+    callback: RecursiveCallback,
+    /** Optional configuration object */
+    config: RecursiveConfig = {},
+    /** Optional base address for the callback function */
+    addr$ = '',
+    /** Technical field */
+    lastElementKey: string | number = '',
+    parent?,
+    techFieldToAvoidCircularDependency: any[] = []
+) {
     err500IfNotSet({ callback })
 
     if (!config.isObjectTestFunction) config.isObjectTestFunction = isObject

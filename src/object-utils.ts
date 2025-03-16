@@ -79,7 +79,7 @@ export function findByAddressAll<ReturnAddresses extends boolean = false>(
     if (addr === '') return (returnAddresses ? [addr, obj, undefined, undefined] : obj) as any
     const addrRegexp = new RegExp('^' + escapeRegexp(
         addr.replace(/\.?\[(\d+)\]/g, '.$1'), // replace .[4] AND [4] TO .4
-        { parseStarChar: true, wildcardNotMatchingChars: '.[' }) + '$'
+        { parseWildcard: true, wildcardNotMatchingChars: '.[' }) + '$'
     )
 
     const matchingItems: any[] = []
@@ -243,12 +243,15 @@ export function reassignForbidden(o) {
 }
 
 /** All fileds and subFields of the object will become readOnly */
-export function readOnlyForAll(object) {
+export function readOnlyRecursive(object) {
     recursiveGenericFunctionSync(object, (item, _, lastElementKey, parent) => {
         if (typeof item === 'object') parent[lastElementKey] = readOnly(item)
     })
     return object
 }
+
+/** @deprecated use readOnlyRecursive instead */
+export const readOnlyForAll = readOnlyRecursive
 
 export function objFilterUndefinedRecursive(obj) {
     if (obj) {
@@ -396,6 +399,7 @@ export function flattenObject(data, config: { withoutArraySyntax?: boolean, with
                 for (const p in cur) recurse(cur[p], (prop ? prop + '.' : '') + p.replace(/\./g, '%')) // allow prop to contain special chars like points);
 
                 if (isEmpty && prop) result[prop] = {}
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {
                 // eslint-disable-next-line no-console
                 console.warn('Circular reference in flattenObject, impossible to parse')
