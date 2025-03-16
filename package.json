@@ -1,6 +1,6 @@
 {
   "name": "topkat-utils",
-  "version": "1.3.3",
+  "version": "1.3.2",
   "type": "commonjs",
   "types": "index.ts",
   "main": "dist",
@@ -48,6 +48,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "// Please run BUMP command with NPM not Yarn": "",
     "bump": "yarn test:ci && yarn build && bump --patch",
     "bump:major": "yarn test:ci && yarn build && bump --major",
     "bump:minor": "yarn test:ci && yarn build && bump --minor",
