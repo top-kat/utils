@@ -206,7 +206,7 @@ function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
     let stackTrace = (new Error('')).stack || ''
     const displayStack = errors[0] === false ? errors.shift() : true
     const symbol = level === 'error' ? '✘ ' : '⚠ '
-    if (errors.length > 1 && !isset(errors[0])) errors.shift()
+    if (errors.length > 1 && !isset(errors[0])) errors.shift() // remove first empty object
 
     const getStringFromErr = (err, i) => {
         if (!isset(err)) return ''
