@@ -453,7 +453,10 @@ export function createProxy<T extends Record<string, any>>(obj: T, optn: {
     return new Proxy(obj, {
         get(target, prop, receiver) {
             if (prop === '__isProxy') return true
-            else if (prop === 'toJSON') return optn?.jsonRepresentation?.(target) || '[TopkatUtils Proxy]'
+            else if (prop === 'toJSON') {
+                if ('toJSON' in target) return target.toJSON
+                else return () => (optn?.jsonRepresentation?.(target) || '[Proxy]')
+            }
             return optn.getter(target, prop, receiver)
         }
     })
