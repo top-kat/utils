@@ -50,6 +50,7 @@
     "build": "tsc",
     "// Please run BUMP command with NPM not Yarn": "",
     "bump": "yarn test:ci && yarn build && bump --patch",
+    "bump:fast": "yarn build && bump --patch",
     "bump:major": "yarn test:ci && yarn build && bump --major",
     "bump:minor": "yarn test:ci && yarn build && bump --minor",
     "bump:patch": "yarn test:ci && yarn build && bump --patch",

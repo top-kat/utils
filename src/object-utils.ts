@@ -457,7 +457,7 @@ export function createProxy<T extends Record<string, any>>(obj: T, optn: {
                 if ('toJSON' in target) return target.toJSON
                 else return () => (optn?.jsonRepresentation?.(target) || '[Proxy]')
             }
-            return optn.getter(target, prop, receiver)
+            return optn.get(target, prop, receiver)
         }
     })
 }
