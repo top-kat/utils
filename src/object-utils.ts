@@ -447,7 +447,7 @@ export const entries = objEntries
 
 /** A Helper to create JavascriptProxies, will add __isProxy and toJSON helper to prevent error when logging the proxy and to be able to check if the object is proxyfied */
 export function createProxy<T extends Record<string, any>>(obj: T, optn: {
-    getter: Required<ProxyHandler<T>>['get'],
+    get: Required<ProxyHandler<T>>['get'],
     jsonRepresentation?: (obj: T) => string
 }) {
     return new Proxy(obj, {
