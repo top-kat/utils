@@ -226,6 +226,7 @@ urlPathJoin('https://api.example.com//v1', '/users/', 'userId') // => 'https://a
 - `readOnly(obj)`: Lock all 1st level props of an object to read only (not rewritable / modifiable)
 - `reassignForbidden(obj)`: Fields of the object can be created BUT NOT reassignated
 - `readOnlyRecursive(obj)`: All fields and subFields of the object will be readOnly
+- `createProxy(obj)`: replace `new Proxy(...)` from javascript with correct handling for JSON.stringify and a `__isProxy: true` helper prop
 
 ### Typescript equivalent of Js functions (Fix types)
 - `lowerCase(str)`: `lowerCase('HelloWorld' as const) // type: 'helloworld'` (Equivalent of type `LowerCase<MyString>`)
