@@ -30,11 +30,8 @@ export function cleanStackTrace(stack) {
     const linesClean = lines
         .filter(l => l && !removeIfContain.some(text => l.includes(text)))
         .map((line, i) => {
-            if (i === 0) return ''
-            else {
-                const [, start, fileName, end] = line.match(/(^.+\/)([^/]+:\d+:\d+)(.{0,3})/) || []
-                return fileName ? `\x1b[2m${start}\x1b[0m${fileName}\x1b[2m${end}\x1b[0m` : `\x1b[2m${line}\x1b[0m`
-            }
+            if (i === 0) return '' // usually just the word "Error:"
+            else return line
         })
         .join('\n')
     return linesClean

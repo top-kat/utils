@@ -201,7 +201,7 @@ export const C = {
 function logErrPrivate(level: NotInfoLogLevel, color: Color, ...errors) {
     const { isProd } = configFn()
 
-    if (errors.length === 1 && typeof errors[0].log === 'function') return errors[0].log()
+    if (errors.length === 1 && typeof errors[0]?.log === 'function') return errors[0].log()
 
     let stackTrace = (new Error('')).stack || ''
     const displayStack = errors[0] === false ? errors.shift() : true
