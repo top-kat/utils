@@ -209,6 +209,9 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     toString() {
         return this.logs.join('\n')
     }
+    toJSON() {
+        return this.toString()
+    }
 }
 
 function computeErrorMessage(err) {
