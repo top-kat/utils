@@ -18,10 +18,6 @@ export const logger = {
         const { preprocessLog } = configFn()
         if (typeof preprocessLog === 'function') str = preprocessLog(str) || str
 
-        const paddingX = configFn()?.terminal?.theme?.paddingX
-        const padX = ' '.repeat(paddingX || 0)
-        str = padX + str.replace(/\n/g, '\n' + padX)
-
         if (isset(console[level])) console[level](str)
         else console.log(str)
 
@@ -69,7 +65,7 @@ export const logger = {
 /**
 // console colored output
 // * console.log(C.green(C.dim('Hey bro !')))
-// * or C.log() // will use padding and color defined by themes
+// * or C.log() // will use color defined by themes
 // * or C.line('MY TITLE', 53)
 // * or C.gradientize(myLongString)
 */
@@ -92,14 +88,13 @@ export const C = {
     rgb: (r, g = 0, b = 0) => configFn()?.terminal?.noColor || !isset(r, g, b) ? '' : `\x1b[38;2;${r};${g};${b}m`,
     bg: (r?, g?, b?) => configFn()?.terminal?.noColor || !isset(r, g, b) ? '' : `${'\x1b['}48;2;${r};${g};${b}m`,
     /** Output a line of title */
-    line(title = '', length = configFn()?.terminal?.theme?.pageWidth, clr = configFn()?.terminal?.theme?.primary, char = '=', paddingX = configFn()?.terminal?.theme?.paddingX) {
-        const padX = ' '.repeat(paddingX || 0)
-        this.log('\u00A0\n' + padX + this.rgb(...clr) + (title + ' ').padEnd(length || 0, char) + this.reset + padX + '\u00A0\n')
+    line(title = '', length = configFn()?.terminal?.theme?.pageWidth, clr = configFn()?.terminal?.theme?.primary, char = '=') {
+        this.log('\u00A0\n' + this.rgb(...clr) + (title + ' ').padEnd(length || 0, char) + this.reset + '\u00A0\n')
     },
     /** Eg: ['cell1', 'cell2', 'cell3'], [25, 15] will start cell2 at 25 and cell 3 at 25 + 15
      * @param {Array} limits default divide the viewport
      */
-    cols(strings, limits: number[] = [], clr = configFn()?.terminal?.theme?.fontColor, paddingX = configFn()?.terminal?.theme?.paddingX) {
+    cols(strings, limits: number[] = [], clr = configFn()?.terminal?.theme?.fontColor) {
 
         if (!limits.length) {
             const colWidth = Math.round(configFn()?.terminal?.theme.pageWidth / strings.length)
@@ -111,16 +106,15 @@ export const C = {
             const realLimit = limits[i] + charLength - realCharLength
             return glob + str.toString().substring(0, realLimit || 999).padEnd(realLimit || 0, ' ')
         }, '')
-        this.logClr(str, clr, paddingX)
+        this.logClr(str, clr)
     },
     /** Console log alias */
     log(...stringsCtxMayBeFirstParam) {
-        stringsCtxMayBeFirstParam.forEach(str => this.logClr(str, undefined, undefined))
+        stringsCtxMayBeFirstParam.forEach(str => this.logClr(str))
     },
-    logClr(str, clr = configFn()?.terminal?.theme?.fontColor, paddingX = configFn()?.terminal?.theme?.paddingX) {
+    logClr(str, clr = configFn()?.terminal?.theme?.fontColor) {
         if (!isset(str)) return
-        const padX = ' '.repeat(paddingX || 0)
-        str = padX + (typeof clr !== 'undefined' ? this.rgb(...clr) : '') + str.toString().replace(/\n/g, '\n' + padX + (typeof clr !== 'undefined' ? this.rgb(...clr) : ''))
+        str = (typeof clr !== 'undefined' ? this.rgb(...clr) : '') + str.toString().replace(/\n/g, '\n' + (typeof clr !== 'undefined' ? this.rgb(...clr) : ''))
         logger.log(str + this.reset, 'info')
     },
     info(...str) {
@@ -168,24 +162,23 @@ export const C = {
     },
     notifications: [] as any[], // fn array
     /** Gratientize lines of text (separated by \n) */
-    gradientize(str = '', rgb1 = configFn()?.terminal?.theme?.shade1, rgb2 = configFn()?.terminal?.theme?.shade2, bgRgb = configFn()?.terminal?.theme?.bgColor, paddingY = configFn()?.terminal?.theme?.paddingY, paddingX = configFn()?.terminal?.theme?.paddingX) {
+    gradientize(str = '', rgb1 = configFn()?.terminal?.theme?.shade1, rgb2 = configFn()?.terminal?.theme?.shade2, bgRgb = configFn()?.terminal?.theme?.bgColor, paddingY = 2) {
 
         const lines = str.split('\n')
         const largestLine = lines.reduce((sum, line) => sum < line.length ? line.length : sum, 0)
         const rgbParts = rgb1.map((val, i) => (val - rgb2[i]) / (lines.length))
 
         const bg = bgRgb ? this.bg(bgRgb[0], bgRgb[1], bgRgb[2]) : ''
-        const padX = ' '.repeat(paddingX || 0)
-        const padLine = bg + padX + ' '.padEnd(largestLine, ' ') + padX + '\x1b[0m\n'
+        const padLine = bg + ' '.padEnd(largestLine, ' ') + '\x1b[0m\n'
 
-        console.log(padLine.repeat(paddingY || 0) +
+        console.log(padLine.repeat(paddingY) +
             lines.reduce((s, line, i) => {
-                return s + bg + padX + this.rgb(...((rgb1 as Color).map((val, i2) => Math.round(val - i * rgbParts[i2]))) as Color) + line.padEnd(largestLine, ' ') + padX + '\x1b[0m\n'
+                return s + bg + this.rgb(...((rgb1 as Color).map((val, i2) => Math.round(val - i * rgbParts[i2]))) as Color) + line.padEnd(largestLine, ' ') + '\x1b[0m\n'
             }, '') +
-            padLine.repeat(paddingY || 0))
+            padLine.repeat(paddingY))
     },
     debugModeLog(title, ...string) {
-        this.logClr('🐞 ' + title, configFn()?.terminal?.theme?.debugModeColor, 0)
+        this.logClr('🐞 ' + title, configFn()?.terminal?.theme?.debugModeColor)
         this.log(this.dimStrSplit(...string))
     },
     /** allow to clear the last lines written to console */

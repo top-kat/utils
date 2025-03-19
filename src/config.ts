@@ -9,8 +9,6 @@ type TerminalTheme = {
     shade1?: Color,
     shade2?: Color,
     bgColor?: Color
-    paddingX?: number
-    paddingY?: number
     fontColor?: Color
     pageWidth?: number
     debugModeColor?: Color,
@@ -47,8 +45,6 @@ let config = {
             primary: [0, 149, 250], // blue theme
             shade1: [0, 90, 250],
             shade2: [0, 208, 245],
-            paddingX: 2,
-            paddingY: 2,
             pageWidth: 53,
             debugModeColor: [201, 27, 169],
         }
