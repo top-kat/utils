@@ -38,3 +38,8 @@ Thumbs.db
 /.history
 
 .yarn
+
+
+.DS_Store
+Thumbs.db
+*.pem
