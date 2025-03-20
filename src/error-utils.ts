@@ -203,7 +203,16 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     }
     log() {
         this.parseError() // re parse it in case it has been updated from the outside (eg: adding extraInfos)
-        if (this.hasBeenLogged === false && this.doNotLog === false) C.error(false, this.logs.join('\n'))
+        const err = new Error()
+        err.message = this.logs.join('\n')
+        err.stack = cleanStackTrace(this.stack)
+        if (this.hasBeenLogged === false && this.doNotLog === false) {
+            // Do not log "this" since in C.error this.log will get called.
+            // This has the advantage of parsing logs when logging a
+            // C.error(DescriptiveError) (calling err.log())
+            // And prevent an infinite loop
+            C.error(err)
+        }
         this.hasBeenLogged = true
     }
     toString() {
