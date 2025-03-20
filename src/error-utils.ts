@@ -51,7 +51,7 @@ export const failSafe = tryCatch // ALIAS
 function extraInfosRendererDefault(extraInfos) {
     return [
         '== EXTRA INFOS ==',
-        removeCircularJSONstringify({ ...extraInfos, msg: undefined, message: undefined }, 2)
+        removeCircularJSONstringify({ ...extraInfos, message: undefined, stack: undefined, originalError: undefined, hasBeenLogged: undefined, logs: undefined }, 2)
     ]
 }
 
@@ -64,7 +64,6 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         id: string
         /** Http error code if any */
         code: number
-        msg: string
         message: string
         /** The parent error if any */
         originalError?: Error | Record<string, any> | DescriptiveError
@@ -76,8 +75,6 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     id: string = generateToken(24, true)
     /** Http code. Eg: 404, 403... */
     code?: number
-    msg: string
-    /** Alias since .msg is not always obvious to find */
     message: string
     options: ErrorOptions
     /** Logging of the error is async, unless disabled, so that it wait one frame to allow to log it manually */
@@ -86,11 +83,10 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
     doNotLog = false // just an alias for the above, actually using this one can be more readable in some situations
     logs: string[] = []
 
-    constructor(msg: string, options: ErrorOptions = {}) {
-        super(msg)
+    constructor(message: string, options: ErrorOptions = {}) {
+        super(message)
         delete options.errMsgId
-        this.msg = msg
-        this.message = msg
+        this.message = message
 
         this.isAxiosError = (options?.err?.stack || options.stack)?.startsWith('Axios') || false
 
@@ -115,7 +111,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         })
 
         const { onError } = configFn()
-        if (typeof onError === 'function') onError(msg, options)
+        if (typeof onError === 'function') onError(message, options)
 
     }
     /** Compute extraInfos and parse options */
@@ -148,7 +144,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
 
         if (isset(ressource)) {
             code = 404
-            if (this.msg === '404') this.msg = `Ressource ${ressource} not found`
+            if (this.message === '404') this.message = `Ressource ${ressource} not found`
             extraInfos.ressource = ressource
         }
 
@@ -164,13 +160,14 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
             this.originalError = err
             errorLogs.push('== ORIGINAL ERROR ==')
             errorLogs.push(computeErrorMessage(err))
-            if (typeof err.parseError === 'function') {
+            if (typeof err.parseError === 'function' || Array.isArray(err?.logs)) {
                 // The catched error is a DescriptiveError so from
                 // there we prevent further logs/ outpus from error
                 err.hasBeenLogged = true // this will be logged in the child error so we dont want it to be logged twice
                 err.doNotLog = true
-                const logFromOtherErr = err.parseError(forCli)
-                errorLogs.push(...logFromOtherErr)
+                const logFromOtherErr = err?.logs || err?.parseError?.(forCli) || []
+                const [, ...errToLog] = logFromOtherErr
+                errorLogs.push(...errToLog)
             } else {
                 errorLogs.push(removeCircularJSONstringify({ ...err, hasBeenLogged: undefined }))
                 if (!noStackTrace && err.stack) errorLogs.push(cleanStackTrace(err.stack))
@@ -188,8 +185,7 @@ export class DescriptiveError<ExpectedOriginalError = any> extends Error {
         if (this.options.doNotDisplayCode || (this.options.hasOwnProperty('code') && !isset(this.options.code))) delete this.code
         this.errorDescription = {
             id: this.id,
-            msg: this.msg,
-            message: this.msg,
+            message: this.message,
             code,
             ressource,
             originalError: err,
