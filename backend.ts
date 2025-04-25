@@ -11,7 +11,7 @@ export async function execWaitForOutput(
         /** Whenever to log output to the console, choose false to execute the process silently. Default: true */
         logOutputStream: boolean
         /** when the output contain this string or matches this regexp, process is considered done. Else it will wait for exit */
-        stringOrRegexpToSearchForConsideringDone: string
+        stringOrRegexpToSearchForConsideringDone: string | RegExp
         /** timeout before killing process in seconds. Put -1 or 0 de disable. Default: 20 */
         nbSecondsBeforeKillingProcess: number
         /** { a: 1000, b: 2000 } { keyCode: sendAfterXms }; Eg: the key "keyCode" will be sent to terminal after "sendAfterXms" milliseconds */
@@ -71,7 +71,7 @@ export async function execWaitForOutput(
                 }, keyCodeToSend[keyCode])
             }
         })
-    } catch (error) {
+    } catch (_) {
         if (errorHandle === 'log') C.error(`Something went wrong using this command: ${command}\nPlease check this log:\n${outputStream}`)
         else throw `Something went wrong using this command: ${command}\nPlease check this log:\n${outputStream}`
     }
