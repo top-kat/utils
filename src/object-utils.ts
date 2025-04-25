@@ -425,9 +425,8 @@ export function objEntries<Obj extends Record<string, any>>(obj: Obj): ObjEntrie
 }
 
 /** Will remove Symbol and Number from keys types */
-type IsNotUndefined<T> = undefined extends T ? false : true;
 type ObjEntries<T> = {
-    [K in keyof T]-?: K extends string ? IsNotUndefined<T[K]> extends true ? [K, T[K]] : never : never
+    [K in keyof T]-?: K extends string ? [K, T[K]] : never
 }[keyof T][];
 
 /** Will remove Symbol and Number from keys types */
