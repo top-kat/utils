@@ -161,3 +161,25 @@ export function recursiveGenericFunctionSync(item: ObjectGeneric | any[], callba
     }
     return item
 }
+
+/** A safer version of while loop that prevents infinite loops
+ * @param {Function} conditionFn Function that returns a boolean to determine if loop should continue
+ * @param {Function} callback Function to execute on each iteration
+ * @param {Object} options Configuration object
+ * @param {number} [options.nbRecursionMax=100] Maximum number of iterations before exiting to prevent infinite loops
+ * @example
+ * // Count up to 10
+ * let i = 0;
+ * safeWhile(
+ *   () => i < 10,
+ *   () => i++
+ * );
+ */
+export function safeWhile(conditionFn: () => boolean, callback: () => any, { nbRecursionMax = 100 } = {}) {
+    let nbRecursion = 0
+    while (conditionFn() && nbRecursion++ < nbRecursionMax) {
+        callback()
+        // eslint-disable-next-line no-console
+        if (nbRecursion === nbRecursionMax - 1) console.warn(`Too much recursion for while loop, exiting...`)
+    }
+}
