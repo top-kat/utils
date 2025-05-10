@@ -30,16 +30,16 @@
     "flatten",
     "case-conversion"
   ],
-  "author": "https://github.com/top-kat",
+  "author": "https://github.com/topkat",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/top-kat/utils.git"
+    "url": "git+https://github.com/topkat/utils.git"
   },
   "bugs": {
-    "url": "https://github.com/top-kat/utils/issues"
+    "url": "https://github.com/topkat/utils/issues"
   },
-  "homepage": "https://github.com/top-kat/utils#readme",
+  "homepage": "https://github.com/topkat/utils#readme",
   "engines": {
     "node": ">=14.0.0"
   },
